@@ -2,14 +2,18 @@ import querystring from 'querystring';
 import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from '../App';
+import { GameData } from '../GameData';
 
 const colors = {
   price: '#acdbf5',
   originalPrice: '#7193a6',
 };
 
-// @ts-ignore "Property 'game' does not exist on type '{ children?: ReactNode; }'.ts(2339)"
-const GameTile = React.forwardRef(({ game, style }, ref) => {
+// @ts-ignore-line "Property 'game' does not exist on type '{ children?: ReactNode; }'.ts(2339)"
+const GameTile: React.ForwardRefExoticComponent<{
+  game: GameData;
+  style: any;
+}> = React.forwardRef(({ game, style }, ref) => {
   const { language, country, hasPlusMembership } = useContext(
     UserOptionsContext,
   );
@@ -17,7 +21,7 @@ const GameTile = React.forwardRef(({ game, style }, ref) => {
   return (
     <div
       key={game.id}
-      // @ts-ignore "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
+      // @ts-ignore-line "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
       ref={ref}
       style={style}
       className={css`
