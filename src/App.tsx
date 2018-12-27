@@ -48,7 +48,21 @@ function App() {
       }}
     >
       <div className={'App '}>
-        {games ? <GamesList games={games} /> : 'loading...'}
+        <div
+          className={css`
+            display: flex;
+            flex-direction: row;
+          `}
+        >
+          <div>fascists</div>
+          <div
+            className={css`
+              flex: 1 1 auto;
+            `}
+          >
+            {games ? <GamesList games={games} /> : 'loading...'}
+          </div>
+        </div>
       </div>
     </UserOptionsContext.Provider>
   );
