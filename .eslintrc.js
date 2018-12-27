@@ -18,7 +18,8 @@ module.exports = {
         "singleQuote": true,
         "trailingComma": "all"
       }
-    ]
+    ],
+    "no-console": "warn"
   },
   "overrides": {
     "files": ["**/*.ts", "**/*.tsx"],
