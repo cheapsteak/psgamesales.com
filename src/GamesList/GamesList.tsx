@@ -15,7 +15,7 @@ const GamesList: React.FunctionComponent<{ games: GameData[] }> = ({
   return (
     <WindowScroller>
       {({ height }) => (
-        <AutoSizer onResize={dimensions => console.log(dimensions)}>
+        <AutoSizer>
           {({ width }) => {
             if (width === 0) {
               return null;
