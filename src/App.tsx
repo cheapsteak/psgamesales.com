@@ -1,7 +1,7 @@
 import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
 import _ from 'lodash';
 import { css } from 'emotion';
-import { fetchGamesFromStore } from './fetchGamesFromStore';
+import fetchGamesFromStore from './fetchGamesFromStore';
 import { GameData } from './GameData';
 import GamesList from './GamesList';
 
@@ -31,8 +31,8 @@ function App() {
   const [hasPlusMembership, setHasPlusMembership] = useState(false);
 
   useEffect(() => {
-    fetchGamesFromStore(storeName).then(returnedGames =>
-      setGames(returnedGames),
+    fetchGamesFromStore({ store: storeName, language, country }).then(
+      returnedGames => setGames(returnedGames),
     );
   }, []);
 

@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
+import localforage from 'localforage';
 import {
   ValkyrieStoreIncludedItem,
   ValkyrieStoreResponse,
@@ -13,6 +14,11 @@ const fetchFromStore = ({ store, start, language, country }) =>
   axios(
     `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?bucket=games&size=${size}&start=${start}`,
   );
+
+const checkIfStoreStillExists = ({ store, language, country }) =>
+  axios(
+    `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?size=0`,
+  ).then(response => response.data.data.attributes['total-results'] > 0);
 
 const getAllItemsFromStore = async ({
   store,
@@ -68,7 +74,7 @@ const transformValkyrieItemToGameData = (
       const plusUserPricing = skuWithDiscount!.prices['plus-user'];
       const nonPlusUserPricing = skuWithDiscount!.prices['non-plus-user'];
       return {
-        _originalData: item,
+        // _originalData: item,
         id: item.id,
         name: item.attributes.name,
         platforms: item.attributes.platforms,
@@ -95,7 +101,39 @@ const transformValkyrieItemToGameData = (
     });
 };
 
-export const fetchGamesFromStore = store =>
-  getAllItemsFromStore({ store, language: 'en', country: 'ca' }).then(items => {
-    return transformValkyrieItemToGameData(items);
+try {
+  localforage.config({
+    driver: localforage.INDEXEDDB,
+    name: 'ps-store',
+    version: 1.0,
   });
+} catch (e) {
+  // no indexeddb
+}
+
+const fetchGamesFromStore = async ({ store, country, language }) => {
+  const fetchGamesFromStoreFromNetwork = () =>
+    getAllItemsFromStore({ store, country, language }).then(items =>
+      transformValkyrieItemToGameData(items),
+    );
+
+  try {
+    const storedStoreItems = await localforage.getItem(store);
+
+    if (
+      storedStoreItems &&
+      checkIfStoreStillExists({ store, country, language })
+    ) {
+      return storedStoreItems as GameData[];
+    } else {
+      const items = fetchGamesFromStoreFromNetwork();
+      await localforage.removeItem(store);
+      return items;
+    }
+  } catch (e) {
+    // browser doesn't support indexeddb
+    return fetchGamesFromStoreFromNetwork();
+  }
+};
+
+export default fetchGamesFromStore;
