@@ -23,7 +23,6 @@ const GamesList: React.FunctionComponent<{ games: GameData[] }> = ({
             const columnWidth = 200;
             const columnCount = Math.ceil(width / columnWidth);
             const rowCount = Math.ceil(games.length / columnCount);
-            console.log({ width, columnCount });
             return (
               <ColumnSizer width={width} columnCount={columnCount}>
                 {({ adjustedWidth, getColumnWidth, registerChild }) => (
