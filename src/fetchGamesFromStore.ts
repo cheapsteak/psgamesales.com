@@ -93,8 +93,8 @@ const transformValkyrieItemToGameData = (
             discountPercentage: nonPlusUserPricing['discount-percentage'],
           },
           plus: {
-            cents: plusUserPricing['strikethrough-price'].value,
-            display: plusUserPricing['strikethrough-price'].display,
+            cents: plusUserPricing['actual-price'].value,
+            display: plusUserPricing['actual-price'].display,
             discountPercentage: plusUserPricing['discount-percentage'],
           },
         },
