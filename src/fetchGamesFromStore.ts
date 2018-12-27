@@ -29,6 +29,7 @@ const getAllItemsFromStore = async ({
   language: string;
   country: string;
 }): Promise<ValkyrieStoreIncludedItem[]> => {
+  // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
     start: 0,
     store,
@@ -37,8 +38,10 @@ const getAllItemsFromStore = async ({
   });
   const items = response.data.included;
   const totalItems = response.data.data.attributes['total-results'];
+
   if (totalItems > size) {
     const pagesRemaining = Math.ceil((totalItems - size) / size);
+    // fetch all the other pages at once
     return _.flatten(
       await Promise.all(
         _.range(pagesRemaining).map(x =>
@@ -101,23 +104,19 @@ const transformValkyrieItemToGameData = (
     });
 };
 
-try {
-  localforage.config({
-    driver: localforage.INDEXEDDB,
-    name: 'ps-store',
-    version: 1.0,
-  });
-} catch (e) {
-  // no indexeddb
-}
-
 const fetchGamesFromStore = async ({ store, country, language }) => {
-  const fetchGamesFromStoreFromNetwork = () =>
+  const fetchGamesFromStoreViaNetwork = () =>
     getAllItemsFromStore({ store, country, language }).then(items =>
       transformValkyrieItemToGameData(items),
     );
 
   try {
+    localforage.config({
+      driver: localforage.INDEXEDDB,
+      name: 'ps-store',
+      version: 1.0,
+    });
+
     const storedStoreItems = await localforage.getItem(store);
 
     if (
@@ -126,13 +125,13 @@ const fetchGamesFromStore = async ({ store, country, language }) => {
     ) {
       return storedStoreItems as GameData[];
     } else {
-      const items = fetchGamesFromStoreFromNetwork();
+      const items = fetchGamesFromStoreViaNetwork();
       await localforage.removeItem(store);
       return items;
     }
   } catch (e) {
     // browser doesn't support indexeddb
-    return fetchGamesFromStoreFromNetwork();
+    return fetchGamesFromStoreViaNetwork();
   }
 };
 

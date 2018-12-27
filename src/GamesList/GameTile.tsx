@@ -1,5 +1,5 @@
 import querystring from 'querystring';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from '../App';
 
@@ -12,6 +12,7 @@ const GameTile = ({ game, style }) => {
   const { language, country, hasPlusMembership } = useContext(
     UserOptionsContext,
   );
+  const [retryCount, setRetryCount] = useState(0);
   return (
     <a
       key={game.id}
@@ -30,8 +31,8 @@ const GameTile = ({ game, style }) => {
     >
       <img
         src={`${game.thumbnailBase}?${querystring.stringify({
-          w: 200,
-          h: 200,
+          w: 200 + retryCount,
+          h: 200 + retryCount,
         })}`}
         alt={game.name}
         className={css`
@@ -39,6 +40,8 @@ const GameTile = ({ game, style }) => {
           width: 100%;
           height: auto;
         `}
+        // Note: sometimes a dimension will return a bad image
+        onError={e => setRetryCount(retryCount + 1)}
       />
 
       <div
