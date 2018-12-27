@@ -105,10 +105,7 @@ const transformValkyrieItemToGameData = (
 };
 
 const fetchGamesFromStore = async ({ store, country, language }) => {
-  const fetchGamesFromStoreViaNetwork = () =>
-    getAllItemsFromStore({ store, country, language }).then(items =>
-      transformValkyrieItemToGameData(items),
-    );
+  let storeItems;
 
   try {
     localforage.config({
@@ -117,21 +114,23 @@ const fetchGamesFromStore = async ({ store, country, language }) => {
       version: 1.0,
     });
 
-    const storedStoreItems = await localforage.getItem(store);
+    storeItems = await localforage.getItem(store);
 
-    if (
-      storedStoreItems &&
-      checkIfStoreStillExists({ store, country, language })
-    ) {
-      return storedStoreItems as GameData[];
-    } else {
-      const items = fetchGamesFromStoreViaNetwork();
-      await localforage.removeItem(store);
-      return items;
+    if (storeItems) {
+      if (checkIfStoreStillExists({ store, country, language })) {
+        return transformValkyrieItemToGameData(storeItems);
+      } else {
+        await localforage.removeItem(store);
+      }
     }
+    storeItems = getAllItemsFromStore({ store, country, language });
+    localforage.setItem(store, storeItems);
+    return transformValkyrieItemToGameData(storeItems);
   } catch (e) {
     // browser doesn't support indexeddb
-    return fetchGamesFromStoreViaNetwork();
+    return getAllItemsFromStore({ store, country, language }).then(
+      transformValkyrieItemToGameData,
+    );
   }
 };
 
