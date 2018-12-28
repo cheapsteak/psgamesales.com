@@ -154,11 +154,13 @@ const fetchGamesFromStore = async ({
     storeItems = await localforage.getItem(storeKey);
 
     if (storeItems) {
-      if (checkIfStoreStillExists({ store, country, language })) {
-        return transformValkyrieItemToGameData(storeItems);
-      } else {
+      try {
+        await checkIfStoreStillExists({ store, country, language });
+      } catch (e) {
         await localforage.removeItem(store);
+        throw e;
       }
+      return transformValkyrieItemToGameData(storeItems);
     }
 
     storeItems = getAllItemsFromStore(storeParams);
