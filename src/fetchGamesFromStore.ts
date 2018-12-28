@@ -141,7 +141,13 @@ const fetchGamesFromStore = async ({
   gameTypes,
 }) => {
   const storeParams = { store, country, language, platforms, gameTypes };
-  const storeKey = JSON.stringify(storeParams);
+  const storeKey = JSON.stringify({
+    store,
+    country,
+    language,
+    platforms: platforms.slice().sort(),
+    gameTypes: gameTypes.slice().sort(),
+  });
   let storeItems;
 
   try {
