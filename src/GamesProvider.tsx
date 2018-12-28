@@ -14,20 +14,26 @@ const GamesProvider: React.FunctionComponent<{
   );
   const [store, setStore] = useState(defaultStore);
   const [games, setGames] = useState<GameData[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(
     () => {
+      setIsLoading(true);
       fetchGamesFromStore({
         store,
         language,
         country,
         platforms,
         gameTypes,
-      }).then(returnedGames => setGames(returnedGames));
+      }).then(returnedGames => {
+        setGames(returnedGames);
+        setIsLoading(false);
+      });
     },
     [language, country, platforms.join(','), gameTypes.join(',')],
   );
 
-  return props.children({ games });
+  return props.children({ games, isLoading });
 };
 
 export default GamesProvider;
