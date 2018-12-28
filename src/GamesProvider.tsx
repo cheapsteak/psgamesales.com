@@ -14,15 +14,18 @@ const GamesProvider: React.FunctionComponent<{
   );
   const [store, setStore] = useState(defaultStore);
   const [games, setGames] = useState<GameData[]>([]);
-  useEffect(() => {
-    fetchGamesFromStore({
-      store,
-      language,
-      country,
-      platforms,
-      gameTypes,
-    }).then(returnedGames => setGames(returnedGames));
-  }, []);
+  useEffect(
+    () => {
+      fetchGamesFromStore({
+        store,
+        language,
+        country,
+        platforms,
+        gameTypes,
+      }).then(returnedGames => setGames(returnedGames));
+    },
+    [language, country, platforms.join(','), gameTypes.join(',')],
+  );
 
   return props.children({ games });
 };
