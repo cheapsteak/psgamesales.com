@@ -3,7 +3,7 @@ export * from './apiResponseTypes';
 export enum Platform {
   PS4 = 'ps4',
   PS3 = 'ps3',
-  vita = 'vita',
+  Vita = 'vita',
 }
 
 export enum GameType {
