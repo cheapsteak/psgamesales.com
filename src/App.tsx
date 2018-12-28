@@ -19,7 +19,7 @@ function App() {
 
   const gameQuery = querystring.parse(location.search.replace(/^\?/, ''))[
     queryParamDict.GAME_SEARCH
-  ] as string;
+  ];
 
   return (
     <div className={'App '}>
@@ -28,7 +28,7 @@ function App() {
           {({ games }) => {
             window['games'] = games;
             const gamesToShow =
-              gameQuery.length > 0
+              gameQuery && gameQuery.length > 0
                 ? games.filter(game =>
                     game.name.toLowerCase().includes(gameQuery),
                   )
