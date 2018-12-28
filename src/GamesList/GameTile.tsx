@@ -1,7 +1,7 @@
 import querystring from 'querystring';
 import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
-import { UserOptionsContext } from '../App';
+import { UserOptionsContext } from '../UserOptionsContext';
 import { GameData } from '../GameData';
 
 const colors = {

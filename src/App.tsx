@@ -8,25 +8,9 @@ import GamesList from './GamesList';
 import Controls from './Controls';
 import querystring from 'querystring';
 import queryParamDict from './queryParamDict';
+import { UserOptionsContext } from './UserOptionsContext';
 
 const storeName = `STORE-MSF77008-HOLIDAYSALELP`;
-
-export const UserOptionsContext: React.Context<{
-  language: string;
-  country: string;
-  hasPlusMembership: boolean;
-  setLanguage: Dispatch<SetStateAction<string>>;
-  setCountry: Dispatch<SetStateAction<string>>;
-  setHasPlusMembership: Dispatch<SetStateAction<boolean>>;
-}> = React.createContext({
-  language: 'en',
-  country: 'ca',
-  hasPlusMembership: false,
-
-  setLanguage: language => {},
-  setCountry: country => {},
-  setHasPlusMembership: hasPlusMembership => {},
-});
 
 function App() {
   const [games, setGames] = useState<GameData[]>([]);
