@@ -4,12 +4,14 @@ import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from '../queryParamDict';
-import { Platform } from '../types';
+import { Platform, GameType } from '../types';
 import { UserOptionsContext } from '../UserOptionsContext';
 
 const Controls = () => {
   const [location, navigate] = useLocation();
-  const { platforms, setUserOptions } = useContext(UserOptionsContext);
+  const { platforms, gameTypes, setUserOptions } = useContext(
+    UserOptionsContext,
+  );
   const userOptions = useContext(UserOptionsContext);
   const currentQueryString = location.search.replace(/^\?/, '');
   return (
@@ -40,6 +42,26 @@ const Controls = () => {
               setUserOptions({
                 platforms: _.uniq(
                   (data.checked ? _.concat : _.difference)(platforms, [
+                    data.value,
+                  ]),
+                ),
+              });
+            }}
+          />
+        ))}
+      </div>
+
+      <div>
+        <h2>Game Types</h2>
+        {_.map(GameType, (value, key) => (
+          <Checkbox
+            label={key}
+            value={value}
+            checked={_.includes(gameTypes, value)}
+            onChange={(e, data) => {
+              setUserOptions({
+                gameTypes: _.uniq(
+                  (data.checked ? _.concat : _.difference)(gameTypes, [
                     data.value,
                   ]),
                 ),
