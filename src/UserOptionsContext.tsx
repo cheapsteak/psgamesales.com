@@ -35,7 +35,7 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
   return (
     <UserOptionsContext.Provider
       value={{
-        ...defaultUserOptions,
+        ...userOptions,
         setUserOptions: newOptions =>
           setUserOptions({ ...userOptions, ...newOptions }),
       }}
