@@ -16,8 +16,18 @@ export const UserOptionsContext: React.Context<{
   hasPlusMembership: boolean;
   platforms: Platform[];
   gameTypes: GameType[];
+  setUserOptions: Dispatch<
+    SetStateAction<{
+      language?: string;
+      country?: string;
+      hasPlusMembership?: boolean;
+      platforms?: Platform[];
+      gameTypes?: GameType[];
+    }>
+  >;
 }> = React.createContext({
   ...defaultUserOptions,
+  setUserOptions: options => {},
 });
 
 export const UserOptionsContextProvider: React.FunctionComponent = props => {
