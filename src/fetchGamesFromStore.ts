@@ -1,3 +1,4 @@
+import querystring from 'querystring';
 import axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
 import localforage from 'localforage';
@@ -5,14 +6,34 @@ import {
   ValkyrieStoreIncludedItem,
   ValkyrieStoreResponse,
   GameMediaList,
+  Platform,
+  GameType,
 } from './types';
 import { GameData } from './GameData';
 
 const size = 100;
 
-const fetchFromStore = ({ store, start, language, country }) =>
+const fetchFromStore = ({
+  store,
+  start,
+  language,
+  country,
+  platforms,
+  gameTypes,
+}) =>
   axios(
-    `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?bucket=games&size=${size}&start=${start}`,
+    `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?${querystring.stringify(
+      _.omitBy(
+        {
+          bucket: 'games',
+          size: size,
+          start: start,
+          platforms: platforms.join(','),
+          gameTypes: gameTypes.join(','),
+        },
+        value => !_.isNil,
+      ),
+    )}`,
   );
 
 const checkIfStoreStillExists = ({ store, language, country }) =>
@@ -24,10 +45,14 @@ const getAllItemsFromStore = async ({
   store,
   language,
   country,
+  platforms,
+  gameTypes,
 }: {
   store: string;
   language: string;
   country: string;
+  platforms: Platform[];
+  gameTypes: GameType[];
 }): Promise<ValkyrieStoreIncludedItem[]> => {
   // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
@@ -35,6 +60,8 @@ const getAllItemsFromStore = async ({
     store,
     language,
     country,
+    platforms,
+    gameTypes,
   });
   const items = response.data.included;
   const totalItems = response.data.data.attributes['total-results'];
@@ -50,6 +77,8 @@ const getAllItemsFromStore = async ({
             start: (x + 1) * size,
             language,
             country,
+            platforms,
+            gameTypes,
           }).then(response => response.data.included),
         ),
       ),
@@ -104,7 +133,15 @@ const transformValkyrieItemToGameData = (
     });
 };
 
-const fetchGamesFromStore = async ({ store, country, language }) => {
+const fetchGamesFromStore = async ({
+  store,
+  country,
+  language,
+  platforms,
+  gameTypes,
+}) => {
+  const storeParams = { store, country, language, platforms, gameTypes };
+  const storeKey = JSON.stringify(storeParams);
   let storeItems;
 
   try {
@@ -114,7 +151,7 @@ const fetchGamesFromStore = async ({ store, country, language }) => {
       version: 1.0,
     });
 
-    storeItems = await localforage.getItem(store);
+    storeItems = await localforage.getItem(storeKey);
 
     if (storeItems) {
       if (checkIfStoreStillExists({ store, country, language })) {
@@ -123,12 +160,13 @@ const fetchGamesFromStore = async ({ store, country, language }) => {
         await localforage.removeItem(store);
       }
     }
-    storeItems = getAllItemsFromStore({ store, country, language });
-    localforage.setItem(store, storeItems);
+
+    storeItems = getAllItemsFromStore(storeParams);
+    localforage.setItem(storeKey, storeItems);
     return transformValkyrieItemToGameData(storeItems);
   } catch (e) {
     // browser doesn't support indexeddb
-    return getAllItemsFromStore({ store, country, language }).then(
+    return getAllItemsFromStore(storeParams).then(
       transformValkyrieItemToGameData,
     );
   }
