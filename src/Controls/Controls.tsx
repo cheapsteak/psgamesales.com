@@ -2,6 +2,7 @@ import React from 'react';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { Input } from 'semantic-ui-react';
 import querystring from 'querystring';
+import queryParamDict from '../queryParamDict';
 
 const Controls = () => {
   const [location, navigate] = useLocation();
@@ -11,11 +12,13 @@ const Controls = () => {
       <Input
         icon="search"
         placeholder="Search..."
-        defaultValue={querystring.parse(currentQueryString).q}
+        defaultValue={
+          querystring.parse(currentQueryString)[queryParamDict.GAME_SEARCH]
+        }
         onChange={e => {
           const serializedQueryParams = querystring.stringify({
             ...querystring.parse(currentQueryString),
-            q: e.target.value,
+            [queryParamDict.GAME_SEARCH]: e.target.value,
           });
           navigate(`?${serializedQueryParams}`, { replace: true });
         }}
