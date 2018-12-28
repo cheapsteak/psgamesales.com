@@ -4,6 +4,7 @@ import { css } from 'emotion';
 import fetchGamesFromStore from './fetchGamesFromStore';
 import { GameData } from './GameData';
 import GamesList from './GamesList';
+import Controls from './Controls';
 
 const storeName = `STORE-MSF77008-HOLIDAYSALELP`;
 
@@ -28,13 +29,15 @@ function App() {
   const [games, setGames] = useState<GameData[]>([]);
   const [language, setLanguage] = useState('en');
   const [country, setCountry] = useState('ca');
-  const [hasPlusMembership, setHasPlusMembership] = useState(false);
+  const [hasPlusMembership, setHasPlusMembership] = useState(true);
 
   useEffect(() => {
     fetchGamesFromStore({ store: storeName, language, country }).then(
       returnedGames => setGames(returnedGames),
     );
   }, []);
+
+  window['games'] = games;
 
   return (
     <UserOptionsContext.Provider
@@ -54,7 +57,9 @@ function App() {
             flex-direction: row;
           `}
         >
-          <div>fascists</div>
+          <div>
+            <Controls />
+          </div>
           <div
             className={css`
               flex: 1 1 auto;
