@@ -1,4 +1,4 @@
-import { GameMediaList } from './apiResponseTypes';
+import { GameMediaList } from './types';
 
 export interface GameData {
   id: string;

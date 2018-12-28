@@ -5,7 +5,7 @@ import {
   ValkyrieStoreIncludedItem,
   ValkyrieStoreResponse,
   GameMediaList,
-} from './apiResponseTypes';
+} from './types';
 import { GameData } from './GameData';
 
 const size = 100;
