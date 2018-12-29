@@ -1,4 +1,5 @@
 import React, { useContext } from 'react';
+import { css } from 'emotion';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox, Icon } from 'semantic-ui-react';
@@ -9,9 +10,12 @@ import { UserOptionsContext } from '../UserOptionsContext';
 
 const Controls = () => {
   const [location, navigate] = useLocation();
-  const { platforms, gameTypes, setUserOptions } = useContext(
-    UserOptionsContext,
-  );
+  const {
+    platforms,
+    gameTypes,
+    hasPlusMembership,
+    setUserOptions,
+  } = useContext(UserOptionsContext);
   const userOptions = useContext(UserOptionsContext);
   const currentQueryString = location.search.replace(/^\?/, '');
 
@@ -60,6 +64,28 @@ const Controls = () => {
           navigate(`?${serializedQueryParams}`, { replace: true });
         }}
       />
+
+      <div>
+        <Checkbox
+          label={
+            <label
+              className={css`
+                display: flex;
+                align-items: center;
+              `}
+            >
+              <img src={require('assets/plus-logo-yellow.png')} alt="" /> PS
+              Plus Discount
+            </label>
+          }
+          checked={hasPlusMembership}
+          onChange={(e, data) =>
+            setUserOptions({
+              hasPlusMembership: data.checked,
+            })
+          }
+        />
+      </div>
 
       <div>
         <h2>Platforms</h2>
