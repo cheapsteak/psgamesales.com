@@ -86,7 +86,7 @@ export default [
   { name: 'Turkey', languageCode: 'tr', code: 'tr' },
   { name: 'Ukraine', languageCode: 'uk', code: 'ua' },
   {
-    name: 'United Arab Emirates/ Middle East',
+    name: 'United Arab Emirates',
     languageCode: 'en',
     code: 'ae',
   },
