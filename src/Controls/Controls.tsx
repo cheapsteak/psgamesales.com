@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
-import { Input, Checkbox } from 'semantic-ui-react';
+import { Input, Checkbox, Icon } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from '../queryParamDict';
 import { Platform, GameType } from '../types';
@@ -14,14 +14,44 @@ const Controls = () => {
   );
   const userOptions = useContext(UserOptionsContext);
   const currentQueryString = location.search.replace(/^\?/, '');
+
+  const searchRef = React.createRef<Input>();
+  const resetGameQuery = () => {
+    navigate(
+      `?${querystring.stringify(
+        _.omit(
+          querystring.parse(currentQueryString),
+          queryParamDict.GAME_SEARCH,
+        ),
+      )}`,
+      { replace: true },
+    );
+    if (searchRef.current) {
+      searchRef.current['inputRef']['value'] = '';
+      searchRef.current['inputRef'].focus();
+    }
+  };
+  const currentGameQuery = querystring.parse(currentQueryString)[
+    queryParamDict.GAME_SEARCH
+  ];
   return (
     <div>
       <Input
-        icon="search"
-        placeholder="Search..."
-        defaultValue={
-          querystring.parse(currentQueryString)[queryParamDict.GAME_SEARCH]
+        ref={searchRef}
+        icon={
+          currentGameQuery ? (
+            <Icon name="close" link onClick={resetGameQuery} />
+          ) : (
+            'search'
+          )
         }
+        placeholder="Search..."
+        defaultValue={currentGameQuery}
+        onKeyUp={e => {
+          if (e.key === 'Escape') {
+            resetGameQuery();
+          }
+        }}
         onChange={e => {
           const serializedQueryParams = querystring.stringify({
             ...querystring.parse(currentQueryString),
