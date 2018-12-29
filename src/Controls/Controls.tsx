@@ -1,18 +1,20 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
-import { Input, Checkbox, Icon } from 'semantic-ui-react';
+import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from '../queryParamDict';
 import { Platform, GameType } from '../types';
 import { UserOptionsContext } from '../UserOptionsContext';
+import { countries, colors } from '../constants';
 
 const Controls = () => {
   const [location, navigate] = useLocation();
   const {
     platforms,
     gameTypes,
+    country: userSelectedCountryCode,
     hasPlusMembership,
     setUserOptions,
   } = useContext(UserOptionsContext);
@@ -85,6 +87,60 @@ const Controls = () => {
             })
           }
         />
+      </div>
+
+      <div>
+        <h2>Country</h2>
+        {(() => {
+          const priorityContryCodes = ['us', 'ca'];
+          const [isExpanded, setIsExpanded] = useState(false);
+          const CountryCheckbox = country => (
+            <Checkbox
+              radio
+              label={
+                <label>
+                  <Flag name={country.code as FlagNameValues} />
+                  {country.name}
+                </label>
+              }
+              value={country.code}
+              checked={userSelectedCountryCode === country.code}
+              onChange={(e, data) =>
+                setUserOptions({
+                  country: country.code,
+                  language: country.languageCode,
+                })
+              }
+            />
+          );
+          const countriesAboveFold = _.uniq([
+            ...priorityContryCodes,
+            userSelectedCountryCode,
+          ]).map(countryCode =>
+            countries.find(country => countryCode.includes(country.code)),
+          );
+          const countriesBelowFold = _.difference(
+            countries,
+            countriesAboveFold,
+          );
+          return (
+            <div>
+              {countriesAboveFold.map(CountryCheckbox)}
+              <button
+                className={css`
+                  cursor: pointer;
+                  border: 0;
+                  background: transparent;
+                  color: ${colors.blue};
+                `}
+                onClick={() => setIsExpanded(!isExpanded)}
+              >
+                <Icon name={isExpanded ? 'chevron up' : 'chevron down'} /> More
+              </button>
+              {isExpanded && countriesBelowFold.map(CountryCheckbox)}
+            </div>
+          );
+        })()}
       </div>
 
       <div>
