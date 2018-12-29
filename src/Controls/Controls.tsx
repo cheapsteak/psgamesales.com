@@ -46,6 +46,10 @@ const Controls = ({ isLoading }) => {
         `Controls ` +
         css`
           opacity: ${isLoading ? 0.5 : 1};
+
+          & .ui.checkbox {
+            display: block;
+          }
         `
       }
     >
