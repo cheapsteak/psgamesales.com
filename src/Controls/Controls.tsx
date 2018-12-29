@@ -182,8 +182,6 @@ const Controls = () => {
           />
         ))}
       </div>
-
-      <pre>{JSON.stringify(userOptions, null, '  ')}</pre>
     </div>
   );
 };
