@@ -4,7 +4,7 @@ import { css, keyframes } from 'emotion';
 
 const disappear = keyframes`
   0% {
-    background-color: #1dcbff;
+    background-color: #ffffff;
     transform: scale(1.1, 1.1);
     opacity: 1;
   }
