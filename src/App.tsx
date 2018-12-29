@@ -11,6 +11,7 @@ import queryParamDict from './queryParamDict';
 import { UserOptionsContextProvider } from './UserOptionsContext';
 import { Platform, GameType } from './types';
 import GamesProvider from './GamesProvider';
+import FancyLoader from './FancyLoader';
 
 const storeName = `STORE-MSF77008-HOLIDAYSALELP`;
 
@@ -22,7 +23,14 @@ function App() {
   ];
 
   return (
-    <div className={'App '}>
+    <div
+      className={
+        'App ' +
+        css`
+          height: 100%;
+        `
+      }
+    >
       <UserOptionsContextProvider>
         <GamesProvider>
           {({ games, isLoading }) => {
@@ -39,6 +47,7 @@ function App() {
                 className={css`
                   display: flex;
                   flex-direction: row;
+                  height: 100%;
                 `}
               >
                 <div>
@@ -47,12 +56,24 @@ function App() {
                 <div
                   className={css`
                     flex: 1 1 auto;
+                    position: relative;
                   `}
                 >
-                  {gamesToShow ? (
-                    <GamesList games={gamesToShow} />
-                  ) : (
-                    'loading...'
+                  {gamesToShow && <GamesList games={gamesToShow} />}
+                  {isLoading && (
+                    <div
+                      className={css`
+                        position: absolute;
+                        width: 100%;
+                        height: 100%;
+                        background: rgba(255, 255, 255, 0.95);
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                      `}
+                    >
+                      <FancyLoader />
+                    </div>
                   )}
                 </div>
               </div>
