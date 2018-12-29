@@ -9,7 +9,7 @@ import { Platform, GameType } from '../types';
 import { UserOptionsContext } from '../UserOptionsContext';
 import { countries, colors } from '../constants';
 
-const Controls = () => {
+const Controls = ({ isLoading }) => {
   const [location, navigate] = useLocation();
   const {
     platforms,
@@ -41,9 +41,17 @@ const Controls = () => {
     queryParamDict.GAME_SEARCH
   ];
   return (
-    <div>
+    <div
+      className={
+        `Controls ` +
+        css`
+          opacity: ${isLoading ? 0.5 : 1};
+        `
+      }
+    >
       <Input
         ref={searchRef}
+        loading={isLoading}
         icon={
           currentGameQuery ? (
             <Icon name="close" link onClick={resetGameQuery} />

@@ -25,7 +25,7 @@ function App() {
     <div className={'App '}>
       <UserOptionsContextProvider>
         <GamesProvider>
-          {({ games }) => {
+          {({ games, isLoading }) => {
             window['games'] = games;
             const gamesToShow =
               gameQuery && gameQuery.length > 0
@@ -33,6 +33,7 @@ function App() {
                     game.name.toLowerCase().includes(gameQuery),
                   )
                 : games;
+
             return (
               <div
                 className={css`
@@ -41,7 +42,7 @@ function App() {
                 `}
               >
                 <div>
-                  <Controls />
+                  <Controls isLoading={isLoading} />
                 </div>
                 <div
                   className={css`
