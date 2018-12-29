@@ -111,7 +111,7 @@ const Controls = () => {
         <h2>Game Types</h2>
         {_.map(GameType, (value, key) => (
           <Checkbox
-            label={key}
+            label={key.replace(/_/g, ' ')}
             value={value}
             checked={_.includes(gameTypes, value)}
             onChange={(e, data) => {
