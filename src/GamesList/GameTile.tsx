@@ -1,4 +1,5 @@
 import querystring from 'querystring';
+import _ from 'lodash';
 import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from '../UserOptionsContext';
@@ -7,7 +8,17 @@ import { GameData } from '../GameData';
 const colors = {
   price: '#acdbf5',
   originalPrice: '#7193a6',
+  gradientFade: 'rgba(255,255,255,0)',
 };
+
+const gradientColors = [
+  '#845EC2',
+  '#D65DB1',
+  '#FF6F91',
+  '#FF9671',
+  '#FFC75F',
+  '#F9F871',
+];
 
 // @ts-ignore-line "Property 'game' does not exist on type '{ children?: ReactNode; }'.ts(2339)"
 const GameTile: React.ForwardRefExoticComponent<{
@@ -18,6 +29,17 @@ const GameTile: React.ForwardRefExoticComponent<{
     UserOptionsContext,
   );
   const [retryCount, setRetryCount] = useState(0);
+  const [backgroundImage] = useState(
+    _.sampleSize(gradientColors, 3)
+      .map(
+        color =>
+          `radial-gradient(circle at ${_.random(0, 200)}px ${_.random(
+            0,
+            200,
+          )}px, ${color}, ${colors.gradientFade})`,
+      )
+      .join(', '),
+  );
   return (
     <div
       key={game.id}
@@ -38,6 +60,8 @@ const GameTile: React.ForwardRefExoticComponent<{
           css`
             display: block;
             position: relative;
+
+            background-image: ${backgroundImage};
           `
         }
       >
