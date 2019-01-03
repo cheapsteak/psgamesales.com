@@ -47,12 +47,14 @@ const getAllItemsFromStore = async ({
   country,
   platforms,
   gameTypes,
+  onFirstPageLoad,
 }: {
   store: string;
   language: string;
   country: string;
   platforms: Platform[];
   gameTypes: GameType[];
+  onFirstPageLoad?: (firstPageResponse: ValkyrieStoreIncludedItem[]) => void;
 }): Promise<ValkyrieStoreIncludedItem[]> => {
   // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
@@ -67,6 +69,7 @@ const getAllItemsFromStore = async ({
   const totalItems = response.data.data.attributes['total-results'];
 
   if (totalItems > size) {
+    onFirstPageLoad && onFirstPageLoad(response.data.included);
     const pagesRemaining = Math.ceil((totalItems - size) / size);
     // fetch all the other pages at once
     return _.flatten(
@@ -139,6 +142,9 @@ const fetchGamesFromStore = async ({
   language,
   platforms,
   gameTypes,
+
+  // callback used to partially populate the list when only the first page of data has been returned
+  onPartialResponse,
 }) => {
   const storeParams = { store, country, language, platforms, gameTypes };
   const storeKey = JSON.stringify({
@@ -174,9 +180,11 @@ const fetchGamesFromStore = async ({
     return transformValkyrieItemToGameData(storeItems);
   } catch (e) {
     // browser doesn't support indexeddb
-    return getAllItemsFromStore(storeParams).then(
-      transformValkyrieItemToGameData,
-    );
+    return getAllItemsFromStore({
+      ...storeParams,
+      onFirstPageLoad: partialResponse =>
+        onPartialResponse(transformValkyrieItemToGameData(partialResponse)),
+    }).then(transformValkyrieItemToGameData);
   }
 };
 

@@ -25,6 +25,7 @@ const GamesProvider: React.FunctionComponent<{
         country,
         platforms,
         gameTypes,
+        onPartialResponse: partialGames => setGames(partialGames),
       }).then(returnedGames => {
         setGames(returnedGames);
         setIsLoading(false);
