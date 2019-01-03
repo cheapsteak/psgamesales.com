@@ -72,20 +72,23 @@ const getAllItemsFromStore = async ({
     onFirstPageLoad && onFirstPageLoad(response.data.included);
     const pagesRemaining = Math.ceil((totalItems - size) / size);
     // fetch all the other pages at once
-    return _.flatten(
-      await Promise.all(
-        _.range(pagesRemaining).map(x =>
-          fetchFromStore({
-            store,
-            start: (x + 1) * size,
-            language,
-            country,
-            platforms,
-            gameTypes,
-          }).then(response => response.data.included),
+    return [
+      ...items,
+      ..._.flatten(
+        await Promise.all(
+          _.range(pagesRemaining).map(x =>
+            fetchFromStore({
+              store,
+              start: (x + 1) * size,
+              language,
+              country,
+              platforms,
+              gameTypes,
+            }).then(response => response.data.included),
+          ),
         ),
       ),
-    );
+    ];
   } else {
     return items;
   }
