@@ -44,6 +44,7 @@ const GamesList: React.FunctionComponent<{ games: GameData[] }> = ({
                     rowHeight={getColumnWidth}
                     rowCount={rowCount}
                     width={adjustedWidth}
+                    autoContainerWidth
                   />
                 )}
               </ColumnSizer>
