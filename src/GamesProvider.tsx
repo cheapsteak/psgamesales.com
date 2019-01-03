@@ -15,6 +15,7 @@ const GamesProvider: React.FunctionComponent<{
   const [store, setStore] = useState(defaultStore);
   const [games, setGames] = useState<GameData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasPartialContent, setHasPartialContent] = useState(false);
 
   useEffect(
     () => {
@@ -25,7 +26,10 @@ const GamesProvider: React.FunctionComponent<{
         country,
         platforms,
         gameTypes,
-        onPartialResponse: partialGames => setGames(partialGames),
+        onPartialResponse: partialGames => {
+          setGames(partialGames);
+          setHasPartialContent(true);
+        },
       }).then(returnedGames => {
         setGames(returnedGames);
         setIsLoading(false);
@@ -34,7 +38,7 @@ const GamesProvider: React.FunctionComponent<{
     [language, country, platforms.join(','), gameTypes.join(',')],
   );
 
-  return props.children({ games, isLoading });
+  return props.children({ games, isLoading, hasPartialContent });
 };
 
 export default GamesProvider;

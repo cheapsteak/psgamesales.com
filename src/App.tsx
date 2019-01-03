@@ -33,7 +33,7 @@ function App() {
     >
       <UserOptionsContextProvider>
         <GamesProvider>
-          {({ games, isLoading }) => {
+          {({ games, isLoading, hasPartialContent }) => {
             window['games'] = games;
             const gamesToShow =
               gameQuery && gameQuery.length > 0
@@ -66,7 +66,13 @@ function App() {
                         position: absolute;
                         width: 100%;
                         height: 100%;
-                        background: rgba(255, 255, 255, 0.95);
+                        background: rgba(
+                          255,
+                          255,
+                          255,
+                          ${hasPartialContent ? 0.5 : 0.95}
+                        );
+                        transition: 0.3s background;
                         display: flex;
                         justify-content: center;
                         align-items: center;
