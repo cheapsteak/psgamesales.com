@@ -60,7 +60,7 @@ const GameTile: React.ForwardRefExoticComponent<{
           css`
             display: block;
             position: relative;
-
+            padding-top: 100%;
             background-image: ${backgroundImage};
           `
         }
@@ -72,6 +72,9 @@ const GameTile: React.ForwardRefExoticComponent<{
           })}`}
           alt={game.name}
           className={css`
+            position: absolute;
+            top: 0;
+            left: 0;
             display: block;
             width: 100%;
             height: auto;
