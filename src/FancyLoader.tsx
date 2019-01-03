@@ -4,12 +4,12 @@ import { css, keyframes } from 'emotion';
 
 const disappear = keyframes`
   0% {
-    background-color: #ffffff;
+    background-color: #f2fdff;
     transform: scale(1.1, 1.1);
     opacity: 1;
   }
   100% {
-    background-color : #848484;
+    background-color : #a2edef;
     transform: scale(0, 0);
     opacity: 0;
   }
@@ -37,7 +37,7 @@ const FancyLoader: React.FunctionComponent = () => (
     {_.range(9).map(x => (
       <div
         className={css`
-          background: #f2fdff;
+          background: #888888;
           border-radius: 2px;
           float: left;
           clear: right;
