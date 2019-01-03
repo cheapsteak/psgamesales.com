@@ -147,7 +147,15 @@ const Controls = ({ isLoading }) => {
                 `}
                 onClick={() => setIsExpanded(!isExpanded)}
               >
-                <Icon name={isExpanded ? 'chevron up' : 'chevron down'} /> More
+                {isExpanded ? (
+                  <React.Fragment>
+                    <Icon name="chevron up" /> Less
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <Icon name="chevron down" /> More
+                  </React.Fragment>
+                )}
               </button>
               {isExpanded && countriesBelowFold.map(CountryCheckbox)}
             </div>
