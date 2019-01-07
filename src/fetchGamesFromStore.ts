@@ -1,7 +1,6 @@
 import querystring from 'querystring';
 import axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
-import localforage from 'localforage';
 import {
   ValkyrieStoreIncludedItem,
   ValkyrieStoreResponse,
@@ -10,6 +9,7 @@ import {
   GameType,
 } from './types';
 import { GameData } from './GameData';
+import { localforageInstance } from './localforageInstance';
 
 const size = 100;
 
@@ -160,26 +160,20 @@ const fetchGamesFromStore = async ({
   let storeItems;
 
   try {
-    localforage.config({
-      driver: localforage.INDEXEDDB,
-      name: 'ps-store',
-      version: 1.0,
-    });
-
-    storeItems = await localforage.getItem(storeKey);
+    storeItems = await localforageInstance.getItem(storeKey);
 
     if (storeItems) {
       try {
         await checkIfStoreStillExists({ store, country, language });
       } catch (e) {
-        await localforage.removeItem(store);
+        await localforageInstance.removeItem(store);
         throw e;
       }
       return transformValkyrieItemToGameData(storeItems);
     }
 
     storeItems = getAllItemsFromStore(storeParams);
-    localforage.setItem(storeKey, storeItems);
+    localforageInstance.setItem(storeKey, storeItems);
     return transformValkyrieItemToGameData(storeItems);
   } catch (e) {
     // browser doesn't support indexeddb
