@@ -2,12 +2,21 @@ import React, { Dispatch, SetStateAction, useState } from 'react';
 import _ from 'lodash';
 import { Platform, GameType } from './types';
 
+let storedUserOptions;
+
+try {
+  storedUserOptions = JSON.parse(localStorage.getItem('user-options') || '');
+} catch (e) {
+  console.error('Failed to retrieve stored user options', e);
+}
+
 const defaultUserOptions = {
   language: 'en',
   country: 'ca',
   hasPlusMembership: false,
   platforms: [Platform.PS4],
   gameTypes: [GameType.Bundles, GameType.PS4_Full_Games, GameType.PSN_Games],
+  ...storedUserOptions,
 };
 
 export const UserOptionsContext: React.Context<{
@@ -36,8 +45,18 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
     <UserOptionsContext.Provider
       value={{
         ...userOptions,
-        setUserOptions: newOptions =>
-          setUserOptions({ ...userOptions, ...newOptions }),
+        setUserOptions: newOptions => {
+          const combinedOptions = { ...userOptions, ...newOptions };
+          setUserOptions(combinedOptions);
+          try {
+            localStorage.setItem(
+              'user-options',
+              JSON.stringify(combinedOptions),
+            );
+          } catch (e) {
+            console.log('Failed to set user options', e);
+          }
+        },
       }}
     >
       {props.children}
