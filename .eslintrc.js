@@ -21,6 +21,7 @@ module.exports = {
       }
     ],
     "no-console": "warn",
+    "react/prop-types": "off",
     "no-unused-vars": "warn",
     "typescript/no-unused-vars": "warn"
   },
