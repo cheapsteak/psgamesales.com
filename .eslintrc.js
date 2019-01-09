@@ -1,5 +1,5 @@
 module.exports = {
-  "parser": "babel-eslint",
+  "parser": "typescript-eslint-parser",
   "env": {
     "browser": true,
     "es6": true
@@ -9,17 +9,25 @@ module.exports = {
     "ecmaVersion": 6,
     "sourceType": "module"
   },
-  "plugins": ["prettier", "babel"],
-  "extends": ["prettier", "prettier/react"],
+  "plugins": ["prettier", "babel", "typescript"],
+  "extends": ["prettier", "prettier/react", 'plugin:react/recommended'],
   "rules": {
     "prettier/prettier": [
       "warn",
       {
         "singleQuote": true,
-        "trailingComma": "all"
+        "trailingComma": "all",
+        "parser": "typescript"
       }
     ],
-    "no-console": "warn"
+    "no-console": "warn",
+    "no-unused-vars": "warn",
+    "typescript/no-unused-vars": "warn"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
   },
   "overrides": {
     "files": ["**/*.ts", "**/*.tsx"],
