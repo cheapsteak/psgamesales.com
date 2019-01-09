@@ -2,8 +2,8 @@ import querystring from 'querystring';
 import _ from 'lodash';
 import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
-import { UserOptionsContext } from '../UserOptionsContext';
-import { GameData } from '../GameData';
+import { UserOptionsContext } from 'src/UserOptionsContext';
+import { GameData } from 'src/GameData';
 
 const colors = {
   price: '#acdbf5',
@@ -55,6 +55,7 @@ const GameTile: React.ForwardRefExoticComponent<{
           game.id
         }`}
         target="_blank"
+        rel="noopener noreferrer"
         className={
           `GameInfoLink ` +
           css`

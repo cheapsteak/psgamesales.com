@@ -6,7 +6,7 @@ import {
   WindowScroller,
 } from 'react-virtualized';
 import { css } from 'emotion';
-import { GameData } from '../GameData';
+import { GameData } from 'src/GameData';
 import GameTile from './GameTile';
 
 const GamesList: React.FunctionComponent<{ games: GameData[] }> = ({

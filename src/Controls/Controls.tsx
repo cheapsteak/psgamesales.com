@@ -5,9 +5,9 @@ import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from '../queryParamDict';
-import { Platform, GameType } from '../types';
-import { UserOptionsContext } from '../UserOptionsContext';
-import { countries, colors } from '../constants';
+import { Platform, GameType } from 'src/types';
+import { UserOptionsContext } from 'src/UserOptionsContext';
+import { countries, colors } from 'src/constants';
 
 const Controls = ({ isLoading }) => {
   const [location, navigate] = useLocation();
