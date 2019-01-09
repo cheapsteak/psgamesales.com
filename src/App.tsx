@@ -1,19 +1,13 @@
-import React, { useState, useEffect, Dispatch, SetStateAction } from 'react';
-import _ from 'lodash';
+import React from 'react';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { css } from 'emotion';
-import fetchGamesFromStore from './fetchGamesFromStore';
-import { GameData } from './GameData';
 import GamesList from './GamesList';
 import Controls from './Controls';
 import querystring from 'querystring';
 import queryParamDict from './queryParamDict';
 import { UserOptionsContextProvider } from './UserOptionsContext';
-import { Platform, GameType } from './types';
 import GamesProvider from './GamesProvider';
 import FancyLoader from './FancyLoader';
-
-const storeName = `STORE-MSF77008-HOLIDAYSALELP`;
 
 function App() {
   const [location] = useLocation();

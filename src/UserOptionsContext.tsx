@@ -1,5 +1,4 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import _ from 'lodash';
 import { Platform, GameType } from './types';
 
 let storedUserOptions;
