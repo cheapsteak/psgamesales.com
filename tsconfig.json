@@ -1,4 +1,5 @@
 {
+  "extends": "./tsconfig.paths.json",
   "defaultSeverity": "warning",
   "compilerOptions": {
     "target": "es5",

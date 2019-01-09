@@ -88,7 +88,7 @@ const Controls = ({ isLoading }) => {
                 align-items: center;
               `}
             >
-              <img src={require('assets/plus-logo-yellow.png')} alt="" /> PS
+              <img src={require('src/assets/plus-logo-yellow.png')} alt="" /> PS
               Plus Discount
             </label>
           }
