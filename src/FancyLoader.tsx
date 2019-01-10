@@ -1,15 +1,16 @@
 import React from 'react';
 import _ from 'lodash';
 import { css, keyframes } from 'emotion';
+import { colors } from 'src/constants';
 
 const disappear = keyframes`
   0% {
-    background-color: #f2fdff;
+    background-color: ${colors.purple};
     transform: scale(1.1, 1.1);
     opacity: 1;
   }
   100% {
-    background-color : #a2edef;
+    background-color : ${colors.pink};
     transform: scale(0, 0);
     opacity: 0;
   }
@@ -38,7 +39,7 @@ const FancyLoader: React.FunctionComponent = () => (
       <div
         key={x}
         className={css`
-          background: #888888;
+          background: ${colors.peach};
           border-radius: 2px;
           float: left;
           clear: right;
