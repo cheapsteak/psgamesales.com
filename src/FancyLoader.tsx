@@ -36,6 +36,7 @@ const FancyLoader: React.FunctionComponent = () => (
   >
     {_.range(9).map(x => (
       <div
+        key={x}
         className={css`
           background: #888888;
           border-radius: 2px;
