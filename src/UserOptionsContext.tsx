@@ -4,7 +4,7 @@ import { Platform, GameType } from './types';
 let storedUserOptions;
 
 try {
-  storedUserOptions = JSON.parse(localStorage.getItem('user-options') || '');
+  storedUserOptions = JSON.parse(localStorage.getItem('user-options') || '{}');
 } catch (e) {
   console.error('Failed to retrieve stored user options', e);
 }
