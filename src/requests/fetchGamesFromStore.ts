@@ -7,9 +7,9 @@ import {
   GameMediaList,
   Platform,
   GameType,
-} from './types';
-import { GameData } from './GameData';
-import { localforageInstance } from './localforageInstance';
+} from 'src/types';
+import { GameData } from 'src/GameData';
+import { localforageInstance } from 'src/localforageInstance';
 
 const size = 100;
 

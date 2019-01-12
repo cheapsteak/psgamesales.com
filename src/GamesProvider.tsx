@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import fetchGamesFromStore from './fetchGamesFromStore';
+import fetchGamesFromStore from './requests/fetchGamesFromStore';
 import { UserOptionsContext } from './UserOptionsContext';
 import { GameData } from './GameData';
 
