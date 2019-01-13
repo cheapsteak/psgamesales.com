@@ -9,7 +9,7 @@ const defaultStore = `STORE-MSF77008-HOLIDAYSALELP`;
 const GamesProvider: React.FunctionComponent<{
   children: (props) => any;
 }> = props => {
-  const { language, country, platforms, gameTypes } = useContext(
+  const { language, country, platforms, contentTypes } = useContext(
     UserOptionsContext,
   );
   const [store, setStore] = useState(defaultStore);
@@ -27,7 +27,8 @@ const GamesProvider: React.FunctionComponent<{
         language,
         country,
         platforms,
-        gameTypes,
+        // gameTypes,
+        contentTypes,
         onPartialResponse: partialStoreItems => {
           setStoreItems(partialStoreItems);
           setHasPartialContent(true);
@@ -37,7 +38,7 @@ const GamesProvider: React.FunctionComponent<{
         setIsLoading(false);
       });
     },
-    [language, country, platforms.join(','), gameTypes.join(',')],
+    [language, country, platforms.join(','), contentTypes.join(',')],
   );
 
   return props.children({

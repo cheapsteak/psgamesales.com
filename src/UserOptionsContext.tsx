@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import { Platform, GameType } from './types';
+import { Platform, ContentType } from './types';
 
 let storedUserOptions;
 
@@ -14,7 +14,8 @@ const defaultUserOptions = {
   country: 'ca',
   hasPlusMembership: false,
   platforms: [Platform.PS4],
-  gameTypes: [GameType.Bundles, GameType.PS4_Full_Games, GameType.PSN_Games],
+  // gameTypes: [GameType.Bundles, GameType.PS4_Full_Games, GameType.PSN_Games],
+  contentTypes: [ContentType.Games, ContentType.Bundles],
   ...storedUserOptions,
 };
 
@@ -23,14 +24,16 @@ export const UserOptionsContext: React.Context<{
   country: string;
   hasPlusMembership: boolean;
   platforms: Platform[];
-  gameTypes: GameType[];
+  // gameTypes: GameType[];
+  contentTypes: ContentType[];
   setUserOptions: Dispatch<
     SetStateAction<{
       language?: string;
       country?: string;
       hasPlusMembership?: boolean;
       platforms?: Platform[];
-      gameTypes?: GameType[];
+      // gameTypes?: GameType[];
+      contentTypes?: ContentType[];
     }>
   >;
 }> = React.createContext({

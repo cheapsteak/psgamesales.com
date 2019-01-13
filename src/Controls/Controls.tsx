@@ -7,13 +7,14 @@ import querystring from 'querystring';
 import queryParamDict from '../queryParamDict';
 import { Platform, GameType } from 'src/types';
 import { UserOptionsContext } from 'src/UserOptionsContext';
-import { countries, colors } from 'src/constants';
+import { countries, colors, facets } from 'src/constants';
 
 const Controls = ({ isLoading }) => {
   const [location, navigate] = useLocation();
   const {
     platforms,
-    gameTypes,
+    // gameTypes,
+    contentTypes,
     country: userSelectedCountryCode,
     hasPlusMembership,
     setUserOptions,
@@ -185,7 +186,7 @@ const Controls = ({ isLoading }) => {
         ))}
       </div>
 
-      <div>
+      {/* <div>
         <h2>Game Types</h2>
         {_.map(GameType, (value, key) => (
           <Checkbox
@@ -197,6 +198,27 @@ const Controls = ({ isLoading }) => {
               setUserOptions({
                 gameTypes: _.uniq(
                   (data.checked ? _.concat : _.difference)(gameTypes, [
+                    data.value,
+                  ]),
+                ),
+              });
+            }}
+          />
+        ))}
+      </div>
+    </div> */}
+      <div>
+        <h2>{facets.game_content_type.name}</h2>
+        {_.map(facets.game_content_type.values, value => (
+          <Checkbox
+            key={value.key}
+            label={value.name}
+            value={value.key}
+            checked={_.includes(contentTypes, value.key)}
+            onChange={(e, data) => {
+              setUserOptions({
+                contentTypes: _.uniq(
+                  (data.checked ? _.concat : _.difference)(contentTypes, [
                     data.value,
                   ]),
                 ),

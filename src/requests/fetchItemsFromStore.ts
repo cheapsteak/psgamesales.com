@@ -6,8 +6,24 @@ import {
   ValkyrieStoreResponse,
   Platform,
   GameType,
+  ContentType,
 } from 'src/types';
 import { localforageInstance } from 'src/localforageInstance';
+
+interface Facets {
+  platforms?: Platform[];
+  gameTypes?: GameType[];
+  contentTypes?: ContentType[];
+}
+interface StoreOptions {
+  store: string;
+
+  // TODO: possible to generate types for these from constants/countries.ts?
+  // maybe reference https://github.com/Microsoft/TypeScript/issues/28046#issuecomment-431871542
+  // https://github.com/Microsoft/TypeScript/issues/10195
+  country: string;
+  language: string;
+}
 
 const size = 100;
 
@@ -18,7 +34,11 @@ const fetchFromStore = ({
   country,
   platforms,
   gameTypes,
-}) =>
+  contentTypes,
+}: Facets &
+  StoreOptions & {
+    start: number;
+  }) =>
   axios(
     `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?${querystring.stringify(
       _.omitBy(
@@ -26,15 +46,16 @@ const fetchFromStore = ({
           bucket: 'games',
           size: size,
           start: start,
-          platform: platforms.join(','),
-          game_type: gameTypes.join(','),
+          platform: platforms && platforms.join(','),
+          game_type: gameTypes && gameTypes.join(','),
+          game_content_type: contentTypes && contentTypes.join(','),
         },
         value => _.isNil(value),
       ),
     )}`,
   );
 
-const checkIfStoreStillExists = ({ store, language, country }) =>
+const checkIfStoreStillExists = ({ store, language, country }: StoreOptions) =>
   axios(
     `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?size=0`,
   ).then(response => response.data.data.attributes['total-results'] > 0);
@@ -45,15 +66,12 @@ const getAllItemsFromStore = async ({
   country,
   platforms,
   gameTypes,
+  contentTypes,
   onFirstPageLoad,
-}: {
-  store: string;
-  language: string;
-  country: string;
-  platforms: Platform[];
-  gameTypes: GameType[];
-  onFirstPageLoad?: (firstPageResponse: ValkyrieStoreIncludedItem[]) => void;
-}): Promise<ValkyrieStoreIncludedItem[]> => {
+}: Facets &
+  StoreOptions & {
+    onFirstPageLoad?: (firstPageResponse: ValkyrieStoreIncludedItem[]) => void;
+  }): Promise<ValkyrieStoreIncludedItem[]> => {
   // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
     start: 0,
@@ -62,6 +80,7 @@ const getAllItemsFromStore = async ({
     country,
     platforms,
     gameTypes,
+    contentTypes,
   });
   const items = response.data.included;
   const totalItems = response.data.data.attributes['total-results'];
@@ -82,6 +101,7 @@ const getAllItemsFromStore = async ({
               country,
               platforms,
               gameTypes,
+              contentTypes,
             }).then(response => response.data.included),
           ),
         ),
@@ -98,17 +118,29 @@ const fetchItemsFromStore = async ({
   language,
   platforms,
   gameTypes,
+  contentTypes,
 
   // callback used to partially populate the list when only the first page of data has been returned
   onPartialResponse,
-}) => {
-  const storeParams = { store, country, language, platforms, gameTypes };
+}: Facets &
+  StoreOptions & {
+    onPartialResponse: Function;
+  }) => {
+  const storeParams = {
+    store,
+    country,
+    language,
+    platforms,
+    gameTypes,
+    contentTypes,
+  };
   const storeKey = JSON.stringify({
     store,
     country,
     language,
-    platforms: platforms.slice().sort(),
-    gameTypes: gameTypes.slice().sort(),
+    platforms: platforms && platforms.slice().sort(),
+    gameTypes: gameTypes && gameTypes.slice().sort(),
+    contentTypes: contentTypes && contentTypes.slice().sort(),
   });
   let storeItems;
 
