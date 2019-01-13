@@ -8,7 +8,6 @@ import {
   GameType,
 } from 'src/types';
 import { localforageInstance } from 'src/localforageInstance';
-import transformValkyrieItemToGameData from './transformValkyrieItemToGameData';
 
 const size = 100;
 
@@ -93,7 +92,7 @@ const getAllItemsFromStore = async ({
   }
 };
 
-const fetchGamesFromStore = async ({
+const fetchItemsFromStore = async ({
   store,
   country,
   language,
@@ -123,20 +122,19 @@ const fetchGamesFromStore = async ({
         await localforageInstance.removeItem(store);
         throw e;
       }
-      return transformValkyrieItemToGameData(storeItems);
+      return storeItems;
     }
 
     storeItems = getAllItemsFromStore(storeParams);
     localforageInstance.setItem(storeKey, storeItems);
-    return transformValkyrieItemToGameData(storeItems);
+    return storeItems;
   } catch (e) {
     // browser doesn't support indexeddb
     return getAllItemsFromStore({
       ...storeParams,
-      onFirstPageLoad: partialResponse =>
-        onPartialResponse(transformValkyrieItemToGameData(partialResponse)),
-    }).then(transformValkyrieItemToGameData);
+      onFirstPageLoad: partialResponse => onPartialResponse(partialResponse),
+    });
   }
 };
 
-export default fetchGamesFromStore;
+export default fetchItemsFromStore;

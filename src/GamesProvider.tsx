@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 
-import fetchGamesFromStore from './requests/fetchGamesFromStore';
+import fetchItemsFromStore from './requests/fetchItemsFromStore';
 import { UserOptionsContext } from './UserOptionsContext';
-import { GameData } from './GameData';
+import transformValkyrieItemToGameData from './requests/transformValkyrieItemToGameData';
 
 const defaultStore = `STORE-MSF77008-HOLIDAYSALELP`;
 
@@ -13,32 +13,38 @@ const GamesProvider: React.FunctionComponent<{
     UserOptionsContext,
   );
   const [store, setStore] = useState(defaultStore);
-  const [games, setGames] = useState<GameData[]>([]);
+  const [storeItems, setStoreItems] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [hasPartialContent, setHasPartialContent] = useState(false);
+
+  window['storeItems'] = storeItems;
 
   useEffect(
     () => {
       setIsLoading(true);
-      fetchGamesFromStore({
+      fetchItemsFromStore({
         store,
         language,
         country,
         platforms,
         gameTypes,
-        onPartialResponse: partialGames => {
-          setGames(partialGames);
+        onPartialResponse: partialStoreItems => {
+          setStoreItems(partialStoreItems);
           setHasPartialContent(true);
         },
-      }).then(returnedGames => {
-        setGames(returnedGames);
+      }).then(returnedStoreItems => {
+        setStoreItems(returnedStoreItems);
         setIsLoading(false);
       });
     },
     [language, country, platforms.join(','), gameTypes.join(',')],
   );
 
-  return props.children({ games, isLoading, hasPartialContent });
+  return props.children({
+    games: transformValkyrieItemToGameData(storeItems),
+    isLoading,
+    hasPartialContent,
+  });
 };
 
 export default GamesProvider;
