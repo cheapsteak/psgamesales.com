@@ -29,7 +29,7 @@ const fetchFromStore = ({
           platform: platforms.join(','),
           game_type: gameTypes.join(','),
         },
-        value => !_.isNil(value),
+        value => _.isNil(value),
       ),
     )}`,
   );
