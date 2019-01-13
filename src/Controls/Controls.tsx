@@ -108,6 +108,7 @@ const Controls = ({ isLoading }) => {
           const [isExpanded, setIsExpanded] = useState(false);
           const CountryCheckbox = country => (
             <Checkbox
+              key={country.code}
               radio
               label={
                 <label>
@@ -167,6 +168,7 @@ const Controls = ({ isLoading }) => {
         <h2>Platforms</h2>
         {_.map(Platform, (value, key) => (
           <Checkbox
+            key={key}
             label={key}
             value={value}
             checked={_.includes(platforms, value)}
@@ -187,6 +189,7 @@ const Controls = ({ isLoading }) => {
         <h2>Game Types</h2>
         {_.map(GameType, (value, key) => (
           <Checkbox
+            key={key}
             label={key.replace(/_/g, ' ')}
             value={value}
             checked={_.includes(gameTypes, value)}
