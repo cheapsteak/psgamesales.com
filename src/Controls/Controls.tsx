@@ -16,7 +16,7 @@ const Controls = ({ isLoading }) => {
     // gameTypes,
     contentTypes,
     country: userSelectedCountryCode,
-    hasPlusMembership,
+    pricingDisplayMode,
     setUserOptions,
   } = useContext(UserOptionsContext);
   const userOptions = useContext(UserOptionsContext);
@@ -81,25 +81,46 @@ const Controls = ({ isLoading }) => {
       />
 
       <div>
-        <Checkbox
-          label={
-            <label
-              className={css`
-                display: flex;
-                align-items: center;
-              `}
-            >
-              <img src={require('src/assets/plus-logo-yellow.png')} alt="" /> PS
-              Plus Discount
-            </label>
-          }
-          checked={hasPlusMembership}
-          onChange={(e, data) =>
-            setUserOptions({
-              hasPlusMembership: data.checked,
-            })
-          }
-        />
+        <h2>Price display</h2>
+        {[
+          {
+            label: (
+              <label
+                className={css`
+                  display: flex;
+                  align-items: center;
+                `}
+              >
+                Only PS Plus{' '}
+                <img src={require('src/assets/plus-logo-yellow.png')} alt="" />{' '}
+              </label>
+            ),
+            value: 'only_plus',
+          },
+          {
+            label: 'Only non-plus',
+            value: 'only_non_plus',
+          },
+          {
+            label: 'Show both',
+            value: 'plus_and_non_plus',
+          },
+        ].map(item => (
+          <Checkbox
+            key={item.value}
+            radio
+            label={item.label}
+            checked={pricingDisplayMode === item.value}
+            onChange={() =>
+              setUserOptions({
+                pricingDisplayMode: item.value as
+                  | 'only_plus'
+                  | 'only_non_plus'
+                  | 'plus_and_non_plus',
+              })
+            }
+          />
+        ))}
       </div>
 
       <div>

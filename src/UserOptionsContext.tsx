@@ -12,17 +12,22 @@ try {
 const defaultUserOptions = {
   language: 'en',
   country: 'ca',
-  hasPlusMembership: false,
+  pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
   // gameTypes: [GameType.Bundles, GameType.PS4_Full_Games, GameType.PSN_Games],
   contentTypes: [ContentType.Games, ContentType.Bundles],
   ...storedUserOptions,
 };
 
+type PricingDisplayModeOptions =
+  | 'only_plus'
+  | 'only_non_plus'
+  | 'plus_and_non_plus';
+
 export const UserOptionsContext: React.Context<{
   language: string;
   country: string;
-  hasPlusMembership: boolean;
+  pricingDisplayMode: PricingDisplayModeOptions;
   platforms: Platform[];
   // gameTypes: GameType[];
   contentTypes: ContentType[];
@@ -30,7 +35,7 @@ export const UserOptionsContext: React.Context<{
     SetStateAction<{
       language?: string;
       country?: string;
-      hasPlusMembership?: boolean;
+      pricingDisplayMode?: PricingDisplayModeOptions;
       platforms?: Platform[];
       // gameTypes?: GameType[];
       contentTypes?: ContentType[];

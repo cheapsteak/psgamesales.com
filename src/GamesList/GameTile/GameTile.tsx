@@ -4,10 +4,9 @@ import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameData } from 'src/GameData';
+import Price from './Price';
 
 const colors = {
-  price: '#acdbf5',
-  originalPrice: '#7193a6',
   gradientFade: 'rgba(255,255,255,0)',
 };
 
@@ -25,9 +24,7 @@ const GameTile: React.ForwardRefExoticComponent<{
   game: GameData;
   style: any;
 }> = React.forwardRef(({ game, style }, ref) => {
-  const { language, country, hasPlusMembership } = useContext(
-    UserOptionsContext,
-  );
+  const { language, country } = useContext(UserOptionsContext);
   const [retryCount, setRetryCount] = useState(0);
   const [backgroundImage] = useState(
     _.sampleSize(gradientColors, 3)
@@ -95,70 +92,7 @@ const GameTile: React.ForwardRefExoticComponent<{
           {game.name}
         </div>
 
-        <div
-          className={
-            'DiscountBlock ' +
-            css`
-              position: absolute;
-              bottom: 0;
-              right: 0;
-              background-color: #000000;
-              display: flex;
-              flex-direction: row;
-            `
-          }
-        >
-          <div
-            className={css`
-              background-color: #8bb006;
-              color: #000000;
-              padding: 0.05em 0.2em;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-              font-size: 22px;
-            `}
-          >
-            {
-              (hasPlusMembership ? game.price.plus : game.price.nonPlus)
-                .discountPercentage
-            }
-            %
-          </div>
-          <div
-            className={css`
-              display: flex;
-              flex-direction: column;
-            `}
-          >
-            <div
-              className={css`
-                padding: 0.2em 0.2em 0;
-                line-height: 1;
-                color: ${colors.originalPrice};
-                font-size: 12px;
-                text-decoration: line-through;
-                text-align: right;
-              `}
-            >
-              {game.price.original.display}
-            </div>
-
-            <div
-              className={css`
-                padding: 0 0.2em 0.2em;
-                color: ${colors.price};
-                font-size: 16px;
-                line-height: 1;
-              `}
-            >
-              {
-                (hasPlusMembership ? game.price.plus : game.price.nonPlus)
-                  .display
-              }
-            </div>
-          </div>
-        </div>
+        <Price price={game.price} />
       </a>
     </div>
   );
