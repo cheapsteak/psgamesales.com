@@ -1,30 +1,15 @@
 import React, { useContext } from 'react';
-import { useLocation } from '@reach/router/unstable-hooks';
 import { css } from 'emotion';
-import querystring from 'querystring';
 
 import GamesList from 'src/GamesList';
 import Controls from 'src/Controls';
-import queryParamDict from 'src/queryParamDict';
 import FancyLoader from 'src/FancyLoader';
-import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemToGameData';
 import { StoreContext } from './StoreContext';
 
 const Store = () => {
-  const [location] = useLocation();
-
-  const { storeItems, isLoading, hasPartialContent } = useContext(StoreContext);
-  const games = transformValkyrieItemToGameData(storeItems);
-  window['games'] = games;
-
-  const gameQuery = querystring.parse(location.search.replace(/^\?/, ''))[
-    queryParamDict.GAME_SEARCH
-  ] as string; // cooercing to `string` because we don't expect the query param to appear multiple times
-
-  const gamesToShow =
-    gameQuery && gameQuery.length > 0
-      ? games.filter(game => game.name.toLowerCase().includes(gameQuery))
-      : games;
+  const { gamesMatchingQuery, isLoading, hasPartialContent } = useContext(
+    StoreContext,
+  );
 
   return (
     <div
@@ -43,7 +28,7 @@ const Store = () => {
           position: relative;
         `}
       >
-        {gamesToShow && <GamesList games={gamesToShow} />}
+        {gamesMatchingQuery && <GamesList games={gamesMatchingQuery} />}
         {isLoading && (
           <div
             className={css`
