@@ -27,7 +27,6 @@ const GamesProvider: React.FunctionComponent<{
         language,
         country,
         platforms,
-        // gameTypes,
         contentTypes,
         onPartialResponse: partialStoreItems => {
           setStoreItems(partialStoreItems);

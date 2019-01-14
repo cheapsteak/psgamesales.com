@@ -14,7 +14,6 @@ const defaultUserOptions = {
   country: 'ca',
   pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
-  // gameTypes: [GameType.Bundles, GameType.PS4_Full_Games, GameType.PSN_Games],
   contentTypes: [ContentType.Games, ContentType.Bundles],
   ...storedUserOptions,
 };
@@ -29,7 +28,6 @@ export const UserOptionsContext: React.Context<{
   country: string;
   pricingDisplayMode: PricingDisplayModeOptions;
   platforms: Platform[];
-  // gameTypes: GameType[];
   contentTypes: ContentType[];
   setUserOptions: Dispatch<
     SetStateAction<{
@@ -37,7 +35,6 @@ export const UserOptionsContext: React.Context<{
       country?: string;
       pricingDisplayMode?: PricingDisplayModeOptions;
       platforms?: Platform[];
-      // gameTypes?: GameType[];
       contentTypes?: ContentType[];
     }>
   >;

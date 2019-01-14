@@ -5,7 +5,7 @@ import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from '../queryParamDict';
-import { Platform, GameType } from 'src/types';
+import { Platform } from 'src/types';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { countries, colors, facets } from 'src/constants';
 
@@ -13,13 +13,11 @@ const Controls = ({ isLoading }) => {
   const [location, navigate] = useLocation();
   const {
     platforms,
-    // gameTypes,
     contentTypes,
     country: userSelectedCountryCode,
     pricingDisplayMode,
     setUserOptions,
   } = useContext(UserOptionsContext);
-  const userOptions = useContext(UserOptionsContext);
   const currentQueryString = location.search.replace(/^\?/, '');
 
   const searchRef = React.createRef<Input>();
@@ -140,7 +138,7 @@ const Controls = ({ isLoading }) => {
               }
               value={country.code}
               checked={userSelectedCountryCode === country.code}
-              onChange={(e, data) =>
+              onChange={() =>
                 setUserOptions({
                   country: country.code,
                   language: country.languageCode,
@@ -207,27 +205,6 @@ const Controls = ({ isLoading }) => {
         ))}
       </div>
 
-      {/* <div>
-        <h2>Game Types</h2>
-        {_.map(GameType, (value, key) => (
-          <Checkbox
-            key={key}
-            label={key.replace(/_/g, ' ')}
-            value={value}
-            checked={_.includes(gameTypes, value)}
-            onChange={(e, data) => {
-              setUserOptions({
-                gameTypes: _.uniq(
-                  (data.checked ? _.concat : _.difference)(gameTypes, [
-                    data.value,
-                  ]),
-                ),
-              });
-            }}
-          />
-        ))}
-      </div>
-    </div> */}
       <div>
         <h2>{facets.game_content_type.name}</h2>
         {_.map(facets.game_content_type.values, value => (
