@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { css } from 'emotion';
+import { cx, css } from 'emotion';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
@@ -42,16 +42,20 @@ const Controls = ({ isLoading }) => {
   ];
   return (
     <div
-      className={
-        `Controls ` +
+      className={cx(
+        `Controls`,
         css`
           opacity: ${isLoading ? 0.5 : 1};
+
+          display: flex;
+          flex-direction: column;
+          padding: 20px;
 
           & .ui.checkbox {
             display: block;
           }
-        `
-      }
+        `,
+      )}
     >
       <Input
         ref={searchRef}
