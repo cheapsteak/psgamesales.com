@@ -11,7 +11,7 @@ try {
 
 const defaultUserOptions = {
   language: 'en',
-  country: 'ca',
+  country: 'us',
   pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
   contentTypes: [ContentType.Games, ContentType.Bundles],
