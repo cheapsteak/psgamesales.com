@@ -81,7 +81,7 @@ const Controls = ({ isLoading }) => {
       <Results />
 
       <div>
-        <h2>Price display</h2>
+        <h2>Prices</h2>
         {[
           {
             label: (
@@ -91,18 +91,18 @@ const Controls = ({ isLoading }) => {
                   align-items: center;
                 `}
               >
-                Only PS Plus{' '}
+                with PS Plus{' '}
                 <img src={require('src/assets/plus-logo-yellow.png')} alt="" />{' '}
               </label>
             ),
             value: 'only_plus',
           },
           {
-            label: 'Only non-plus',
+            label: 'no PS Plus',
             value: 'only_non_plus',
           },
           {
-            label: 'Show both',
+            label: 'show both',
             value: 'plus_and_non_plus',
           },
         ].map(item => (
