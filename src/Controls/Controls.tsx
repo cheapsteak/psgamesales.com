@@ -4,10 +4,11 @@ import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
-import queryParamDict from '../queryParamDict';
+import queryParamDict from 'src/queryParamDict';
 import { Platform } from 'src/types';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { countries, colors, facets } from 'src/constants';
+import Results from './Results';
 
 const Controls = ({ isLoading }) => {
   const [location, navigate] = useLocation();
@@ -77,6 +78,7 @@ const Controls = ({ isLoading }) => {
           navigate(`?${serializedQueryParams}`, { replace: true });
         }}
       />
+      <Results />
 
       <div>
         <h2>Price display</h2>
