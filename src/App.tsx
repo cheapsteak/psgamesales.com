@@ -1,7 +1,10 @@
 import React from 'react';
 import { css } from 'emotion';
 import { UserOptionsContextProvider } from './UserOptionsContext';
+import { StoreContextProvider } from './Store/StoreContext';
 import Store from './Store';
+
+const defaultStore = `STORE-MSF77008-HOLIDAYSALELP`;
 
 function App() {
   return (
@@ -14,7 +17,9 @@ function App() {
       }
     >
       <UserOptionsContextProvider>
-        <Store />
+        <StoreContextProvider storeName={defaultStore}>
+          <Store />
+        </StoreContextProvider>
       </UserOptionsContextProvider>
     </div>
   );

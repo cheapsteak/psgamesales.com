@@ -1,7 +1,18 @@
-import { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 
-import fetchItemsFromStore from './requests/fetchItemsFromStore';
-import { UserOptionsContext } from './UserOptionsContext';
+import { ValkyrieStoreIncludedItem } from 'src/types';
+import fetchItemsFromStore from 'src/requests/fetchItemsFromStore';
+import { UserOptionsContext } from 'src/UserOptionsContext';
+
+export const StoreContext: React.Context<{
+  storeItems: ValkyrieStoreIncludedItem[];
+  isLoading: boolean;
+  hasPartialContent: boolean;
+}> = React.createContext({
+  storeItems: [] as ValkyrieStoreIncludedItem[],
+  isLoading: false,
+  hasPartialContent: false,
+});
 
 const useStore = storeName => {
   const { language, country, platforms, contentTypes } = useContext(
@@ -35,10 +46,27 @@ const useStore = storeName => {
   );
 
   return {
-    storeItems,
     isLoading,
     hasPartialContent,
+    storeItems,
   };
 };
 
-export default useStore;
+export const StoreContextProvider: React.FunctionComponent<{
+  storeName: string;
+  children: any;
+}> = ({ storeName, children }) => {
+  const { storeItems, isLoading, hasPartialContent } = useStore(storeName);
+
+  return (
+    <StoreContext.Provider
+      value={{
+        storeItems,
+        isLoading,
+        hasPartialContent,
+      }}
+    >
+      {children}
+    </StoreContext.Provider>
+  );
+};

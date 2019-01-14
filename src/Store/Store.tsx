@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { css } from 'emotion';
 import querystring from 'querystring';
@@ -7,15 +7,13 @@ import GamesList from 'src/GamesList';
 import Controls from 'src/Controls';
 import queryParamDict from 'src/queryParamDict';
 import FancyLoader from 'src/FancyLoader';
-import useGames from 'src/useStore';
 import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemToGameData';
-
-const defaultStore = `STORE-MSF77008-HOLIDAYSALELP`;
+import { StoreContext } from './StoreContext';
 
 const Store = () => {
   const [location] = useLocation();
 
-  const { storeItems, isLoading, hasPartialContent } = useGames(defaultStore);
+  const { storeItems, isLoading, hasPartialContent } = useContext(StoreContext);
   const games = transformValkyrieItemToGameData(storeItems);
   window['games'] = games;
 
