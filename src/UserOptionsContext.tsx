@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
 import { Platform, ContentType } from './types';
 
 let storedUserOptions;
@@ -12,6 +12,7 @@ try {
 const defaultUserOptions = {
   language: 'en',
   country: 'us',
+  hasUserExplicitlySetCountryCode: false,
   pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
   contentTypes: [ContentType.Games, ContentType.Bundles],
@@ -26,6 +27,7 @@ type PricingDisplayModeOptions =
 export const UserOptionsContext: React.Context<{
   language: string;
   country: string;
+  hasUserExplicitlySetCountryCode: boolean;
   pricingDisplayMode: PricingDisplayModeOptions;
   platforms: Platform[];
   contentTypes: ContentType[];
@@ -33,6 +35,7 @@ export const UserOptionsContext: React.Context<{
     SetStateAction<{
       language?: string;
       country?: string;
+      hasUserExplicitlySetCountryCode?: boolean;
       pricingDisplayMode?: PricingDisplayModeOptions;
       platforms?: Platform[];
       contentTypes?: ContentType[];
@@ -45,6 +48,28 @@ export const UserOptionsContext: React.Context<{
 
 export const UserOptionsContextProvider: React.FunctionComponent = props => {
   const [userOptions, setUserOptions] = useState(defaultUserOptions);
+
+  useEffect(() => {
+    !userOptions.hasUserExplicitlySetCountryCode &&
+      fetch('http://ip-api.com/json/')
+        .then(res => res.json())
+        .then(geoInfo => {
+          setUserOptions({
+            ...userOptions,
+            country: geoInfo.countryCode.toLowerCase(),
+          });
+        })
+        .catch(e => {
+          // failed to get user location, probably got caught by adblock
+          console.error(e);
+          // todo: ask user to select their country?
+          setUserOptions({
+            ...userOptions,
+            country: 'us',
+          });
+        });
+  }, []);
+
   return (
     <UserOptionsContext.Provider
       value={{

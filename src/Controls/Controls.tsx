@@ -146,6 +146,7 @@ const Controls = ({ isLoading }) => {
               onChange={() =>
                 setUserOptions({
                   country: country.code,
+                  hasUserExplicitlySetCountryCode: true,
                   language: country.languageCode,
                 })
               }
