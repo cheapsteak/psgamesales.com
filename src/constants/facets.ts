@@ -127,6 +127,7 @@ const facets = {
   },
 
   platform: {
+    name: 'Platform',
     query_param_name: 'platform',
     values: [
       {

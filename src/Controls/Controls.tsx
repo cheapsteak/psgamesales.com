@@ -5,7 +5,6 @@ import { useLocation } from '@reach/router/unstable-hooks';
 import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
-import { Platform } from 'src/types';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { countries, colors, facets } from 'src/constants';
 import Results from './Results';
@@ -191,13 +190,13 @@ const Controls = ({ isLoading }) => {
       </div>
 
       <div>
-        <h2>Platforms</h2>
-        {_.map(Platform, (value, key) => (
+        <h2>{facets.platform.name}</h2>
+        {facets.platform.values.map(value => (
           <Checkbox
-            key={key}
-            label={key}
-            value={value}
-            checked={_.includes(platforms, value)}
+            key={value.key}
+            label={value.name}
+            value={value.key}
+            checked={_.includes(platforms, value.key)}
             onChange={(e, data) => {
               setUserOptions({
                 platforms: _.uniq(
