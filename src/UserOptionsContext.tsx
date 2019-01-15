@@ -4,7 +4,9 @@ import { Platform, ContentType } from './types';
 let storedUserOptions;
 
 try {
-  storedUserOptions = JSON.parse(localStorage.getItem('user-options') || '{}');
+  storedUserOptions = JSON.parse(
+    localStorage.getItem('psgamedeals:user-options') || '{}',
+  );
 } catch (e) {
   console.error('Failed to retrieve stored user options', e);
 }
@@ -79,7 +81,7 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
           setUserOptions(combinedOptions);
           try {
             localStorage.setItem(
-              'user-options',
+              'psgamedeals:user-options',
               JSON.stringify(combinedOptions),
             );
           } catch (e) {
