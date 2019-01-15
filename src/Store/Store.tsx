@@ -29,7 +29,7 @@ const Store = () => {
         `}
       >
         {gamesMatchingQuery && <GamesList games={gamesMatchingQuery} />}
-        {isLoading && (
+        {isLoading && !hasPartialContent && (
           <div
             className={css`
               position: absolute;
