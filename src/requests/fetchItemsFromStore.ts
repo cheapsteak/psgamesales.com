@@ -140,6 +140,9 @@ const fetchItemsFromStore = async ({
     platforms,
     gameTypes,
     contentTypes,
+    onFirstPageLoad: partialResponse => {
+      onPartialResponse(partialResponse);
+    },
   };
   const storeKey = JSON.stringify({
     store,
@@ -171,7 +174,6 @@ const fetchItemsFromStore = async ({
     // browser doesn't support indexeddb
     return getAllItemsFromStore({
       ...storeParams,
-      onFirstPageLoad: partialResponse => onPartialResponse(partialResponse),
     });
   }
 };
