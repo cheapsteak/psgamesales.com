@@ -36,6 +36,9 @@ const useStore = storeName => {
   useEffect(
     () => {
       setIsLoading(true);
+      if (!country) {
+        return;
+      }
       fetchItemsFromStore({
         store: storeName,
         language,
@@ -51,7 +54,14 @@ const useStore = storeName => {
         setIsLoading(false);
       });
     },
-    [storeName, language, country, platforms.join(','), contentTypes.join(',')],
+    [
+      country,
+      storeName,
+      language,
+      country,
+      platforms.join(','),
+      contentTypes.join(','),
+    ],
   );
 
   return {

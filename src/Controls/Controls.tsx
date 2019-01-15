@@ -14,7 +14,7 @@ const Controls = ({ isLoading }) => {
   const {
     platforms,
     contentTypes,
-    country: userSelectedCountryCode,
+    country: countryCodeFromUserOptions,
     pricingDisplayMode,
     setUserOptions,
   } = useContext(UserOptionsContext);
@@ -142,7 +142,7 @@ const Controls = ({ isLoading }) => {
                 </label>
               }
               value={country.code}
-              checked={userSelectedCountryCode === country.code}
+              checked={countryCodeFromUserOptions === country.code}
               onChange={() =>
                 setUserOptions({
                   country: country.code,
@@ -154,10 +154,12 @@ const Controls = ({ isLoading }) => {
           );
           const countriesAboveFold = _.uniq([
             ...priorityContryCodes,
-            userSelectedCountryCode,
-          ]).map(countryCode =>
-            countries.find(country => countryCode.includes(country.code)),
-          );
+            countryCodeFromUserOptions,
+          ])
+            .filter(Boolean)
+            .map(countryCode =>
+              countries.find(country => countryCode.includes(country.code)),
+            );
           const countriesBelowFold = _.difference(
             countries,
             countriesAboveFold,

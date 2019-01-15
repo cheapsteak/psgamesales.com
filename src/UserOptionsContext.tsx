@@ -13,7 +13,7 @@ try {
 
 const defaultUserOptions = {
   language: 'en',
-  country: 'us',
+  country: undefined,
   hasUserExplicitlySetCountryCode: false,
   pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
@@ -28,7 +28,7 @@ type PricingDisplayModeOptions =
 
 export const UserOptionsContext: React.Context<{
   language: string;
-  country: string;
+  country?: string;
   hasUserExplicitlySetCountryCode: boolean;
   pricingDisplayMode: PricingDisplayModeOptions;
   platforms: Platform[];
