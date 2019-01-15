@@ -4,20 +4,8 @@ import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameData } from 'src/GameData';
+import colors, { gradientColors } from 'src/constants/colors';
 import Price from './Price';
-
-const colors = {
-  gradientFade: 'rgba(255,255,255,0)',
-};
-
-const gradientColors = [
-  '#845EC2',
-  '#D65DB1',
-  '#FF6F91',
-  '#FF9671',
-  '#FFC75F',
-  '#F9F871',
-];
 
 // @ts-ignore-line "Property 'game' does not exist on type '{ children?: ReactNode; }'.ts(2339)"
 const GameTile: React.ForwardRefExoticComponent<{
@@ -39,7 +27,6 @@ const GameTile: React.ForwardRefExoticComponent<{
   );
   return (
     <div
-      key={game.id}
       // @ts-ignore-line "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
       ref={ref}
       style={style}

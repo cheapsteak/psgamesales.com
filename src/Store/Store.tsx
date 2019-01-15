@@ -28,7 +28,7 @@ const Store = () => {
           position: relative;
         `}
       >
-        {gamesMatchingQuery && <GamesList games={gamesMatchingQuery} />}
+        {gamesMatchingQuery && <GamesList />}
         {isLoading && !hasPartialContent && (
           <div
             className={css`
