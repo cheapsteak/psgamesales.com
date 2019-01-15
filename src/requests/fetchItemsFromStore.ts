@@ -73,8 +73,8 @@ const getAllItemsFromStore = async ({
   onFirstPageLoad,
 }: Facets &
   StoreOptions & {
-    onFirstPageLoad?: (firstPageResponse: ValkyrieStoreIncludedItem[]) => void;
-  }): Promise<ValkyrieStoreIncludedItem[]> => {
+    onFirstPageLoad?: (firstPageResponse: ValkyrieStoreResponse) => void;
+  }): Promise<ValkyrieStoreResponse> => {
   // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
     start: 0,
@@ -90,32 +90,35 @@ const getAllItemsFromStore = async ({
   const totalItems = response.data.data.attributes['total-results'];
 
   if (totalItems > firstPageSize) {
-    onFirstPageLoad && onFirstPageLoad(response.data.included);
+    onFirstPageLoad && onFirstPageLoad(response.data);
     const pagesRemaining = Math.ceil(
       (totalItems - subsequentPageSize) / subsequentPageSize,
     );
     // fetch all the other pages at once
-    return [
-      ...items,
-      ..._.flatten(
-        await Promise.all(
-          _.range(pagesRemaining).map(x =>
-            fetchFromStore({
-              store,
-              size: subsequentPageSize,
-              start: (x + 1) * subsequentPageSize,
-              language,
-              country,
-              platforms,
-              gameTypes,
-              contentTypes,
-            }).then(response => response.data.included),
+    return {
+      data: response.data.data,
+      included: [
+        ...items,
+        ..._.flatten(
+          await Promise.all(
+            _.range(pagesRemaining).map(x =>
+              fetchFromStore({
+                store,
+                size: subsequentPageSize,
+                start: (x + 1) * subsequentPageSize,
+                language,
+                country,
+                platforms,
+                gameTypes,
+                contentTypes,
+              }).then(response => response.data.included),
+            ),
           ),
         ),
-      ),
-    ];
+      ],
+    };
   } else {
-    return items;
+    return response.data;
   }
 };
 
@@ -132,7 +135,7 @@ const fetchItemsFromStore = async ({
 }: Facets &
   StoreOptions & {
     onPartialResponse: Function;
-  }) => {
+  }): Promise<ValkyrieStoreResponse> => {
   const storeParams = {
     store,
     country,
@@ -152,29 +155,27 @@ const fetchItemsFromStore = async ({
     gameTypes: gameTypes && gameTypes.slice().sort(),
     contentTypes: contentTypes && contentTypes.slice().sort(),
   });
-  let storeItems;
+  let storeData: ValkyrieStoreResponse;
 
   try {
-    storeItems = await localforageInstance.getItem(storeKey);
+    storeData = await localforageInstance.getItem(storeKey);
 
-    if (storeItems) {
+    if (storeData) {
       try {
         await checkIfStoreStillExists({ store, country, language });
       } catch (e) {
         await localforageInstance.removeItem(store);
         throw e;
       }
-      return storeItems;
+      return storeData;
     }
 
-    storeItems = getAllItemsFromStore(storeParams);
-    localforageInstance.setItem(storeKey, storeItems);
-    return storeItems;
+    storeData = await getAllItemsFromStore(storeParams);
+    localforageInstance.setItem(storeKey, storeData);
+    return storeData;
   } catch (e) {
     // browser doesn't support indexeddb
-    return getAllItemsFromStore({
-      ...storeParams,
-    });
+    return await getAllItemsFromStore(storeParams);
   }
 };
 

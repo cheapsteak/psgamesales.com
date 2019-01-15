@@ -1,7 +1,7 @@
 import querystring from 'querystring';
 import React, { useState, useContext, useEffect } from 'react';
 
-import { ValkyrieStoreIncludedItem } from 'src/types';
+import { ValkyrieStoreIncludedItem, ValkyrieStoreResponse } from 'src/types';
 import fetchItemsFromStore from 'src/requests/fetchItemsFromStore';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import queryParamDict from 'src/queryParamDict';
@@ -12,10 +12,12 @@ import { GameData } from 'src/GameData';
 export const StoreContext: React.Context<{
   games: GameData[];
   gamesMatchingQuery: GameData[];
+  storeData: ValkyrieStoreResponse;
   storeItems: ValkyrieStoreIncludedItem[];
   isLoading: boolean;
   hasPartialContent: boolean;
 }> = React.createContext({
+  storeData: {} as ValkyrieStoreResponse,
   storeItems: [] as ValkyrieStoreIncludedItem[],
   games: [] as GameData[],
   gamesMatchingQuery: [] as GameData[],
@@ -27,7 +29,10 @@ const useStore = storeName => {
   const { language, country, platforms, contentTypes } = useContext(
     UserOptionsContext,
   );
-  const [storeItems, setStoreItems] = useState([]);
+  const [storeItems, setStoreItems] = useState(
+    [] as ValkyrieStoreIncludedItem[],
+  );
+  const [storeData, setStoreData] = useState({} as ValkyrieStoreResponse);
   const [isLoading, setIsLoading] = useState(false);
   const [hasPartialContent, setHasPartialContent] = useState(false);
 
@@ -45,12 +50,14 @@ const useStore = storeName => {
         country,
         platforms,
         contentTypes,
-        onPartialResponse: partialStoreItems => {
-          setStoreItems(partialStoreItems);
+        onPartialResponse: partialStoreData => {
+          setStoreData(partialStoreData);
+          setStoreItems(partialStoreData.included);
           setHasPartialContent(true);
         },
-      }).then(returnedStoreItems => {
-        setStoreItems(returnedStoreItems);
+      }).then(returnedStoreData => {
+        setStoreData(returnedStoreData);
+        setStoreItems(returnedStoreData.included);
         setIsLoading(false);
       });
     },
@@ -68,6 +75,7 @@ const useStore = storeName => {
     isLoading,
     hasPartialContent,
     storeItems,
+    storeData,
   };
 };
 
@@ -76,7 +84,9 @@ export const StoreContextProvider: React.FunctionComponent<{
   children: any;
 }> = ({ storeName, children }) => {
   const [location] = useLocation();
-  const { storeItems, isLoading, hasPartialContent } = useStore(storeName);
+  const { storeData, storeItems, isLoading, hasPartialContent } = useStore(
+    storeName,
+  );
 
   const games = transformValkyrieItemToGameData(storeItems);
   window['games'] = games;
@@ -93,6 +103,7 @@ export const StoreContextProvider: React.FunctionComponent<{
   return (
     <StoreContext.Provider
       value={{
+        storeData,
         storeItems,
         games,
         gamesMatchingQuery,
