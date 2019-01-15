@@ -10,6 +10,9 @@ import {
 } from 'src/types';
 import { localforageInstance } from 'src/localforageInstance';
 
+const firstPageSize = 50;
+const subsequentPageSize = 100;
+
 interface Facets {
   platforms?: Platform[];
   gameTypes?: GameType[];
@@ -25,10 +28,9 @@ interface StoreOptions {
   language: string;
 }
 
-const size = 100;
-
 const fetchFromStore = ({
   store,
+  size,
   start,
   language,
   country,
@@ -38,6 +40,7 @@ const fetchFromStore = ({
 }: Facets &
   StoreOptions & {
     start: number;
+    size: number;
   }) =>
   axios(
     `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?${querystring.stringify(
@@ -75,6 +78,7 @@ const getAllItemsFromStore = async ({
   // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
     start: 0,
+    size: firstPageSize,
     store,
     language,
     country,
@@ -85,9 +89,11 @@ const getAllItemsFromStore = async ({
   const items = response.data.included;
   const totalItems = response.data.data.attributes['total-results'];
 
-  if (totalItems > size) {
+  if (totalItems > firstPageSize) {
     onFirstPageLoad && onFirstPageLoad(response.data.included);
-    const pagesRemaining = Math.ceil((totalItems - size) / size);
+    const pagesRemaining = Math.ceil(
+      (totalItems - subsequentPageSize) / subsequentPageSize,
+    );
     // fetch all the other pages at once
     return [
       ...items,
@@ -96,7 +102,8 @@ const getAllItemsFromStore = async ({
           _.range(pagesRemaining).map(x =>
             fetchFromStore({
               store,
-              start: (x + 1) * size,
+              size: subsequentPageSize,
+              start: (x + 1) * subsequentPageSize,
               language,
               country,
               platforms,
