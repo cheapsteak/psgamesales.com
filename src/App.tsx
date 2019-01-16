@@ -3,8 +3,11 @@ import { css } from 'emotion';
 import { UserOptionsContextProvider } from './UserOptionsContext';
 import { StoreContextProvider } from './Store/StoreContext';
 import Store from './Store';
+import idx from 'idx.macro';
 
-const defaultStore = `STORE-MSF77008-HOLIDAYSALELP`;
+const defaultStore =
+  idx(window, window => window['SETTINGS'].defaultStore) ||
+  `STORE-MSF77008-HOLIDAYSALELP`;
 
 function App() {
   return (
