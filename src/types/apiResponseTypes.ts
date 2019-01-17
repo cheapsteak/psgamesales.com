@@ -1,5 +1,5 @@
 export interface ValkyrieStoreResponse {
-  data: Data;
+  data: ValkyrieStoreData;
   included: ValkyrieStoreIncludedItem[];
 }
 
@@ -263,7 +263,7 @@ interface Eligibility {
   operator: string;
 }
 
-interface Data {
+export interface ValkyrieStoreData {
   attributes: ValkyrieStoreAttributes;
   id: string;
   relationships: Relationships;

@@ -134,7 +134,7 @@ const fetchItemsFromStore = async ({
   onPartialResponse,
 }: Facets &
   StoreOptions & {
-    onPartialResponse: Function;
+    onPartialResponse: (partialResponse: ValkyrieStoreResponse) => void;
   }): Promise<ValkyrieStoreResponse> => {
   const storeParams = {
     store,

@@ -5,6 +5,7 @@ import {
   ValkyrieStoreIncludedItem,
   ValkyrieStoreResponse,
   GameData,
+  StoreMetaData,
 } from 'src/types';
 import fetchItemsFromStore from 'src/requests/fetchItemsFromStore';
 import { UserOptionsContext } from 'src/UserOptionsContext';
@@ -15,12 +16,12 @@ import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemT
 export const StoreContext: React.Context<{
   games: GameData[];
   gamesMatchingQuery: GameData[];
-  storeData: ValkyrieStoreResponse;
+  storeMetaData: StoreMetaData;
   storeItems: ValkyrieStoreIncludedItem[];
   isLoading: boolean;
   hasPartialContent: boolean;
 }> = React.createContext({
-  storeData: {} as ValkyrieStoreResponse,
+  storeMetaData: {} as StoreMetaData,
   storeItems: [] as ValkyrieStoreIncludedItem[],
   games: [] as GameData[],
   gamesMatchingQuery: [] as GameData[],
@@ -35,7 +36,7 @@ const useStore = storeName => {
   const [storeItems, setStoreItems] = useState(
     [] as ValkyrieStoreIncludedItem[],
   );
-  const [storeData, setStoreData] = useState({} as ValkyrieStoreResponse);
+  const [storeMetaData, setStoreMetaData] = useState({} as StoreMetaData);
   const [isLoading, setIsLoading] = useState(false);
   const [hasPartialContent, setHasPartialContent] = useState(false);
 
@@ -53,14 +54,22 @@ const useStore = storeName => {
         country,
         platforms,
         contentTypes,
-        onPartialResponse: partialStoreData => {
-          setStoreData(partialStoreData);
-          setStoreItems(partialStoreData.included);
+        onPartialResponse: ({ data, included }) => {
+          setStoreMetaData({
+            id: data.id,
+            name: data.attributes.name,
+            totalResults: data.attributes['total-results'],
+          });
+          setStoreItems(included);
           setHasPartialContent(true);
         },
-      }).then(returnedStoreData => {
-        setStoreData(returnedStoreData);
-        setStoreItems(returnedStoreData.included);
+      }).then(({ data, included }) => {
+        setStoreMetaData({
+          id: data.id,
+          name: data.attributes.name,
+          totalResults: data.attributes['total-results'],
+        });
+        setStoreItems(included);
         setIsLoading(false);
       });
     },
@@ -78,7 +87,7 @@ const useStore = storeName => {
     isLoading,
     hasPartialContent,
     storeItems,
-    storeData,
+    storeMetaData,
   };
 };
 
@@ -87,7 +96,7 @@ export const StoreContextProvider: React.FunctionComponent<{
   children: any;
 }> = ({ storeName, children }) => {
   const [location] = useLocation();
-  const { storeData, storeItems, isLoading, hasPartialContent } = useStore(
+  const { storeMetaData, storeItems, isLoading, hasPartialContent } = useStore(
     storeName,
   );
 
@@ -106,7 +115,7 @@ export const StoreContextProvider: React.FunctionComponent<{
   return (
     <StoreContext.Provider
       value={{
-        storeData,
+        storeMetaData,
         storeItems,
         games,
         gamesMatchingQuery,
