@@ -1,4 +1,4 @@
-import { GameMediaList } from './types';
+import { GameMediaList } from './apiResponseTypes';
 
 export interface GameDataPrice {
   original: {

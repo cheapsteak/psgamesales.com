@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
-import { GameDataPrice } from 'src/GameData';
+import { GameDataPrice } from 'src/types';
 
 const colors = {
   price: '#acdbf5',

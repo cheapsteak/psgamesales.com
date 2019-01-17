@@ -1,13 +1,16 @@
 import querystring from 'querystring';
 import React, { useState, useContext, useEffect } from 'react';
 
-import { ValkyrieStoreIncludedItem, ValkyrieStoreResponse } from 'src/types';
+import {
+  ValkyrieStoreIncludedItem,
+  ValkyrieStoreResponse,
+  GameData,
+} from 'src/types';
 import fetchItemsFromStore from 'src/requests/fetchItemsFromStore';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import queryParamDict from 'src/queryParamDict';
 import { useLocation } from '@reach/router/unstable-hooks';
 import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemToGameData';
-import { GameData } from 'src/GameData';
 
 export const StoreContext: React.Context<{
   games: GameData[];

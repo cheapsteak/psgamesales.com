@@ -1,5 +1,4 @@
-import { ValkyrieStoreIncludedItem, GameMediaList } from 'src/types';
-import { GameData } from 'src/GameData';
+import { ValkyrieStoreIncludedItem, GameMediaList, GameData } from 'src/types';
 
 const transformValkyrieItemToGameData = (
   valkyrieItems: ValkyrieStoreIncludedItem[],

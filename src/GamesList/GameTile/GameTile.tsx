@@ -3,7 +3,7 @@ import _ from 'lodash';
 import React, { useContext, useState } from 'react';
 import { css } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
-import { GameData } from 'src/GameData';
+import { GameData } from 'src/types';
 import colors, { gradientColors } from 'src/constants/colors';
 import Price from './Price';
 
