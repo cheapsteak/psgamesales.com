@@ -7,7 +7,7 @@ import idx from 'idx.macro';
 
 const defaultStore =
   idx(window, window => window['SETTINGS'].defaultStore) ||
-  `STORE-MSF77008-HOLIDAYSALELP`;
+  `STORE-MSF77008-WEEKLYDEALS`;
 
 function App() {
   return (
