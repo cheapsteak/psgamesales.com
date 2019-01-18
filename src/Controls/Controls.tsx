@@ -133,7 +133,7 @@ const Controls = ({ isLoading }) => {
           const [isExpanded, setIsExpanded] = useState(false);
           const CountryCheckbox = country => (
             <Checkbox
-              key={country.code}
+              key={`${country.code}:${country.name}`}
               radio
               label={
                 <label>

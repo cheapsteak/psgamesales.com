@@ -53,7 +53,6 @@ export default [
   { name: 'Korea', languageCode: 'ko', code: 'kr' },
   { name: 'Kuwait', languageCode: 'en', code: 'ae' },
   { name: 'Lebanon', languageCode: 'en', code: 'ae' },
-  { name: 'Luxembourg', languageCode: 'de', code: 'lu' },
   { name: 'Luxembourg', languageCode: 'fr', code: 'lu' },
   { name: 'Malaysia', languageCode: 'en', code: 'my' },
   { name: 'Malta', languageCode: 'en', code: 'mt' },
