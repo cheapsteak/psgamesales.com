@@ -5,7 +5,7 @@ let storedUserOptions;
 
 try {
   storedUserOptions = JSON.parse(
-    localStorage.getItem('psgamedeals:user-options') || '{}',
+    localStorage.getItem('psgamesales:user-options') || '{}',
   );
 } catch (e) {
   console.error('Failed to retrieve stored user options', e);
@@ -53,17 +53,17 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
 
   useEffect(() => {
     !userOptions.hasUserExplicitlySetCountryCode &&
-      fetch('http://ip-api.com/json/')
+      fetch('https://us-central1-psgamedeals.cloudfunctions.net/geolocation')
         .then(res => res.json())
-        .then(geoInfo => {
+        .then(geoInfo =>
           setUserOptions({
             ...userOptions,
-            country: geoInfo.countryCode.toLowerCase(),
-          });
-        })
+            country: geoInfo.country.toLowerCase(),
+          }),
+        )
         .catch(e => {
-          // failed to get user location, probably got caught by adblock
           console.error(e);
+          // couldn't automatically determine country. set a default value
           // todo: ask user to select their country?
           setUserOptions({
             ...userOptions,
@@ -81,7 +81,7 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
           setUserOptions(combinedOptions);
           try {
             localStorage.setItem(
-              'psgamedeals:user-options',
+              'psgamesales:user-options',
               JSON.stringify(combinedOptions),
             );
           } catch (e) {
