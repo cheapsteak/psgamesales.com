@@ -30,9 +30,12 @@ export const StoreContext: React.Context<{
 });
 
 const useStore = storeName => {
-  const { language, country, platforms, contentTypes } = useContext(
-    UserOptionsContext,
-  );
+  const {
+    language,
+    country,
+    platforms,
+    // contentTypes
+  } = useContext(UserOptionsContext);
   const [storeItems, setStoreItems] = useState(
     [] as ValkyrieStoreIncludedItem[],
   );
@@ -53,7 +56,7 @@ const useStore = storeName => {
         language,
         country,
         platforms,
-        contentTypes,
+        // contentTypes,
         onPartialResponse: ({ data, included }) => {
           setStoreMetaData({
             id: data.id,
@@ -79,7 +82,7 @@ const useStore = storeName => {
       language,
       country,
       platforms.join(','),
-      contentTypes.join(','),
+      // contentTypes.join(','),
     ],
   );
 

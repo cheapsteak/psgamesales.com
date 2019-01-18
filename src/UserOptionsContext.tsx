@@ -17,7 +17,7 @@ const defaultUserOptions = {
   hasUserExplicitlySetCountryCode: false,
   pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
-  contentTypes: [ContentType.Games, ContentType.Bundles],
+  // contentTypes: [ContentType.Games, ContentType.Bundles],
   ...storedUserOptions,
 };
 
@@ -32,7 +32,7 @@ export const UserOptionsContext: React.Context<{
   hasUserExplicitlySetCountryCode: boolean;
   pricingDisplayMode: PricingDisplayModeOptions;
   platforms: Platform[];
-  contentTypes: ContentType[];
+  // contentTypes: ContentType[];
   setUserOptions: Dispatch<
     SetStateAction<{
       language?: string;
@@ -40,7 +40,7 @@ export const UserOptionsContext: React.Context<{
       hasUserExplicitlySetCountryCode?: boolean;
       pricingDisplayMode?: PricingDisplayModeOptions;
       platforms?: Platform[];
-      contentTypes?: ContentType[];
+      // contentTypes?: ContentType[];
     }>
   >;
 }> = React.createContext({
