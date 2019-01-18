@@ -3,6 +3,7 @@ import { css } from 'emotion';
 
 import GamesList from 'src/GamesList';
 import Controls from 'src/Controls';
+
 import FancyLoader from 'src/FancyLoader';
 import { StoreContext } from './StoreContext';
 
@@ -19,9 +20,7 @@ const Store = () => {
         height: 100%;
       `}
     >
-      <div>
-        <Controls isLoading={isLoading} />
-      </div>
+      <Controls isLoading={isLoading} />
       <div
         className={css`
           flex: 1 1 auto;

@@ -6,10 +6,14 @@ import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
 import { UserOptionsContext } from 'src/UserOptionsContext';
-import { countries, colors, facets } from 'src/constants';
+import { countries, colors, facets, mq } from 'src/constants';
 import Results from './Results';
 
-const Controls = ({ isLoading }) => {
+const Controls: React.FunctionComponent<
+  {
+    isLoading: boolean;
+  } & React.HTMLAttributes<HTMLDivElement>
+> = ({ isLoading, className }) => {
   const [location, navigate] = useLocation();
   const {
     platforms,
@@ -53,7 +57,21 @@ const Controls = ({ isLoading }) => {
           & .ui.checkbox {
             display: block;
           }
+          & > * {
+            flex-shrink: 0;
+          }
+
+          ${mq.smallDown} {
+            position: absolute;
+            z-index: 1;
+            background: #ffffff;
+            box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.2);
+            border-bottom-right-radius: 3px;
+            max-height: 96vh;
+            overflow: auto;
+          }
         `,
+        className,
       )}
     >
       <Input
