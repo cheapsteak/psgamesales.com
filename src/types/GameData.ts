@@ -23,4 +23,7 @@ export interface GameData {
   price: GameDataPrice;
   thumbnailBase: string;
   mediaList: GameMediaList;
+  originalFields: {
+    type: 'legacy-sku' | 'game-related' | 'game';
+  };
 }

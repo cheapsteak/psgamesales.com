@@ -123,12 +123,16 @@ export const StoreContextProvider: React.FunctionComponent<{
     queryParamDict.GAME_SEARCH
   ] as string; // cooercing to `string` because we don't expect the query param to appear multiple times
 
-  const gamesToShow =
-    gameQuery && gameQuery.length > 0
-      ? games.filter(
-          game => !game || game.name.toLowerCase().includes(gameQuery),
-        )
-      : games;
+  const gamesToShow = games.filter(game => {
+    if (!game) return true;
+    if (game.originalFields.type === 'game-related') {
+      return false;
+    }
+    if (gameQuery && gameQuery.length > 0) {
+      return game.name.toLowerCase().includes(gameQuery);
+    }
+    return true;
+  });
 
   return (
     <StoreContext.Provider

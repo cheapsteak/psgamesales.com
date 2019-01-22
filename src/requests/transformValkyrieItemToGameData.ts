@@ -45,6 +45,9 @@ const transformValkyrieItemToGameData = (
         },
         thumbnailBase: item.attributes['thumbnail-url-base'] as string,
         mediaList: item.attributes['media-list'] as GameMediaList,
+        originalFields: {
+          type: item.type as 'legacy-sku' | 'game-related' | 'game',
+        },
       };
     });
 };
