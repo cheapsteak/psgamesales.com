@@ -13,12 +13,12 @@ import LoadingTile from './LoadingTile';
 const GamesList: React.FunctionComponent = () => {
   const {
     storeMetaData,
-    gamesMatchingQuery,
+    gamesToShow,
     isLoading,
     hasPartialContent,
   } = useContext(StoreContext);
 
-  const games = gamesMatchingQuery;
+  const games = gamesToShow;
   const blocksToFillSpaceWith = 20;
   const totalItemsInStore = hasPartialContent
     ? storeMetaData.totalResults

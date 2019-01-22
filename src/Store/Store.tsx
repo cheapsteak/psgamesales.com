@@ -8,7 +8,7 @@ import FancyLoader from 'src/FancyLoader';
 import { StoreContext } from './StoreContext';
 
 const Store = () => {
-  const { gamesMatchingQuery, isLoading, hasPartialContent } = useContext(
+  const { gamesToShow, isLoading, hasPartialContent } = useContext(
     StoreContext,
   );
 
@@ -27,7 +27,7 @@ const Store = () => {
           position: relative;
         `}
       >
-        {gamesMatchingQuery && <GamesList />}
+        {gamesToShow && <GamesList />}
         {isLoading && !hasPartialContent && (
           <div
             className={css`

@@ -16,7 +16,7 @@ import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemT
 
 export const StoreContext: React.Context<{
   games: (GameData | null)[];
-  gamesMatchingQuery: (GameData | null)[];
+  gamesToShow: (GameData | null)[];
   storeMetaData: StoreMetaData;
   storeItems: (ValkyrieStoreIncludedItem | null)[];
   isLoading: boolean;
@@ -25,7 +25,7 @@ export const StoreContext: React.Context<{
   storeMetaData: {} as StoreMetaData,
   storeItems: [] as (ValkyrieStoreIncludedItem | null)[],
   games: [] as (GameData | null)[],
-  gamesMatchingQuery: [] as (GameData | null)[],
+  gamesToShow: [] as (GameData | null)[],
   isLoading: false,
   hasPartialContent: false,
 });
@@ -123,7 +123,7 @@ export const StoreContextProvider: React.FunctionComponent<{
     queryParamDict.GAME_SEARCH
   ] as string; // cooercing to `string` because we don't expect the query param to appear multiple times
 
-  const gamesMatchingQuery =
+  const gamesToShow =
     gameQuery && gameQuery.length > 0
       ? games.filter(
           game => !game || game.name.toLowerCase().includes(gameQuery),
@@ -136,7 +136,7 @@ export const StoreContextProvider: React.FunctionComponent<{
         storeMetaData,
         storeItems,
         games,
-        gamesMatchingQuery,
+        gamesToShow,
         isLoading,
         hasPartialContent,
       }}

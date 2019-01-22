@@ -5,7 +5,7 @@ import { StoreContext } from 'src/Store/StoreContext';
 const Results: React.FunctionComponent<
   React.HTMLAttributes<HTMLDivElement>
 > = ({ className }) => {
-  const { gamesMatchingQuery, isLoading } = useContext(StoreContext);
+  const { gamesToShow, isLoading } = useContext(StoreContext);
 
   if (isLoading) {
     return <div>...loading</div>;
@@ -20,7 +20,7 @@ const Results: React.FunctionComponent<
         `,
       )}
     >
-      {gamesMatchingQuery.length} results
+      {gamesToShow.length} results
     </div>
   );
 };
