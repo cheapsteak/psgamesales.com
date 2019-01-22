@@ -1,15 +1,19 @@
 import { ValkyrieStoreIncludedItem, GameMediaList, GameData } from 'src/types';
 
 const transformValkyrieItemToGameData = (
-  valkyrieItems: ValkyrieStoreIncludedItem[],
-): GameData[] => {
+  valkyrieItems: (ValkyrieStoreIncludedItem | null)[],
+): (GameData | null)[] => {
   return valkyrieItems
     .filter(
       item =>
-        !!item.attributes['primary-classification'] &&
-        item.attributes.skus !== undefined,
+        item === null ||
+        (!!item.attributes['primary-classification'] &&
+          item.attributes.skus !== undefined),
     )
     .map(item => {
+      if (item === null) {
+        return null;
+      }
       const skuWithDiscount = item.attributes.skus!.find(
         sku =>
           sku.prices['non-plus-user']['discount-percentage'] > 0 ||

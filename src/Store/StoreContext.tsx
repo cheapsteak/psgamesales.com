@@ -1,5 +1,6 @@
 import querystring from 'querystring';
 import React, { useState, useContext, useEffect } from 'react';
+import _ from 'lodash';
 
 import {
   ValkyrieStoreIncludedItem,
@@ -14,17 +15,17 @@ import { useLocation } from '@reach/router/unstable-hooks';
 import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemToGameData';
 
 export const StoreContext: React.Context<{
-  games: GameData[];
-  gamesMatchingQuery: GameData[];
+  games: (GameData | null)[];
+  gamesMatchingQuery: (GameData | null)[];
   storeMetaData: StoreMetaData;
-  storeItems: ValkyrieStoreIncludedItem[];
+  storeItems: (ValkyrieStoreIncludedItem | null)[];
   isLoading: boolean;
   hasPartialContent: boolean;
 }> = React.createContext({
   storeMetaData: {} as StoreMetaData,
-  storeItems: [] as ValkyrieStoreIncludedItem[],
-  games: [] as GameData[],
-  gamesMatchingQuery: [] as GameData[],
+  storeItems: [] as (ValkyrieStoreIncludedItem | null)[],
+  games: [] as (GameData | null)[],
+  gamesMatchingQuery: [] as (GameData | null)[],
   isLoading: false,
   hasPartialContent: false,
 });
@@ -37,7 +38,7 @@ const useStore = storeName => {
     // contentTypes
   } = useContext(UserOptionsContext);
   const [storeItems, setStoreItems] = useState(
-    [] as ValkyrieStoreIncludedItem[],
+    [] as (ValkyrieStoreIncludedItem | null)[],
   );
   const [storeMetaData, setStoreMetaData] = useState({} as StoreMetaData);
   const [isLoading, setIsLoading] = useState(false);
@@ -57,13 +58,25 @@ const useStore = storeName => {
         country,
         platforms,
         // contentTypes,
-        onPartialResponse: ({ data, included }) => {
+        onPartialResponse: ({ data, included }, pageIndex, pageSize) => {
+          const totalResults = data.attributes['total-results'];
+
           setStoreMetaData({
             id: data.id,
             name: data.attributes.name,
-            totalResults: data.attributes['total-results'],
+            totalResults,
           });
-          setStoreItems(included);
+
+          const storeItemsWithHoles =
+            storeItems.length === totalResults
+              ? storeItems
+              : _.fill(_.range(20), null);
+
+          setStoreItems([
+            ...storeItemsWithHoles.slice(0, pageIndex * pageSize),
+            ...included,
+            ...storeItemsWithHoles.slice((pageIndex + 1) * pageSize + 1),
+          ]);
           setHasPartialContent(true);
         },
       }).then(({ data, included }) => {
@@ -112,7 +125,9 @@ export const StoreContextProvider: React.FunctionComponent<{
 
   const gamesMatchingQuery =
     gameQuery && gameQuery.length > 0
-      ? games.filter(game => game.name.toLowerCase().includes(gameQuery))
+      ? games.filter(
+          game => !game || game.name.toLowerCase().includes(gameQuery),
+        )
       : games;
 
   return (

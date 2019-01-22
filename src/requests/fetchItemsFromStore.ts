@@ -10,8 +10,9 @@ import {
 } from 'src/types';
 import { localforageInstance } from 'src/localforageInstance';
 
-const firstPageSize = 50;
-const subsequentPageSize = 100;
+// const firstPageSize = 50;
+// const subsequentPageSize = 100;
+const pageSize = 40;
 
 interface Facets {
   platforms?: Platform[];
@@ -70,15 +71,19 @@ const getAllItemsFromStore = async ({
   platforms,
   gameTypes,
   contentTypes,
-  onFirstPageLoad,
+  onPageLoad,
 }: Facets &
   StoreOptions & {
-    onFirstPageLoad?: (firstPageResponse: ValkyrieStoreResponse) => void;
+    onPageLoad?: (
+      pageResponse: ValkyrieStoreResponse,
+      pageIndex: number,
+      pageSize: number,
+    ) => void;
   }): Promise<ValkyrieStoreResponse> => {
   // fetch one page first
   const response: AxiosResponse<ValkyrieStoreResponse> = await fetchFromStore({
     start: 0,
-    size: firstPageSize,
+    size: pageSize,
     store,
     language,
     country,
@@ -89,11 +94,9 @@ const getAllItemsFromStore = async ({
   const items = response.data.included;
   const totalItems = response.data.data.attributes['total-results'];
 
-  if (totalItems > firstPageSize) {
-    onFirstPageLoad && onFirstPageLoad(response.data);
-    const pagesRemaining = Math.ceil(
-      (totalItems - subsequentPageSize) / subsequentPageSize,
-    );
+  if (totalItems > pageSize) {
+    onPageLoad && onPageLoad(response.data, 0, pageSize);
+    const pagesRemaining = Math.ceil((totalItems - pageSize) / pageSize);
     // fetch all the other pages at once
     return {
       data: response.data.data,
@@ -104,14 +107,17 @@ const getAllItemsFromStore = async ({
             _.range(pagesRemaining).map(x =>
               fetchFromStore({
                 store,
-                size: subsequentPageSize,
-                start: (x + 1) * subsequentPageSize,
+                size: pageSize,
+                start: (x + 1) * pageSize,
                 language,
                 country,
                 platforms,
                 gameTypes,
                 contentTypes,
-              }).then(response => response.data.included),
+              }).then(response => {
+                onPageLoad && onPageLoad(response.data, x + 1, pageSize);
+                return response.data.included;
+              }),
             ),
           ),
         ),
@@ -134,7 +140,11 @@ const fetchItemsFromStore = async ({
   onPartialResponse,
 }: Facets &
   StoreOptions & {
-    onPartialResponse: (partialResponse: ValkyrieStoreResponse) => void;
+    onPartialResponse: (
+      partialResponse: ValkyrieStoreResponse,
+      pageIndex: number,
+      pageSize: number,
+    ) => void;
   }): Promise<ValkyrieStoreResponse> => {
   const storeParams = {
     store,
@@ -143,8 +153,8 @@ const fetchItemsFromStore = async ({
     platforms,
     gameTypes,
     contentTypes,
-    onFirstPageLoad: partialResponse => {
-      onPartialResponse(partialResponse);
+    onPageLoad: (partialResponse, pageIndex, pageSize) => {
+      onPartialResponse(partialResponse, pageIndex, pageSize);
     },
   };
   const storeKey = JSON.stringify({
