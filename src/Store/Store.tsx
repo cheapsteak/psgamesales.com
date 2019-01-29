@@ -5,6 +5,7 @@ import GamesList from 'src/GamesList';
 import Controls from 'src/Controls';
 
 import FancyLoader from 'src/FancyLoader';
+import { mq } from 'src/constants';
 import { StoreContext } from './StoreContext';
 
 const Store = () => {
@@ -18,6 +19,10 @@ const Store = () => {
         display: flex;
         flex-direction: row;
         height: 100%;
+
+        ${mq.smallDown} {
+          flex-direction: column;
+        }
       `}
     >
       <Controls isLoading={isLoading} />

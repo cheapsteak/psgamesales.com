@@ -8,7 +8,7 @@ const Results: React.FunctionComponent<
   const { gamesToShow, isLoading } = useContext(StoreContext);
 
   if (isLoading) {
-    return <div>...loading</div>;
+    return <div className={className}>...loading</div>;
   }
 
   return (
