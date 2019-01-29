@@ -1,13 +1,8 @@
 import querystring from 'querystring';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext, useEffect, useReducer } from 'react';
 import _ from 'lodash';
 
-import {
-  ValkyrieStoreIncludedItem,
-  ValkyrieStoreResponse,
-  GameData,
-  StoreMetaData,
-} from 'src/types';
+import { ValkyrieStoreIncludedItem, GameData, StoreMetaData } from 'src/types';
 import fetchItemsFromStore from 'src/requests/fetchItemsFromStore';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import queryParamDict from 'src/queryParamDict';
@@ -30,8 +25,18 @@ export const StoreContext: React.Context<{
   hasPartialContent: false,
 });
 
-// legacy-skus contain duplicate data
-const filterResponseItems = includedItem => includedItem.type !== 'legacy-sku';
+type StoreItemsAction_Partial = {
+  type: 'partial';
+  items: ValkyrieStoreIncludedItem[];
+  pageIndex: number;
+  pageSize: number;
+  totalResultsCount: number;
+};
+
+type StoreItemsAction_Whole = {
+  type: 'whole';
+  items: ValkyrieStoreIncludedItem[];
+};
 
 const useStore = storeName => {
   const {
@@ -40,7 +45,35 @@ const useStore = storeName => {
     platforms,
     // contentTypes
   } = useContext(UserOptionsContext);
-  const [storeItems, setStoreItems] = useState(
+
+  const [storeItems, dispatchStoreItemsAction] = useReducer(
+    (
+      itemsCurrentlyInStore,
+      action: StoreItemsAction_Partial | StoreItemsAction_Whole,
+    ) => {
+      const itemsWithoutFillers = action.items.filter(
+        item => item.type !== 'legacy-sku',
+      );
+
+      if (action.type === 'partial') {
+        const { pageIndex, pageSize, totalResultsCount } = action;
+
+        const itemsWithHoles =
+          itemsCurrentlyInStore.length === totalResultsCount
+            ? itemsCurrentlyInStore
+            : _.fill(_.range(totalResultsCount), null);
+
+        return [
+          ...itemsWithHoles.slice(0, pageIndex * pageSize),
+          ...itemsWithoutFillers,
+          ...itemsWithHoles.slice((pageIndex + 1) * pageSize),
+        ];
+      } else if (action.type === 'whole') {
+        return itemsWithoutFillers;
+      } else {
+        return itemsCurrentlyInStore;
+      }
+    },
     [] as (ValkyrieStoreIncludedItem | null)[],
   );
   const [storeMetaData, setStoreMetaData] = useState({} as StoreMetaData);
@@ -48,7 +81,6 @@ const useStore = storeName => {
   const [hasPartialContent, setHasPartialContent] = useState(false);
 
   window['storeItems'] = storeItems;
-  let mutableStoreItems = storeItems;
 
   useEffect(
     () => {
@@ -64,7 +96,6 @@ const useStore = storeName => {
         // contentTypes,
         onPartialResponse: ({ data, included }, pageIndex, pageSize) => {
           const totalResultsCount = data.attributes['total-results'];
-          const includedWithoutFillers = included.filter(filterResponseItems);
 
           setStoreMetaData({
             id: data.id,
@@ -72,19 +103,14 @@ const useStore = storeName => {
             totalResults: totalResultsCount,
           });
 
-          const storeItemsWithHoles =
-            mutableStoreItems.length === totalResultsCount
-              ? mutableStoreItems
-              : _.fill(_.range(totalResultsCount), null);
+          dispatchStoreItemsAction({
+            type: 'partial',
+            items: included,
+            pageIndex,
+            pageSize,
+            totalResultsCount,
+          });
 
-          const updatedStoreItems = [
-            ...storeItemsWithHoles.slice(0, pageIndex * pageSize),
-            ...includedWithoutFillers,
-            ...storeItemsWithHoles.slice((pageIndex + 1) * pageSize),
-          ];
-
-          setStoreItems(updatedStoreItems);
-          mutableStoreItems = updatedStoreItems;
           setHasPartialContent(true);
         },
       }).then(({ data, included }) => {
@@ -93,7 +119,7 @@ const useStore = storeName => {
           name: data.attributes.name,
           totalResults: data.attributes['total-results'],
         });
-        setStoreItems(included.filter(filterResponseItems));
+        dispatchStoreItemsAction({ type: 'whole', items: included });
         setIsLoading(false);
       });
     },
