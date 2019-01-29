@@ -50,7 +50,13 @@ const GamesList: React.FunctionComponent = () => {
                       }
                       return (
                         // @ts-ignore "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
-                        game && <GameTile key={key} game={game} style={style} />
+                        game && (
+                          <GameTile
+                            key={`${key}:${game.id}`}
+                            game={game}
+                            style={style}
+                          />
+                        )
                       );
                     }}
                     className=""
