@@ -177,7 +177,7 @@ const fetchItemsFromStore = async ({
         await localforageInstance.removeItem(store);
         throw e;
       }
-      return storeData;
+      onPartialResponse(storeData, 0, storeData.included.length);
     }
 
     storeData = await getAllItemsFromStore(storeParams);
