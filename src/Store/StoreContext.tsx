@@ -133,9 +133,12 @@ export const StoreContextProvider: React.FunctionComponent<{
 
   const gamesToShow = games.filter(game => {
     if (!game) return true;
-    if (game.originalFields.type === 'game-related') {
-      return false;
-    }
+
+    // Note: 'game-related' also contains expansion packs like Destiny: Forsaken
+    // if (game.originalFields.type === 'game-related') {
+    //   return false;
+    // }
+
     if (gameQuery && gameQuery.length > 0) {
       return game.name.toLowerCase().includes(gameQuery);
     }
