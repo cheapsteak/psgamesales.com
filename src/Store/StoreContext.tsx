@@ -30,6 +30,9 @@ export const StoreContext: React.Context<{
   hasPartialContent: false,
 });
 
+// legacy-skus contain duplicate data
+const filterResponseItems = includedItem => includedItem.type !== 'legacy-sku';
+
 const useStore = storeName => {
   const {
     language,
@@ -45,6 +48,7 @@ const useStore = storeName => {
   const [hasPartialContent, setHasPartialContent] = useState(false);
 
   window['storeItems'] = storeItems;
+  let mutableStoreItems = storeItems;
 
   useEffect(
     () => {
@@ -59,24 +63,28 @@ const useStore = storeName => {
         platforms,
         // contentTypes,
         onPartialResponse: ({ data, included }, pageIndex, pageSize) => {
-          const totalResults = data.attributes['total-results'];
+          const totalResultsCount = data.attributes['total-results'];
+          const includedWithoutFillers = included.filter(filterResponseItems);
 
           setStoreMetaData({
             id: data.id,
             name: data.attributes.name,
-            totalResults,
+            totalResults: totalResultsCount,
           });
 
           const storeItemsWithHoles =
-            storeItems.length === totalResults
-              ? storeItems
-              : _.fill(_.range(20), null);
+            mutableStoreItems.length === totalResultsCount
+              ? mutableStoreItems
+              : _.fill(_.range(totalResultsCount), null);
 
-          setStoreItems([
+          const updatedStoreItems = [
             ...storeItemsWithHoles.slice(0, pageIndex * pageSize),
-            ...included,
-            ...storeItemsWithHoles.slice((pageIndex + 1) * pageSize + 1),
-          ]);
+            ...includedWithoutFillers,
+            ...storeItemsWithHoles.slice((pageIndex + 1) * pageSize),
+          ];
+
+          setStoreItems(updatedStoreItems);
+          mutableStoreItems = updatedStoreItems;
           setHasPartialContent(true);
         },
       }).then(({ data, included }) => {
@@ -85,7 +93,7 @@ const useStore = storeName => {
           name: data.attributes.name,
           totalResults: data.attributes['total-results'],
         });
-        setStoreItems(included);
+        setStoreItems(included.filter(filterResponseItems));
         setIsLoading(false);
       });
     },
