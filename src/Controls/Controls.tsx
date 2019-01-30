@@ -43,6 +43,7 @@ const Controls: React.FunctionComponent<
   const currentGameQuery = querystring.parse(currentQueryString)[
     queryParamDict.GAME_SEARCH
   ];
+
   return (
     <div
       className={cx(
@@ -59,6 +60,24 @@ const Controls: React.FunctionComponent<
             flex-shrink: 0;
           }
 
+          &,
+          & .ui.checkbox label,
+          & .ui.checkbox + label {
+            color: rgba(255, 255, 255, 0.82);
+          }
+
+          h2 {
+            color: rgba(255, 255, 255, 0.95);
+            margin-bottom: 0.2em;
+          }
+
+          background-image: radial-gradient(
+              circle at 0 top,
+              #4925bd 14%,
+              #a46ae247
+            ),
+            radial-gradient(circle at 140px bottom, #9c6de0, #fff0);
+
           ${mq.smallDown} {
             /* position: absolute;
             z-index: 1;
@@ -69,6 +88,12 @@ const Controls: React.FunctionComponent<
             overflow: auto;
             padding: 14px;
             padding-bottom: 6px;
+          }
+
+          .FacetWrapper {
+            & + .FacetWrapper {
+              margin-top: 1em;
+            }
           }
         `,
         className,
@@ -101,21 +126,24 @@ const Controls: React.FunctionComponent<
       />
       <Results
         className={css`
+          align-self: flex-end;
           ${mq.smallDown} {
-            align-self: flex-end;
             padding-top: 4px;
           }
         `}
       />
 
       <div
-        className={css`
-          ${mq.smallDown} {
-            display: none;
-          }
-        `}
+        className={cx(
+          'ControlsWrapper',
+          css`
+            ${mq.smallDown} {
+              display: none;
+            }
+          `,
+        )}
       >
-        <div>
+        <div className="FacetWrapper">
           <h2>Prices</h2>
           {[
             {
@@ -161,7 +189,7 @@ const Controls: React.FunctionComponent<
           ))}
         </div>
 
-        <div>
+        <div className="FacetWrapper">
           <h2>Country</h2>
           {(() => {
             const priorityContryCodes = ['us', 'ca'];
@@ -227,7 +255,7 @@ const Controls: React.FunctionComponent<
           })()}
         </div>
 
-        <div>
+        <div className="FacetWrapper">
           <h2>{facets.platform.name}</h2>
           {facets.platform.values.map(value => (
             <Checkbox

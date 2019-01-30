@@ -30,6 +30,7 @@ const Store = () => {
         className={css`
           flex: 1 1 auto;
           position: relative;
+          background-color: #2b3354;
         `}
       >
         {gamesToShow && <GamesList />}
