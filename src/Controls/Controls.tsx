@@ -48,8 +48,6 @@ const Controls: React.FunctionComponent<
       className={cx(
         `Controls`,
         css`
-          opacity: ${isLoading ? 0.5 : 1};
-
           display: flex;
           flex-direction: column;
           padding: 20px;
