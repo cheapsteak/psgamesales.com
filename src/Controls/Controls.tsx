@@ -7,6 +7,10 @@ import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { countries, colors, facets, mq } from 'src/constants';
+import { ReactComponent as IconX } from 'src/assets/icon-x.svg';
+import { ReactComponent as IconO } from 'src/assets/icon-o.svg';
+import { ReactComponent as IconFatSquare } from 'src/assets/icon-square-fat.svg';
+import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
 import Results from './Results';
 
 const Controls: React.FunctionComponent<
@@ -52,6 +56,8 @@ const Controls: React.FunctionComponent<
           display: flex;
           flex-direction: column;
           padding: 20px;
+          position: relative;
+          overflow: hidden;
 
           & .ui.checkbox {
             display: block;
@@ -99,7 +105,69 @@ const Controls: React.FunctionComponent<
         className,
       )}
     >
+      <IconO
+        className={css`
+          position: absolute;
+          height: auto;
+          mix-blend-mode: difference;
+          opacity: 0.5;
+          right: -20px;
+          top: -50px;
+          width: 360px;
+          & path {
+            fill: #a60000;
+          }
+        `}
+      />
+      <IconTriangle
+        className={css`
+          position: absolute;
+          height: auto;
+          mix-blend-mode: difference;
+          opacity: 0.5;
+          right: -100px;
+          top: 90px;
+          width: 360px;
+          transform: rotateZ(20deg) rotateY(-7deg);
+          & path {
+            fill: #a60000;
+          }
+        `}
+      />
+      <IconFatSquare
+        className={css`
+          position: absolute;
+          height: auto;
+          mix-blend-mode: difference;
+          opacity: 0.5;
+          right: 40px;
+          top: 400px;
+          width: 130px;
+          transform: rotateZ(-7deg) rotateY(20deg);
+          & path {
+            fill: #a60000;
+          }
+        `}
+      />
+      <IconX
+        className={css`
+          position: absolute;
+          height: auto;
+          mix-blend-mode: difference;
+          opacity: 0.5;
+          right: 0px;
+          top: 460px;
+          width: 360px;
+          transform: rotateZ(23deg) rotateY(10deg) rotateX(10deg);
+          & path {
+            fill: #a60000;
+          }
+        `}
+      />
       <Input
+        className={css`
+          z-index: 1;
+        `}
         ref={searchRef}
         loading={isLoading}
         icon={
@@ -126,6 +194,7 @@ const Controls: React.FunctionComponent<
       />
       <Results
         className={css`
+          z-index: 1;
           align-self: flex-end;
           ${mq.smallDown} {
             padding-top: 4px;
@@ -137,6 +206,7 @@ const Controls: React.FunctionComponent<
         className={cx(
           'ControlsWrapper',
           css`
+            z-index: 1;
             ${mq.smallDown} {
               display: none;
             }
