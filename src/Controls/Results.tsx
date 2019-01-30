@@ -7,10 +7,6 @@ const Results: React.FunctionComponent<
 > = ({ className }) => {
   const { gamesToShow, isLoading } = useContext(StoreContext);
 
-  if (isLoading) {
-    return <div className={className}>...loading</div>;
-  }
-
   return (
     <div
       className={cx(
@@ -20,7 +16,7 @@ const Results: React.FunctionComponent<
         `,
       )}
     >
-      {gamesToShow.length} results
+      {isLoading ? '...' : gamesToShow.length} results
     </div>
   );
 };
