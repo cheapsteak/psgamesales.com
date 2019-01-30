@@ -84,7 +84,7 @@ const Controls: React.FunctionComponent<
             'search'
           )
         }
-        placeholder="Search..."
+        placeholder={isLoading ? 'Loading...' : 'Search...'}
         defaultValue={currentGameQuery}
         onKeyUp={e => {
           if (e.key === 'Escape') {
