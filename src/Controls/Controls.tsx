@@ -2,7 +2,14 @@ import React, { useContext, useState } from 'react';
 import { cx, css } from 'emotion';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
-import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
+import {
+  Input,
+  Checkbox,
+  Icon,
+  Flag,
+  FlagNameValues,
+  Dropdown,
+} from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
 import { UserOptionsContext } from 'src/UserOptionsContext';
@@ -12,6 +19,7 @@ import { ReactComponent as IconO } from 'src/assets/icon-o.svg';
 import { ReactComponent as IconFatSquare } from 'src/assets/icon-square-fat.svg';
 import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
 import Results from './Results';
+import MobileCountrySelect from './MobileCountrySelect';
 
 const Controls: React.FunctionComponent<
   {
@@ -215,15 +223,36 @@ const Controls: React.FunctionComponent<
           navigate(`?${serializedQueryParams}`, { replace: true });
         }}
       />
-      <Results
+      <div
         className={css`
           z-index: 1;
-          align-self: flex-end;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
           ${mq.smallDown} {
             padding-top: 4px;
           }
         `}
-      />
+      >
+        <Results
+          className={css`
+            align-self: flex-end;
+            margin-left: auto;
+          `}
+        />
+        <MobileCountrySelect
+          selectedCountryKey={
+            countryFromUserOptions && countryFromUserOptions.key
+          }
+          onChange={selectedCountry =>
+            setUserOptions({
+              country: selectedCountry,
+              hasUserExplicitlySetCountryKey: true,
+              language: selectedCountry.languageCode,
+            })
+          }
+        />
+      </div>
 
       <div
         className={cx(
