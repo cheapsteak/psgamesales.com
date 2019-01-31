@@ -2,14 +2,7 @@ import React, { useContext, useState } from 'react';
 import { cx, css } from 'emotion';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
-import {
-  Input,
-  Checkbox,
-  Icon,
-  Flag,
-  FlagNameValues,
-  Dropdown,
-} from 'semantic-ui-react';
+import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
 import { UserOptionsContext } from 'src/UserOptionsContext';
@@ -20,6 +13,7 @@ import { ReactComponent as IconFatSquare } from 'src/assets/icon-square-fat.svg'
 import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
 import Results from './Results';
 import MobileCountrySelect from './MobileCountrySelect';
+import PricingToggle from './PricingToggle';
 
 const Controls: React.FunctionComponent<
   {
@@ -67,7 +61,7 @@ const Controls: React.FunctionComponent<
           position: relative;
           overflow: hidden;
 
-          & .ui.checkbox,
+          & .ui.checkbox:not(.toggle),
           & .ui.radio.checkbox {
             display: block;
             & .box,
@@ -232,6 +226,19 @@ const Controls: React.FunctionComponent<
           padding-top: 4px;
         `}
       >
+        <PricingToggle
+          className={css`
+            ${mq.mediumUp} {
+              display: none !important;
+            }
+          `}
+          checked={pricingDisplayMode === 'only_plus'}
+          onChange={(event, data) =>
+            setUserOptions({
+              pricingDisplayMode: data.checked ? 'only_plus' : 'only_non_plus',
+            })
+          }
+        />
         <Results
           className={css`
             align-self: flex-end;
@@ -264,49 +271,27 @@ const Controls: React.FunctionComponent<
         )}
       >
         <div className="FacetWrapper">
-          <h2>Prices</h2>
-          {[
-            {
-              label: (
-                <label
-                  className={css`
-                    display: flex;
-                    align-items: center;
-                  `}
-                >
-                  with PS Plus{' '}
-                  <img
-                    src={require('src/assets/plus-logo-yellow.png')}
-                    alt=""
-                  />{' '}
-                </label>
-              ),
-              value: 'only_plus',
-            },
-            {
-              label: 'no PS Plus',
-              value: 'only_non_plus',
-            },
-            {
-              label: 'show both',
-              value: 'plus_and_non_plus',
-            },
-          ].map(item => (
-            <Checkbox
-              key={item.value}
-              radio
-              label={item.label}
-              checked={pricingDisplayMode === item.value}
-              onChange={() =>
+          <h2
+            className={css`
+              display: flex;
+              align-items: center;
+            `}
+          >
+            Prices
+            <PricingToggle
+              className={css`
+                margin-left: 1em;
+              `}
+              checked={pricingDisplayMode === 'only_plus'}
+              onChange={(event, data) =>
                 setUserOptions({
-                  pricingDisplayMode: item.value as
-                    | 'only_plus'
-                    | 'only_non_plus'
-                    | 'plus_and_non_plus',
+                  pricingDisplayMode: data.checked
+                    ? 'only_plus'
+                    : 'only_non_plus',
                 })
               }
-            />
-          ))}
+            />{' '}
+          </h2>
         </div>
 
         <div className="FacetWrapper">
