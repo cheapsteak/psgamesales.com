@@ -283,7 +283,6 @@ const Controls: React.FunctionComponent<
         </div>
 
         <div className="FacetWrapper">
-          <h2>Country</h2>
           {(() => {
             const priorityContryCodes = ['us', 'ca'];
             const [isExpanded, setIsExpanded] = useState(false);
@@ -321,29 +320,32 @@ const Controls: React.FunctionComponent<
               countriesAboveFold,
             );
             return (
-              <div>
-                {countriesAboveFold.map(CountryCheckbox)}
+              <React.Fragment>
                 <button
                   className={css`
                     cursor: pointer;
                     border: 0;
                     background: transparent;
-                    color: ${colors.blue};
+                    color: #f7d9d9;
+                    font-size: 16px;
+                    padding: 0;
                   `}
                   onClick={() => setIsExpanded(!isExpanded)}
                 >
-                  {isExpanded ? (
-                    <React.Fragment>
-                      <Icon name="chevron up" /> Less
-                    </React.Fragment>
-                  ) : (
-                    <React.Fragment>
-                      <Icon name="chevron down" /> More
-                    </React.Fragment>
-                  )}
+                  <h2>
+                    Country{' '}
+                    {isExpanded ? (
+                      <Icon name="chevron up" size="small" />
+                    ) : (
+                      <Icon name="chevron down" size="small" />
+                    )}
+                  </h2>
                 </button>
-                {isExpanded && countriesBelowFold.map(CountryCheckbox)}
-              </div>
+                <div>
+                  {countriesAboveFold.map(CountryCheckbox)}
+                  {isExpanded && countriesBelowFold.map(CountryCheckbox)}
+                </div>
+              </React.Fragment>
             );
           })()}
         </div>
