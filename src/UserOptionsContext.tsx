@@ -1,4 +1,5 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import countries, { Country } from 'src/constants/countries';
 import { Platform, ContentType } from './types';
 
 let storedUserOptions;
@@ -14,7 +15,7 @@ try {
 const defaultUserOptions = {
   language: 'en',
   country: undefined,
-  hasUserExplicitlySetCountryCode: false,
+  hasUserExplicitlySetCountryKey: false,
   pricingDisplayMode: 'only_plus',
   platforms: [Platform.PS4],
   // contentTypes: [ContentType.Games, ContentType.Bundles],
@@ -28,16 +29,16 @@ type PricingDisplayModeOptions =
 
 export const UserOptionsContext: React.Context<{
   language: string;
-  country?: string;
-  hasUserExplicitlySetCountryCode: boolean;
+  country?: Country;
+  hasUserExplicitlySetCountryKey: boolean;
   pricingDisplayMode: PricingDisplayModeOptions;
   platforms: Platform[];
   // contentTypes: ContentType[];
   setUserOptions: Dispatch<
     SetStateAction<{
       language?: string;
-      country?: string;
-      hasUserExplicitlySetCountryCode?: boolean;
+      country?: Country;
+      hasUserExplicitlySetCountryKey?: boolean;
       pricingDisplayMode?: PricingDisplayModeOptions;
       platforms?: Platform[];
       // contentTypes?: ContentType[];
@@ -52,22 +53,31 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
   const [userOptions, setUserOptions] = useState(defaultUserOptions);
 
   useEffect(() => {
-    !userOptions.hasUserExplicitlySetCountryCode &&
+    !userOptions.hasUserExplicitlySetCountryKey &&
       fetch('https://us-central1-psgamedeals.cloudfunctions.net/geolocation')
         .then(res => res.json())
-        .then(geoInfo =>
+        .then(geoInfo => {
+          const countryFromGeoInfo = countries.find(
+            country => country.code === geoInfo.country.toLowerCase(),
+          );
+
+          if (!countryFromGeoInfo) {
+            throw new Error(
+              `Could not find country geoInfo, ${JSON.stringify(geoInfo)}`,
+            );
+          }
           setUserOptions({
             ...userOptions,
-            country: geoInfo.country.toLowerCase(),
-          }),
-        )
+            country: countryFromGeoInfo,
+          });
+        })
         .catch(e => {
           console.error(e);
           // couldn't automatically determine country. set a default value
           // todo: ask user to select their country?
           setUserOptions({
             ...userOptions,
-            country: 'us',
+            country: countries.find(country => country.code === 'us'),
           });
         });
   }, []);

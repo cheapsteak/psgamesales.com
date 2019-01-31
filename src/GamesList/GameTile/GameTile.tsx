@@ -25,6 +25,9 @@ const GameTile: React.ForwardRefExoticComponent<{
       )
       .join(', '),
   );
+  if (!country) {
+    throw new Error(`No country found. Shouldn't be rendering GameTile yet.`);
+  }
   return (
     <div
       // @ts-ignore-line "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
@@ -35,9 +38,9 @@ const GameTile: React.ForwardRefExoticComponent<{
       `}
     >
       <a
-        href={`https://store.playstation.com/${language}-${country}/product/${
-          game.id
-        }`}
+        href={`https://store.playstation.com/${language}-${
+          country.code
+        }/product/${game.id}`}
         target="_blank"
         rel="noopener noreferrer"
         className={

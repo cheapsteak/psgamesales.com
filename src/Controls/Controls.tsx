@@ -22,7 +22,7 @@ const Controls: React.FunctionComponent<
   const {
     platforms,
     // contentTypes,
-    country: countryCodeFromUserOptions,
+    country: countryFromUserOptions,
     pricingDisplayMode,
     setUserOptions,
   } = useContext(UserOptionsContext);
@@ -297,11 +297,14 @@ const Controls: React.FunctionComponent<
                   </label>
                 }
                 value={country.code}
-                checked={countryCodeFromUserOptions === country.code}
+                checked={
+                  countryFromUserOptions &&
+                  countryFromUserOptions.code === country.code
+                }
                 onChange={() =>
                   setUserOptions({
-                    country: country.code,
-                    hasUserExplicitlySetCountryCode: true,
+                    country: country,
+                    hasUserExplicitlySetCountryKey: true,
                     language: country.languageCode,
                   })
                 }
@@ -309,7 +312,7 @@ const Controls: React.FunctionComponent<
             );
             const countriesAboveFold = _.uniq([
               ...priorityContryCodes,
-              countryCodeFromUserOptions,
+              countryFromUserOptions && countryFromUserOptions.code,
             ])
               .filter(Boolean)
               .map(countryCode =>

@@ -91,7 +91,7 @@ const useStore = storeName => {
       fetchItemsFromStore({
         store: storeName,
         language,
-        country,
+        country: country.code,
         platforms,
         // contentTypes,
         onPartialResponse: ({ data, included }, pageIndex, pageSize) => {
