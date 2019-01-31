@@ -17,7 +17,14 @@ var countries = Array.from(document.querySelectorAll('.c-list li a'))
   .filter(Boolean);
 */
 
-export default [
+export interface Country {
+  name: string;
+  languageCode: string;
+  code: string;
+  key: string;
+}
+
+const countriesWithoutKeys = [
   { name: 'Argentina', languageCode: 'es', code: 'ar' },
   { name: 'Australia', languageCode: 'en', code: 'au' },
   { name: 'Austria', languageCode: 'de', code: 'at' },
@@ -93,3 +100,10 @@ export default [
   { name: 'United Kingdom', languageCode: 'en', code: 'gb' },
   { name: 'Vietnam', languageCode: 'en', code: 'vn' },
 ];
+
+const countries: Country[] = countriesWithoutKeys.map(country => ({
+  ...country,
+  key: `${country.name}:${country.code}`,
+}));
+
+export default countries;
