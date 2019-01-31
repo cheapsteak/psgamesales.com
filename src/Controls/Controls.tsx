@@ -59,8 +59,28 @@ const Controls: React.FunctionComponent<
           position: relative;
           overflow: hidden;
 
-          & .ui.checkbox {
+          & .ui.checkbox,
+          & .ui.radio.checkbox {
             display: block;
+            & .box,
+            & label {
+              &:before {
+                top: 2px;
+                left: 0px;
+                width: 13px;
+                height: 13px;
+              }
+            }
+            /* the "dot" and "check" in checkbox/radios*/
+            & input:checked ~ .box:after,
+            & input:checked ~ label:after {
+              color: #5d2dae;
+              left: -1px;
+            }
+          }
+          & .ui.radio.checkbox input:checked ~ .box:after,
+          & .ui.radio.checkbox input:checked ~ label:after {
+            background-color: #5d2dae;
           }
           & > * {
             flex-shrink: 0;
@@ -69,7 +89,10 @@ const Controls: React.FunctionComponent<
           &,
           & .ui.checkbox label,
           & .ui.checkbox + label {
-            color: rgba(255, 255, 255, 0.82);
+            color: rgba(255, 255, 255, 0.85);
+          }
+          & .ui.checkbox input:focus ~ label {
+            color: #ffffff;
           }
 
           h2 {
@@ -90,8 +113,8 @@ const Controls: React.FunctionComponent<
             background: #ffffff;
             box-shadow: 0 0 3px 2px rgba(0, 0, 0, 0.2);
             border-bottom-right-radius: 3px;
-            max-height: 96vh; */
-            overflow: auto;
+            max-height: 96vh;
+            overflow: auto; */
             padding: 14px;
             padding-bottom: 6px;
           }
