@@ -229,9 +229,7 @@ const Controls: React.FunctionComponent<
           display: flex;
           flex-direction: row;
           align-items: center;
-          ${mq.smallDown} {
-            padding-top: 4px;
-          }
+          padding-top: 4px;
         `}
       >
         <Results
