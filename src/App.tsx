@@ -1,13 +1,19 @@
 import React from 'react';
 import { css } from 'emotion';
+import { Router, RouteComponentProps } from '@reach/router';
 import { UserOptionsContextProvider } from './UserOptionsContext';
 import { StoreContextProvider } from './Store/StoreContext';
 import Store from './Store';
-import idx from 'idx.macro';
+import RedirectToDefaultStore from './RedirectToDefaultStore';
 
-const defaultStore =
-  idx(window, window => window['SETTINGS'].defaultStore) ||
-  `STORE-MSF77008-WEEKLYDEALS`;
+const Route = ({
+  Component,
+  ...routerProps
+}: {
+  Component: (routerProps: RouteComponentProps) => JSX.Element;
+} & RouteComponentProps) => {
+  return Component(routerProps);
+};
 
 function App() {
   return (
@@ -20,9 +26,21 @@ function App() {
       }
     >
       <UserOptionsContextProvider>
-        <StoreContextProvider storeName={defaultStore}>
-          <Store />
-        </StoreContextProvider>
+        <Router
+          className={css`
+            height: 100%;
+          `}
+        >
+          <Route
+            path="stores/:storeId"
+            Component={(props: RouteComponentProps<{ storeId: string }>) => (
+              <StoreContextProvider storeName={props.storeId as string}>
+                <Store />
+              </StoreContextProvider>
+            )}
+          />
+          <Route path="/" Component={() => <RedirectToDefaultStore />} />
+        </Router>
       </UserOptionsContextProvider>
     </div>
   );
