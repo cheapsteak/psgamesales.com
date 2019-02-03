@@ -6,3 +6,5 @@ http://master.psgamesales.netlify.com/* https://www.psgamesales.com/:splat 301!
 
 https://psgamesales.com/* https://www.psgamesales.com/:splat 301!
 http://psgamesales.com/* https://www.psgamesales.com/:splat 301!
+
+/*    /index.html   200
