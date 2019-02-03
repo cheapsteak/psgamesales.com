@@ -117,7 +117,7 @@ interface NonPlusUserPrice {
   availability: Availability;
   'discount-percentage': number;
   'is-plus': boolean;
-  'strikethrough-price': ActualPrice;
+  'strikethrough-price'?: ActualPrice;
   'upsell-price'?: ActualPrice;
 }
 
