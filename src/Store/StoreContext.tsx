@@ -39,12 +39,9 @@ type StoreItemsAction_Whole = {
 };
 
 const useStore = storeName => {
-  const {
-    language,
-    country,
-    platforms,
-    // contentTypes
-  } = useContext(UserOptionsContext);
+  const { language, country, platforms, contentTypes } = useContext(
+    UserOptionsContext,
+  );
 
   const [storeItems, dispatchStoreItemsAction] = useReducer(
     (
@@ -93,7 +90,7 @@ const useStore = storeName => {
         language,
         country: country.code,
         platforms,
-        // contentTypes,
+        contentTypes,
         onPartialResponse: ({ data, included }, pageIndex, pageSize) => {
           const totalResultsCount = data.attributes['total-results'];
 
@@ -129,7 +126,7 @@ const useStore = storeName => {
       language,
       country,
       platforms.join(','),
-      // contentTypes.join(','),
+      contentTypes.join(','),
     ],
   );
 

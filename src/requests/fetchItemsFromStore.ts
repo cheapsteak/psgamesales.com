@@ -44,6 +44,8 @@ const fetchFromStore = ({
     start: number;
     size: number;
   }) =>
+  // @ts-ignore
+  console.log(contentTypes) ||
   axios(
     `https://store.playstation.com/valkyrie-api/${language}/${country.toUpperCase()}/19/container/${store}?${querystring.stringify(
       _.omitBy(
@@ -166,6 +168,14 @@ const fetchItemsFromStore = async ({
       onPartialResponse(partialResponse, pageIndex, pageSize);
     },
   };
+  // @ts-ignore
+  console.log(
+    storefrontsSupportingFilters.includes(store) && {
+      platforms,
+      gameTypes,
+      contentTypes,
+    },
+  );
   const storeKey = JSON.stringify({
     store,
     country,

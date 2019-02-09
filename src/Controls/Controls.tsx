@@ -24,7 +24,7 @@ const Controls: React.FunctionComponent<
   const [location, navigate] = useLocation();
   const {
     platforms,
-    // contentTypes,
+    contentTypes,
     country: countryFromUserOptions,
     pricingDisplayMode,
     setUserOptions,
@@ -387,29 +387,29 @@ const Controls: React.FunctionComponent<
             />
           ))}
         </div>
-      </div>
 
-      {/* Filtering doesn't work API-side, PSN games aren't included as part of game_content_type=games or game_type=ps4_full_games%2Cpsn_games*/}
-      {/* <div>
-        <h2>{facets.game_content_type.name}</h2>
-        {_.map(facets.game_content_type.values, value => (
-          <Checkbox
-            key={value.key}
-            label={value.name}
-            value={value.key}
-            checked={_.includes(contentTypes, value.key)}
-            onChange={(e, data) => {
-              setUserOptions({
-                contentTypes: _.uniq(
-                  (data.checked ? _.concat : _.difference)(contentTypes, [
-                    data.value,
-                  ]),
-                ),
-              });
-            }}
-          />
-        ))}
-      </div> */}
+        {/* Filtering doesn't work API-side, PSN games aren't included as part of game_content_type=games or game_type=ps4_full_games%2Cpsn_games*/}
+        <div className="FacetWrapper">
+          <h2>{facets.game_content_type.name}</h2>
+          {_.map(facets.game_content_type.values, value => (
+            <Checkbox
+              key={value.key}
+              label={value.name}
+              value={value.key}
+              checked={_.includes(contentTypes, value.key)}
+              onChange={(e, data) => {
+                setUserOptions({
+                  contentTypes: _.uniq(
+                    (data.checked ? _.concat : _.difference)(contentTypes, [
+                      data.value,
+                    ]),
+                  ),
+                });
+              }}
+            />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
