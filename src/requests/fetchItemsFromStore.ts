@@ -9,6 +9,7 @@ import {
   ContentType,
 } from 'src/types';
 import { localforageInstance } from 'src/localforageInstance';
+import DEFAULT_STOREFRONTS from '../constants/DEFAULT_STOREFRONTS';
 
 // const firstPageSize = 50;
 // const subsequentPageSize = 100;
@@ -128,6 +129,12 @@ const getAllItemsFromStore = async ({
   }
 };
 
+const storefrontsSupportingFilters = [
+  DEFAULT_STOREFRONTS.ALL_DEALS.id,
+  DEFAULT_STOREFRONTS.PSPLUS_DISCOUNTS.id,
+  DEFAULT_STOREFRONTS.PSPLUS_EXCLUSIVES.id,
+];
+
 const fetchItemsFromStore = async ({
   store,
   country,
@@ -150,9 +157,11 @@ const fetchItemsFromStore = async ({
     store,
     country,
     language,
-    platforms,
-    gameTypes,
-    contentTypes,
+    ...(storefrontsSupportingFilters.includes(store) && {
+      platforms,
+      gameTypes,
+      contentTypes,
+    }),
     onPageLoad: (partialResponse, pageIndex, pageSize) => {
       onPartialResponse(partialResponse, pageIndex, pageSize);
     },

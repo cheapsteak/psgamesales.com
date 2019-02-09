@@ -4,7 +4,7 @@ import {
   ValkyrieStorefrontBase__Item,
 } from 'src/types/storefrontBaseResponseTypes';
 import { StorefrontItem } from 'src/types';
-import { DEFAULT_STOREFRONT } from 'src/constants';
+import { DEFAULT_STOREFRONTS } from 'src/constants';
 
 const transformValkyrieStorefrontToStorefront = (
   valkyrieStorefront: ValkyrieStorefrontBase__Item,
@@ -36,7 +36,7 @@ const fetchStorefronts = async (countryCode: string) => {
   );
 
   return [
-    DEFAULT_STOREFRONT,
+    DEFAULT_STOREFRONTS.ALL_DEALS,
     ...saleNavItems.items
       .filter(
         (item, i) =>
@@ -45,10 +45,8 @@ const fetchStorefronts = async (countryCode: string) => {
           i > separatorIndex,
       )
       .map(transformValkyrieStorefrontToStorefront),
-    {
-      id: 'STORE-MSF77008-PLAYSTATIONPLUS',
-      name: 'PlayStation®Plus',
-    },
+    DEFAULT_STOREFRONTS.PSPLUS_DISCOUNTS,
+    DEFAULT_STOREFRONTS.PSPLUS_EXCLUSIVES,
   ];
 };
 
