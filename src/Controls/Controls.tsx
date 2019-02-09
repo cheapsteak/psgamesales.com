@@ -6,6 +6,7 @@ import { Input, Icon } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
 import { UserOptionsContext } from 'src/UserOptionsContext';
+import StorefrontContainer from 'src/StorefrontContainer';
 import { mq } from 'src/constants';
 import { ReactComponent as IconX } from 'src/assets/icon-x.svg';
 import { ReactComponent as IconO } from 'src/assets/icon-o.svg';
@@ -48,6 +49,9 @@ const Controls: React.FunctionComponent<
   const currentGameQuery = querystring.parse(currentQueryString)[
     queryParamDict.GAME_SEARCH
   ];
+
+  const storefronts = useContext(StorefrontContainer.Context);
+  const shouldShowFacets = !!countryFromUserOptions && storefronts.length > 0;
 
   return (
     <div
@@ -269,11 +273,15 @@ const Controls: React.FunctionComponent<
           `,
         )}
       >
-        <Facets.Storefronts />
-        <Facets.Price />
-        <Facets.CountrySelector />
-        <Facets.Platforms />
-        <Facets.ContentTypes />
+        {shouldShowFacets && (
+          <React.Fragment>
+            <Facets.Storefronts />
+            <Facets.Price />
+            <Facets.CountrySelector />
+            <Facets.Platforms />
+            <Facets.ContentTypes />
+          </React.Fragment>
+        )}
       </div>
     </div>
   );
