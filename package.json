@@ -2,6 +2,7 @@
   "name": "psgamedeals",
   "version": "0.1.0",
   "private": true,
+  "license": "UNLICENSED",
   "dependencies": {
     "@emotion/css": "10.0.0",
     "@reach/router": "git://github.com/cheapsteak/router.git#withhooks",
