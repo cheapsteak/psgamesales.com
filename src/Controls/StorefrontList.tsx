@@ -24,6 +24,7 @@ const StorefrontList: React.FunctionComponent<{}> = () => {
               `,
               isCurrent &&
                 css`
+                  color: rgba(255, 255, 255, 1);
                   font-weight: bold;
                 `,
             ),
