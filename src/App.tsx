@@ -34,7 +34,10 @@ function App() {
           <Route
             path="stores/:storeId"
             Component={(props: RouteComponentProps<{ storeId: string }>) => (
-              <StoreContextProvider storeName={props.storeId as string}>
+              <StoreContextProvider
+                key={props.storeId}
+                storeName={props.storeId as string}
+              >
                 <Store />
               </StoreContextProvider>
             )}

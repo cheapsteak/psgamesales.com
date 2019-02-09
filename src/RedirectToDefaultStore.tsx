@@ -1,29 +1,11 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { UserOptionsContext } from 'src/UserOptionsContext';
-import { StorefrontItem } from 'src/types/StoreMetaData';
-import fetchStorefronts from 'src/requests/fetchStorefronts';
+import React from 'react';
 import { Redirect } from '@reach/router';
+import useStorefronts from './useStorefronts';
 
 const RedirectToDefaultStore: React.FunctionComponent = () => {
-  const { country } = useContext(UserOptionsContext);
-  const [storefronts, setStorefronts] = useState([] as StorefrontItem[]);
+  const storefronts = useStorefronts();
 
-  useEffect(
-    () => {
-      if (!country) {
-        return;
-      }
-      fetchStorefronts(country.code).then(fetchedStorefronts => {
-        if (!fetchedStorefronts || !fetchedStorefronts.length) {
-          throw new Error('No storefronts could be found');
-        }
-        setStorefronts(fetchedStorefronts);
-      });
-    },
-    [country && country.key],
-  );
-
-  if (!country || !storefronts.length) {
+  if (!storefronts.length) {
     // loading
     return null;
   }
