@@ -1,16 +1,9 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { Redirect } from '@reach/router';
-import StorefrontContainer from './StorefrontContainer';
+import { DEFAULT_STOREFRONT } from './constants';
 
-const RedirectToDefaultStore: React.FunctionComponent = () => {
-  const storefronts = useContext(StorefrontContainer.Context);
-
-  if (!storefronts.length) {
-    // loading
-    return null;
-  }
-
-  return <Redirect noThrow to={`stores/${storefronts[0].id}`} />;
-};
+const RedirectToDefaultStore: React.FunctionComponent = () => (
+  <Redirect noThrow to={`stores/${DEFAULT_STOREFRONT.id}`} />
+);
 
 export default RedirectToDefaultStore;

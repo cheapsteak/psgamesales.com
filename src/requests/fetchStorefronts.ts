@@ -4,6 +4,7 @@ import {
   ValkyrieStorefrontBase__Item,
 } from 'src/types/storefrontBaseResponseTypes';
 import { StorefrontItem } from 'src/types';
+import { DEFAULT_STOREFRONT } from 'src/constants';
 
 const transformValkyrieStorefrontToStorefront = (
   valkyrieStorefront: ValkyrieStorefrontBase__Item,
@@ -35,10 +36,7 @@ const fetchStorefronts = async (countryCode: string) => {
   );
 
   return [
-    {
-      id: 'STORE-MSF77008-ALLDEALS',
-      name: 'All Deals',
-    },
+    DEFAULT_STOREFRONT,
     ...saleNavItems.items
       .filter(
         (item, i) =>
