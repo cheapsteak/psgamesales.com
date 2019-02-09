@@ -1,6 +1,7 @@
 import { GameMediaList } from './apiResponseTypes';
 
 export interface GameDataPrice {
+  type?: string;
   original: {
     cents: number;
     display: string;

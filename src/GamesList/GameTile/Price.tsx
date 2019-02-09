@@ -7,6 +7,9 @@ const colors = {
   price: '#acdbf5',
   plusPrice: '#ffbf0a',
   originalPrice: '#7193a6',
+
+  greenBg: '#8bb006',
+  textAgainstGreenBg: '#e9f5bd',
 };
 
 const DiscountBlockWrapper: React.FunctionComponent<
@@ -41,18 +44,32 @@ const Price: React.FunctionComponent<
   const shouldShowPlusPricing =
     plusHasHigherDiscount && pricingDisplayMode !== 'only_non_plus';
 
-  if (price.nonPlus.cents === 0) {
+  if (price.original.cents === price.plus.cents) {
     return (
       <DiscountBlockWrapper>
         <div
           className={css`
-            padding: 0.5em;
-            color: #000000;
-            background-color: #8bb006;
+            padding: 0.3em 0.5em;
+            background-color: ${colors.greenBg};
+            color: ${colors.textAgainstGreenBg};
             font-size: 16px;
             line-height: 1;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
           `}
         >
+          {price.type === 'exclusive' && (
+            <img
+              className={css`
+                margin-right: 0.2em;
+                filter: hue-rotate(10deg);
+              `}
+              src={require('src/assets/plus-logo-yellow.png')}
+              alt=""
+            />
+          )}
           {price.nonPlus.display}
         </div>
       </DiscountBlockWrapper>
@@ -66,8 +83,8 @@ const Price: React.FunctionComponent<
           className={
             'PercentageBlock ' +
             css`
-              background-color: #8bb006;
-              color: #000000;
+              background-color: ${colors.greenBg};
+              color: ${colors.textAgainstGreenBg};
               padding: 0.05em 0.2em;
               display: flex;
               flex-direction: row;

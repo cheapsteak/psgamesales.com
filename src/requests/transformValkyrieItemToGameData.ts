@@ -30,6 +30,9 @@ const transformValkyrieItemToGameData = (
         starRating: item.attributes['star-rating'],
         contentType: item.attributes['game-content-type'],
         price: {
+          type:
+            item.attributes['upsell-info'] &&
+            item.attributes['upsell-info'].type,
           original: {
             display: nonPlusUserPricing['strikethrough-price']
               ? nonPlusUserPricing['strikethrough-price'].display
