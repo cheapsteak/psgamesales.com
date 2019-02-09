@@ -14,6 +14,7 @@ import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
 import Results from './Results';
 import MobileCountrySelect from './MobileCountrySelect';
 import PricingToggle from './PricingToggle';
+import StorefrontList from './StorefrontList';
 
 const Controls: React.FunctionComponent<
   {
@@ -270,6 +271,7 @@ const Controls: React.FunctionComponent<
           `,
         )}
       >
+        <StorefrontList />
         <div className="FacetWrapper">
           <h2
             className={css`
