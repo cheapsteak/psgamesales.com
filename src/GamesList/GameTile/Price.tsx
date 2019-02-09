@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { css } from 'emotion';
+import { cx, css } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameDataPrice } from 'src/types';
 
@@ -8,6 +8,26 @@ const colors = {
   plusPrice: '#ffbf0a',
   originalPrice: '#7193a6',
 };
+
+const DiscountBlockWrapper: React.FunctionComponent<
+  React.HTMLAttributes<HTMLDivElement>
+> = ({ className, ...props }) => (
+  <div
+    className={cx(
+      'DiscountBlock',
+      css`
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        background-color: #000000;
+        display: flex;
+        flex-direction: row;
+      `,
+      className,
+    )}
+    {...props}
+  />
+);
 
 const Price: React.FunctionComponent<
   {
@@ -21,21 +41,26 @@ const Price: React.FunctionComponent<
   const shouldShowPlusPricing =
     plusHasHigherDiscount && pricingDisplayMode !== 'only_non_plus';
 
+  if (price.nonPlus.cents === 0) {
+    return (
+      <DiscountBlockWrapper>
+        <div
+          className={css`
+            padding: 0.5em;
+            color: #000000;
+            background-color: #8bb006;
+            font-size: 16px;
+            line-height: 1;
+          `}
+        >
+          {price.nonPlus.display}
+        </div>
+      </DiscountBlockWrapper>
+    );
+  }
+
   return (
-    <div
-      className={
-        'DiscountBlock ' +
-        css`
-          position: absolute;
-          bottom: 0;
-          right: 0;
-          background-color: #000000;
-          display: flex;
-          flex-direction: row;
-        ` +
-        ` ${className}`
-      }
-    >
+    <DiscountBlockWrapper>
       {pricingDisplayMode !== 'plus_and_non_plus' && (
         <div
           className={
@@ -114,7 +139,7 @@ const Price: React.FunctionComponent<
           </div>
         )}
       </div>
-    </div>
+    </DiscountBlockWrapper>
   );
 };
 
