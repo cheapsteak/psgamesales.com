@@ -25,22 +25,33 @@ const fetchStorefronts = async (countryCode: string) => {
   const saleNavItems = navigationItem.submenu.find(
     submenuItem => submenuItem['target-container-id'] === 'STORE-MSF77008-SAVE',
   );
+
   if (!saleNavItems) {
     throw new Error('Unable to find sale items from list');
   }
-  return (
-    saleNavItems.items
-      .filter(
-        item =>
-          !item['is-separator'] &&
-          // bundles aren't really sales
-          item['target-container-id'] !== 'STORE-MSF77008-BUNDLESGRID',
-      )
-      .map(transformValkyrieStorefrontToStorefront)
-      // Note: this might not be the best way to sort
-      // only one datapoint now to infer that normal storefronts are at the top
-      .reverse()
+
+  const separatorIndex = saleNavItems.items.findIndex(
+    item => item['is-separator'],
   );
+
+  return [
+    {
+      id: 'STORE-MSF77008-ALLDEALS',
+      name: 'All Deals',
+    },
+    ...saleNavItems.items
+      .filter(
+        (item, i) =>
+          // bundles aren't really sales
+          item['target-container-id'] !== 'STORE-MSF77008-BUNDLESGRID' &&
+          i > separatorIndex,
+      )
+      .map(transformValkyrieStorefrontToStorefront),
+    {
+      id: 'STORE-MSF77008-PLAYSTATIONPLUS',
+      name: 'PlayStation®Plus',
+    },
+  ];
 };
 
 export default fetchStorefronts;
