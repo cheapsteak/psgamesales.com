@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect } from '@reach/router';
-import useStorefronts from './useStorefronts';
+import StorefrontContainer from './StorefrontContainer';
 
 const RedirectToDefaultStore: React.FunctionComponent = () => {
-  const storefronts = useStorefronts();
+  const storefronts = useContext(StorefrontContainer.Context);
 
   if (!storefronts.length) {
     // loading

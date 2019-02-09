@@ -5,6 +5,7 @@ import { UserOptionsContextProvider } from './UserOptionsContext';
 import { StoreContextProvider } from './Store/StoreContext';
 import Store from './Store';
 import RedirectToDefaultStore from './RedirectToDefaultStore';
+import StorefrontContainer from './StorefrontContainer';
 
 const Route = ({
   Component,
@@ -26,24 +27,26 @@ function App() {
       }
     >
       <UserOptionsContextProvider>
-        <Router
-          className={css`
-            height: 100%;
-          `}
-        >
-          <Route
-            path="stores/:storeId"
-            Component={(props: RouteComponentProps<{ storeId: string }>) => (
-              <StoreContextProvider
-                key={props.storeId}
-                storeName={props.storeId as string}
-              >
-                <Store />
-              </StoreContextProvider>
-            )}
-          />
-          <Route path="/" Component={() => <RedirectToDefaultStore />} />
-        </Router>
+        <StorefrontContainer.Provider>
+          <Router
+            className={css`
+              height: 100%;
+            `}
+          >
+            <Route
+              path="stores/:storeId"
+              Component={(props: RouteComponentProps<{ storeId: string }>) => (
+                <StoreContextProvider
+                  key={props.storeId}
+                  storeName={props.storeId as string}
+                >
+                  <Store />
+                </StoreContextProvider>
+              )}
+            />
+            <Route path="/" Component={() => <RedirectToDefaultStore />} />
+          </Router>
+        </StorefrontContainer.Provider>
       </UserOptionsContextProvider>
     </div>
   );
