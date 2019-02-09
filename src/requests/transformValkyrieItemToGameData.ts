@@ -23,7 +23,7 @@ const transformValkyrieItemToGameData = (
       const plusUserPricing = sku!.prices['plus-user'];
       const nonPlusUserPricing = sku!.prices['non-plus-user'];
       return {
-        // _originalData: item,
+        _originalData: item,
         id: item.id,
         name: item.attributes.name,
         platforms: item.attributes.platforms,
