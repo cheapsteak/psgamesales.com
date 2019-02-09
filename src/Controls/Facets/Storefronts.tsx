@@ -1,10 +1,10 @@
-import React, { useContext, HtmlHTMLAttributes } from 'react';
+import React, { useContext } from 'react';
 import { Link } from '@reach/router';
 import { css, cx } from 'emotion';
-import StorefrontContainer from '../StorefrontContainer';
+import StorefrontContainer from 'src/StorefrontContainer';
 
-const StorefrontList: React.FunctionComponent<
-  HtmlHTMLAttributes<HTMLDivElement>
+const Storefronts: React.FunctionComponent<
+  React.HtmlHTMLAttributes<HTMLDivElement>
 > = ({ className, ...props }) => {
   const storefronts = useContext(StorefrontContainer.Context);
   return (
@@ -39,4 +39,4 @@ const StorefrontList: React.FunctionComponent<
   );
 };
 
-export default StorefrontList;
+export default Storefronts;

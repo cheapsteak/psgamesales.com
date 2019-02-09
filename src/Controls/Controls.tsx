@@ -1,12 +1,12 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { cx, css } from 'emotion';
 import _ from 'lodash';
 import { useLocation } from '@reach/router/unstable-hooks';
-import { Input, Checkbox, Icon, Flag, FlagNameValues } from 'semantic-ui-react';
+import { Input, Icon } from 'semantic-ui-react';
 import querystring from 'querystring';
 import queryParamDict from 'src/queryParamDict';
 import { UserOptionsContext } from 'src/UserOptionsContext';
-import { countries, colors, facets, mq } from 'src/constants';
+import { mq } from 'src/constants';
 import { ReactComponent as IconX } from 'src/assets/icon-x.svg';
 import { ReactComponent as IconO } from 'src/assets/icon-o.svg';
 import { ReactComponent as IconFatSquare } from 'src/assets/icon-square-fat.svg';
@@ -14,7 +14,7 @@ import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
 import Results from './Results';
 import MobileCountrySelect from './MobileCountrySelect';
 import PricingToggle from './PricingToggle';
-import StorefrontList from './StorefrontList';
+import * as Facets from './Facets';
 
 const Controls: React.FunctionComponent<
   {
@@ -23,8 +23,6 @@ const Controls: React.FunctionComponent<
 > = ({ isLoading, className }) => {
   const [location, navigate] = useLocation();
   const {
-    platforms,
-    contentTypes,
     country: countryFromUserOptions,
     pricingDisplayMode,
     setUserOptions,
@@ -271,144 +269,11 @@ const Controls: React.FunctionComponent<
           `,
         )}
       >
-        <StorefrontList />
-        <div className="FacetWrapper">
-          <h2
-            className={css`
-              display: flex;
-              align-items: center;
-            `}
-          >
-            Prices
-            <PricingToggle
-              className={css`
-                margin-left: 1em;
-              `}
-              checked={pricingDisplayMode === 'only_plus'}
-              onChange={(event, data) =>
-                setUserOptions({
-                  pricingDisplayMode: data.checked
-                    ? 'only_plus'
-                    : 'only_non_plus',
-                })
-              }
-            />{' '}
-          </h2>
-        </div>
-
-        <div className="FacetWrapper">
-          {(() => {
-            const priorityContryCodes = ['us', 'ca'];
-            const [isExpanded, setIsExpanded] = useState(false);
-            const CountryCheckbox = country => (
-              <Checkbox
-                key={`${country.code}:${country.name}`}
-                radio
-                label={
-                  <label>
-                    <Flag name={country.code as FlagNameValues} />
-                    {country.name}
-                  </label>
-                }
-                value={country.code}
-                checked={
-                  countryFromUserOptions &&
-                  countryFromUserOptions.code === country.code
-                }
-                onChange={() =>
-                  setUserOptions({
-                    country: country,
-                    hasUserExplicitlySetCountryKey: true,
-                    language: country.languageCode,
-                  })
-                }
-              />
-            );
-            const countriesAboveFold = _.uniq([
-              ...priorityContryCodes,
-              countryFromUserOptions && countryFromUserOptions.code,
-            ])
-              .filter(Boolean)
-              .map(countryCode =>
-                countries.find(country => countryCode.includes(country.code)),
-              );
-            const countriesBelowFold = _.difference(
-              countries,
-              countriesAboveFold,
-            );
-            return (
-              <React.Fragment>
-                <button
-                  className={css`
-                    cursor: pointer;
-                    border: 0;
-                    background: transparent;
-                    color: #f7d9d9;
-                    font-size: 16px;
-                    padding: 0;
-                  `}
-                  onClick={() => setIsExpanded(!isExpanded)}
-                >
-                  <h2>
-                    Country{' '}
-                    {isExpanded ? (
-                      <Icon name="chevron up" size="small" />
-                    ) : (
-                      <Icon name="chevron down" size="small" />
-                    )}
-                  </h2>
-                </button>
-                <div>
-                  {countriesAboveFold.map(CountryCheckbox)}
-                  {isExpanded && countriesBelowFold.map(CountryCheckbox)}
-                </div>
-              </React.Fragment>
-            );
-          })()}
-        </div>
-
-        <div className="FacetWrapper">
-          <h2>{facets.platform.name}</h2>
-          {facets.platform.values.map(value => (
-            <Checkbox
-              key={value.key}
-              label={value.name}
-              value={value.key}
-              checked={_.includes(platforms, value.key)}
-              onChange={(e, data) => {
-                setUserOptions({
-                  platforms: _.uniq(
-                    (data.checked ? _.concat : _.difference)(platforms, [
-                      data.value,
-                    ]),
-                  ),
-                });
-              }}
-            />
-          ))}
-        </div>
-
-        {/* Filtering doesn't work API-side, PSN games aren't included as part of game_content_type=games or game_type=ps4_full_games%2Cpsn_games*/}
-        <div className="FacetWrapper">
-          <h2>{facets.game_content_type.name}</h2>
-          {_.map(facets.game_content_type.values, value => (
-            <Checkbox
-              key={value.key}
-              label={value.name}
-              value={value.key}
-              checked={_.includes(contentTypes, value.key)}
-              onChange={(e, data) => {
-                setUserOptions({
-                  contentTypes: _.uniq(
-                    (data.checked ? _.concat : _.difference)(contentTypes, [
-                      data.value,
-                    ]),
-                  ),
-                });
-              }}
-            />
-          ))}
-        </div>
+        <Facets.Storefronts />
+        <Facets.Price />
+        <Facets.CountrySelector />
+        <Facets.Platforms />
+        <Facets.ContentTypes />
       </div>
     </div>
   );
