@@ -8,25 +8,20 @@ const transformValkyrieItemToGameData = (
       item =>
         item === null ||
         (!!item.attributes['primary-classification'] &&
-          item.attributes.skus !== undefined &&
-          // item must be discounted
-          !!item.attributes.skus!.find(
-            sku =>
-              sku.prices['non-plus-user']['discount-percentage'] > 0 ||
-              sku.prices['plus-user']['discount-percentage'] > 0,
-          )),
+          item.attributes.skus !== undefined),
     )
     .map(item => {
       if (item === null) {
         return null;
       }
-      const skuWithDiscount = item.attributes.skus!.find(
-        sku =>
-          sku.prices['non-plus-user']['discount-percentage'] > 0 ||
-          sku.prices['plus-user']['discount-percentage'] > 0,
-      );
-      const plusUserPricing = skuWithDiscount!.prices['plus-user'];
-      const nonPlusUserPricing = skuWithDiscount!.prices['non-plus-user'];
+      const sku =
+        item.attributes.skus!.find(
+          sku =>
+            sku.prices['non-plus-user']['discount-percentage'] > 0 ||
+            sku.prices['plus-user']['discount-percentage'] > 0,
+        ) || item.attributes.skus![0];
+      const plusUserPricing = sku!.prices['plus-user'];
+      const nonPlusUserPricing = sku!.prices['non-plus-user'];
       return {
         // _originalData: item,
         id: item.id,
