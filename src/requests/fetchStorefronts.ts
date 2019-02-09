@@ -36,7 +36,6 @@ const fetchStorefronts = async (countryCode: string) => {
   );
 
   return [
-    DEFAULT_STOREFRONTS.ALL_DEALS,
     ...saleNavItems.items
       .filter(
         (item, i) =>
@@ -47,6 +46,7 @@ const fetchStorefronts = async (countryCode: string) => {
       .map(transformValkyrieStorefrontToStorefront),
     DEFAULT_STOREFRONTS.PSPLUS_DISCOUNTS,
     DEFAULT_STOREFRONTS.PSPLUS_EXCLUSIVES,
+    DEFAULT_STOREFRONTS.ALL_DEALS,
   ];
 };
 
