@@ -1,11 +1,47 @@
 import querystring from 'querystring';
 import _ from 'lodash';
 import React, { useContext, useState } from 'react';
-import { css } from 'emotion';
+import { css, cx } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameData } from 'src/types';
 import colors, { gradientColors } from 'src/constants/colors';
 import Price from './Price';
+
+const MoreInfo: React.FunctionComponent<{
+  game: GameData;
+  className?: string;
+}> = ({ game, className }) => {
+  return (
+    <div
+      className={cx(
+        'MoreInfo',
+        css`
+          position: absolute;
+          top: 3px;
+          left: 100%;
+          width: 200%;
+          background-color: #e3eaef;
+          background-image: linear-gradient(
+            to bottom,
+            #e3eaef 0%,
+            #c7d5e0 100%
+          );
+          box-shadow: 0 0 12px #000000;
+          color: #333;
+          z-index: 1;
+          padding: 1em;
+          pointer-events: none;
+
+          opacity: 0;
+          transition: 0.2s transform, 0.3s opacity;
+        `,
+        className,
+      )}
+    >
+      <div>{game.name}</div>
+    </div>
+  );
+};
 
 // @ts-ignore-line "Property 'game' does not exist on type '{ children?: ReactNode; }'.ts(2339)"
 const GameTile: React.ForwardRefExoticComponent<{
@@ -34,7 +70,15 @@ const GameTile: React.ForwardRefExoticComponent<{
       ref={ref}
       style={style}
       className={css`
-        padding: 0.2em;
+        padding: 3px;
+        z-index: 1;
+        &:hover {
+          z-index: 20;
+          & .MoreInfo {
+            opacity: 1;
+            pointer-events: initial;
+          }
+        }
       `}
     >
       <a
@@ -84,6 +128,7 @@ const GameTile: React.ForwardRefExoticComponent<{
 
         <Price price={game.price} />
       </a>
+      <MoreInfo game={game} />
     </div>
   );
 });
