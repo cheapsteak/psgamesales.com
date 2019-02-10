@@ -19,13 +19,6 @@ const MoreInfo: React.FunctionComponent<{
         css`
           position: absolute;
           top: 3px;
-          ${position === 'left'
-            ? css`
-                left: calc(100% + 3px);
-              `
-            : css`
-                right: calc(100% + 3px);
-              `}
 
           width: 200%;
           background-color: #e3eaef;
@@ -46,15 +39,28 @@ const MoreInfo: React.FunctionComponent<{
           &:after {
             content: '';
             display: block;
-            width: 10px;
+            width: 6px;
             height: 100%;
-            max-height: 100px;
             background: linear-gradient(to ${position}, #0000, #9dafbd),
               linear-gradient(to bottom, #e3eaef 0%, #c7d5e0 100%);
-            ${position}: -6px;
             position: absolute;
             top: 0;
           }
+          ${position === 'left'
+            ? css`
+                left: calc(100% + 3px);
+                &:after {
+                  left: -6px;
+                  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 170px);
+                }
+              `
+            : css`
+                right: calc(100% + 3px);
+                &:after {
+                  right: -5px;
+                  clip-path: polygon(0% 0%, 100% 0%, 100% 170px, 0% 100%);
+                }
+              `}
         `,
         className,
       )}
