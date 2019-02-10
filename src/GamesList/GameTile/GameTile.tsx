@@ -23,7 +23,7 @@ const Screenshots: React.FunctionComponent<{
   );
 
   useEffect(() => {
-    const interval = global.setInterval(dispatchChangeUrl, 1500);
+    const interval = global.setInterval(dispatchChangeUrl, 1200);
     return function cleanup() {
       global.clearInterval(interval);
     };
