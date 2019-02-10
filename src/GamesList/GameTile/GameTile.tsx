@@ -13,6 +13,9 @@ const Screenshots: React.FunctionComponent<{
 }> = ({ screenshots }) => {
   const getNextUrl = currentUrl =>
     screenshots[(screenshots.indexOf(currentUrl) + 1) % screenshots.length];
+  const getPreviousUrl = currentUrl =>
+    screenshots[screenshots.indexOf(currentUrl) - 1] ||
+    screenshots.slice(-1)[0];
 
   const [currentUrl, dispatchChangeUrl] = useReducer(
     currentUrlInState => getNextUrl(currentUrlInState),
@@ -20,7 +23,7 @@ const Screenshots: React.FunctionComponent<{
   );
 
   useEffect(() => {
-    const interval = global.setInterval(dispatchChangeUrl, 1000);
+    const interval = global.setInterval(dispatchChangeUrl, 1500);
     return function cleanup() {
       global.clearInterval(interval);
     };
@@ -38,19 +41,36 @@ const Screenshots: React.FunctionComponent<{
       {screenshots.map(url => (
         <div
           key={url}
-          className={css`
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('${url}');
-            background-size: cover;
-            background-position: center;
-            z-index: ${url === currentUrl ? 1 : 0};
-            opacity: ${url === currentUrl ? 1 : 0};
-            transition: 0.2s opacity;
-        `}
+          className={cx(
+            css`
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-image: url('${url}');
+              background-size: cover;
+              background-position: center;
+              transition: 0.3s opacity;
+              z-index: 1;
+            `,
+            css`
+              z-index: ${url === currentUrl ? 1 : 0};
+              opacity: ${url === currentUrl ? 1 : 0};
+            `,
+            url === currentUrl &&
+              css`
+                z-index: 2;
+              `,
+            url === getNextUrl(currentUrl) &&
+              css`
+                z-index: 2;
+              `,
+            url === getPreviousUrl(currentUrl) &&
+              css`
+                transition-delay: 0.2s opacity;
+              `,
+          )}
         />
       ))}
     </div>
