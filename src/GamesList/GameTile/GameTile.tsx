@@ -1,5 +1,6 @@
 import querystring from 'querystring';
 import _ from 'lodash';
+import { Rating } from 'semantic-ui-react';
 import React, { useContext, useState, useEffect, useReducer } from 'react';
 import { css, cx } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
@@ -133,6 +134,33 @@ const MoreInfo: React.FunctionComponent<{
             screenshot => screenshot.url,
           )}
         />
+      )}
+      {game.starRating && game.starRating.score && (
+        <div
+          className={css`
+            margin-top: 4px;
+          `}
+        >
+          <Rating
+            disabled
+            rating={Math.floor(game.starRating.score)}
+            maxRating={5}
+          />
+          <span
+            className={css`
+              margin-left: 3px;
+            `}
+          >
+            {game.starRating.score}{' '}
+            <span
+              className={css`
+                opacity: 0.5;
+              `}
+            >
+              ({game.starRating.total} ratings)
+            </span>
+          </span>
+        </div>
       )}
     </div>
   );

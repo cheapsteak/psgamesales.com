@@ -66,7 +66,7 @@ interface ValkyrieStoreItemAttributes {
   'release-date'?: string;
   'secondary-classification'?: string;
   skus?: Skus[];
-  'star-rating'?: Starrating;
+  'star-rating'?: StarRating;
   'subtitle-language-codes'?: any[];
   'tertiary-classification'?: string;
   'thumbnail-url-base'?: string;
@@ -82,7 +82,7 @@ interface Upsellinfo {
   type: string;
 }
 
-interface Starrating {
+export interface StarRating {
   score?: number;
   total?: number;
 }

@@ -1,4 +1,4 @@
-import { GameMediaList } from './apiResponseTypes';
+import { GameMediaList, StarRating } from './apiResponseTypes';
 
 export interface GameDataPrice {
   type?: string;
@@ -24,6 +24,7 @@ export interface GameData {
   price: GameDataPrice;
   thumbnailBase: string;
   mediaList: GameMediaList;
+  starRating?: StarRating;
   contentType:
     | 'Dynamic Theme'
     | 'Theme'
