@@ -10,7 +10,8 @@ import Price from './Price';
 const MoreInfo: React.FunctionComponent<{
   game: GameData;
   className?: string;
-}> = ({ game, className }) => {
+  position: 'left' | 'right';
+}> = ({ game, className, position }) => {
   return (
     <div
       className={cx(
@@ -18,7 +19,14 @@ const MoreInfo: React.FunctionComponent<{
         css`
           position: absolute;
           top: 3px;
-          left: 100%;
+          ${position === 'left'
+            ? css`
+                left: calc(100% + 3px);
+              `
+            : css`
+                right: calc(100% + 3px);
+              `}
+
           width: 200%;
           background-color: #e3eaef;
           background-image: linear-gradient(
@@ -34,6 +42,19 @@ const MoreInfo: React.FunctionComponent<{
 
           opacity: 0;
           transition: 0.2s transform, 0.3s opacity;
+
+          &:after {
+            content: '';
+            display: block;
+            width: 10px;
+            height: 100%;
+            max-height: 100px;
+            background: linear-gradient(to ${position}, #0000, #9dafbd),
+              linear-gradient(to bottom, #e3eaef 0%, #c7d5e0 100%);
+            ${position}: -6px;
+            position: absolute;
+            top: 0;
+          }
         `,
         className,
       )}
@@ -47,7 +68,8 @@ const MoreInfo: React.FunctionComponent<{
 const GameTile: React.ForwardRefExoticComponent<{
   game: GameData;
   style: any;
-}> = React.forwardRef(({ game, style }, ref) => {
+  tooltipPosition: 'left' | 'right';
+}> = React.forwardRef(({ game, style, tooltipPosition }, ref) => {
   const { language, country } = useContext(UserOptionsContext);
   const [retryCount, setRetryCount] = useState(0);
   const [backgroundImage] = useState(
@@ -128,7 +150,7 @@ const GameTile: React.ForwardRefExoticComponent<{
 
         <Price price={game.price} />
       </a>
-      <MoreInfo game={game} />
+      <MoreInfo game={game} position={tooltipPosition} />
     </div>
   );
 });

@@ -55,6 +55,9 @@ const GamesList: React.FunctionComponent = () => {
                             key={`${key}:${game.id}`}
                             game={game}
                             style={style}
+                            tooltipPosition={
+                              columnIndex > columnCount - 3 ? 'right' : 'left'
+                            }
                           />
                         )
                       );
