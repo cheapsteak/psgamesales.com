@@ -31,6 +31,7 @@ const Screenshots: React.FunctionComponent<{
         position: relative;
         width: 100%;
         height: 180px;
+        background-color: rgba(0, 0, 0, 0.1);
       `}
     >
       {screenshots.map(url => (
@@ -102,7 +103,6 @@ const MoreInfo: React.FunctionComponent<{
                 border-bottom-left-radius: 2px;
                 &:after {
                   left: -6px;
-                  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 170px);
                 }
               `
             : css`
@@ -112,7 +112,6 @@ const MoreInfo: React.FunctionComponent<{
                 border-bottom-right-radius: 2px;
                 &:after {
                   right: -5px;
-                  clip-path: polygon(0% 0%, 100% 0%, 100% 170px, 0% 100%);
                 }
               `}
         `,
@@ -200,6 +199,8 @@ const GameTile: React.ForwardRefExoticComponent<{
             position: relative;
             padding-top: 100%;
             box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
           `,
         )}
       >
