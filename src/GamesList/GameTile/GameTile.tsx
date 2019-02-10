@@ -7,6 +7,26 @@ import { GameData } from 'src/types';
 import colors, { gradientColors } from 'src/constants/colors';
 import Price from './Price';
 
+const Screenshots: React.FunctionComponent<{
+  screenshots: GameData['mediaList']['preview'];
+}> = ({ screenshots }) => {
+  const [currentUrl, setCurrentUrl] = useState(screenshots[0].url);
+
+  return (
+    <div>
+      <div
+        className={css`
+          width: 100%;
+          height: 180px;
+          background-image: url('${currentUrl}');
+          background-size: cover;
+          background-position: center;
+        `}
+      />
+    </div>
+  );
+};
+
 const MoreInfo: React.FunctionComponent<{
   game: GameData;
   className?: string;
@@ -20,7 +40,7 @@ const MoreInfo: React.FunctionComponent<{
           position: absolute;
           top: 3px;
 
-          width: 200%;
+          width: 180%;
           background-color: #e3eaef;
           background-image: linear-gradient(
             to bottom,
@@ -65,7 +85,18 @@ const MoreInfo: React.FunctionComponent<{
         className,
       )}
     >
-      <div>{game.name}</div>
+      <h3
+        className={css`
+          font-size: 17px;
+          font-weight: normal;
+          margin-bottom: 0.5em;
+        `}
+      >
+        {game.name}
+      </h3>
+      {game.mediaList.screenshots.length > 0 && (
+        <Screenshots screenshots={game.mediaList.screenshots} />
+      )}
     </div>
   );
 };
