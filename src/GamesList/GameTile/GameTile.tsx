@@ -1,6 +1,6 @@
 import querystring from 'querystring';
 import _ from 'lodash';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect, useReducer } from 'react';
 import { css, cx } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameData } from 'src/types';
@@ -8,21 +8,49 @@ import colors, { gradientColors } from 'src/constants/colors';
 import Price from './Price';
 
 const Screenshots: React.FunctionComponent<{
-  screenshots: GameData['mediaList']['preview'];
+  screenshots: string[];
 }> = ({ screenshots }) => {
-  const [currentUrl, setCurrentUrl] = useState(screenshots[0].url);
+  const getNextUrl = currentUrl =>
+    screenshots[(screenshots.indexOf(currentUrl) + 1) % screenshots.length];
+
+  const [currentUrl, dispatchChangeUrl] = useReducer(
+    currentUrlInState => getNextUrl(currentUrlInState),
+    screenshots[0],
+  );
+
+  useEffect(() => {
+    const interval = global.setInterval(dispatchChangeUrl, 1000);
+    return function cleanup() {
+      global.clearInterval(interval);
+    };
+  }, []);
 
   return (
-    <div>
-      <div
-        className={css`
-          width: 100%;
-          height: 180px;
-          background-image: url('${currentUrl}');
-          background-size: cover;
-          background-position: center;
+    <div
+      className={css`
+        position: relative;
+        width: 100%;
+        height: 180px;
+      `}
+    >
+      {screenshots.map(url => (
+        <div
+          key={url}
+          className={css`
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('${url}');
+            background-size: cover;
+            background-position: center;
+            z-index: ${url === currentUrl ? 1 : 0};
+            opacity: ${url === currentUrl ? 1 : 0};
+            transition: 0.2s opacity;
         `}
-      />
+        />
+      ))}
     </div>
   );
 };
@@ -69,6 +97,9 @@ const MoreInfo: React.FunctionComponent<{
           ${position === 'left'
             ? css`
                 left: calc(100% + 3px);
+                border-top-right-radius: 2px;
+                border-bottom-right-radius: 2px;
+                border-bottom-left-radius: 2px;
                 &:after {
                   left: -6px;
                   clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 170px);
@@ -76,6 +107,9 @@ const MoreInfo: React.FunctionComponent<{
               `
             : css`
                 right: calc(100% + 3px);
+                border-top-left-radius: 2px;
+                border-bottom-left-radius: 2px;
+                border-bottom-right-radius: 2px;
                 &:after {
                   right: -5px;
                   clip-path: polygon(0% 0%, 100% 0%, 100% 170px, 0% 100%);
@@ -95,7 +129,11 @@ const MoreInfo: React.FunctionComponent<{
         {game.name}
       </h3>
       {game.mediaList.screenshots.length > 0 && (
-        <Screenshots screenshots={game.mediaList.screenshots} />
+        <Screenshots
+          screenshots={game.mediaList.screenshots.map(
+            screenshot => screenshot.url,
+          )}
+        />
       )}
     </div>
   );
@@ -107,6 +145,7 @@ const GameTile: React.ForwardRefExoticComponent<{
   style: any;
   tooltipPosition: 'left' | 'right';
 }> = React.forwardRef(({ game, style, tooltipPosition }, ref) => {
+  const [shouldShowMoreInfo, setShouldShowMoreInfo] = useState(false);
   const { language, country } = useContext(UserOptionsContext);
   const [retryCount, setRetryCount] = useState(0);
   const [backgroundImage] = useState(
@@ -120,9 +159,11 @@ const GameTile: React.ForwardRefExoticComponent<{
       )
       .join(', '),
   );
+
   if (!country) {
     throw new Error(`No country found. Shouldn't be rendering GameTile yet.`);
   }
+
   return (
     <div
       // @ts-ignore-line "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
@@ -139,6 +180,9 @@ const GameTile: React.ForwardRefExoticComponent<{
           }
         }
       `}
+      onMouseOver={() => !shouldShowMoreInfo && setShouldShowMoreInfo(true)}
+      onMouseEnter={() => setShouldShowMoreInfo(true)}
+      onMouseLeave={() => setShouldShowMoreInfo(false)}
     >
       <a
         href={`https://store.playstation.com/${language}-${
@@ -146,15 +190,18 @@ const GameTile: React.ForwardRefExoticComponent<{
         }/product/${game.id}`}
         target="_blank"
         rel="noopener noreferrer"
-        className={
-          `GameInfoLink ` +
+        className={cx(
+          `GameInfoLink`,
+          css`
+            background-image: ${backgroundImage};
+          `,
           css`
             display: block;
             position: relative;
             padding-top: 100%;
-            background-image: ${backgroundImage};
-          `
-        }
+            box-shadow: 0 0 3px 1px rgba(0, 0, 0, 0.3);
+          `,
+        )}
       >
         <img
           src={`${game.thumbnailBase}?${querystring.stringify({
@@ -187,7 +234,9 @@ const GameTile: React.ForwardRefExoticComponent<{
 
         <Price price={game.price} />
       </a>
-      <MoreInfo game={game} position={tooltipPosition} />
+      {shouldShowMoreInfo && (
+        <MoreInfo game={game} position={tooltipPosition} />
+      )}
     </div>
   );
 });
