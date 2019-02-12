@@ -14,7 +14,9 @@ const transformValkyrieStorefrontToStorefront = (
 });
 
 const fetchStorefronts = async (countryCode: string) => {
-  const url = `https://store.playstation.com/valkyrie-api/en/${countryCode.toUpperCase()}/999/storefront/STORE-MSF77008-BASE`;
+  // not sure what the difference is between 999 and 19, but 19 had a 2k sale and 999 didn't
+  // const url = `https://store.playstation.com/valkyrie-api/en/${countryCode.toUpperCase()}/999/storefront/STORE-MSF77008-BASE`;
+  const url = `https://store.playstation.com/valkyrie-api/en/${countryCode.toUpperCase()}/19/storefront/STORE-MSF77008-BASE`;
   const response: AxiosResponse<ValkyrieStorefrontBase> = await axios.get(url);
   const navigationItem = response.data.data.attributes.navigation.find(
     navigationItem =>
