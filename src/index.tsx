@@ -17,7 +17,7 @@ window.addEventListener('beforeinstallprompt', e => {
   deferredPrompt = e;
   // Update UI notify the user they can add to home screen
   // btnAdd.style.display = 'block';
-  alert('install prompt');
+  console.log('install prompt');
 });
 
 // If you want your app to work offline and load faster, you can change
