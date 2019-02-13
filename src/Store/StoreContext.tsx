@@ -8,6 +8,8 @@ import { UserOptionsContext } from 'src/UserOptionsContext';
 import queryParamDict from 'src/queryParamDict';
 import { useLocation } from '@reach/router/unstable-hooks';
 import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemToGameData';
+import StorefrontContainer from 'src/StorefrontContainer';
+import { Redirect } from '@reach/router';
 
 export const StoreContext: React.Context<{
   games: (GameData | null)[];
@@ -38,7 +40,13 @@ type StoreItemsAction_Whole = {
   items: ValkyrieStoreIncludedItem[];
 };
 
+type StoreItemsAction_Error = {
+  type: 'error';
+  error: any;
+};
+
 const useStore = storeName => {
+  const storefronts = useContext(StorefrontContainer.Context);
   const { language, country, platforms, contentTypes } = useContext(
     UserOptionsContext,
   );
@@ -46,8 +54,15 @@ const useStore = storeName => {
   const [storeItems, dispatchStoreItemsAction] = useReducer(
     (
       itemsCurrentlyInStore,
-      action: StoreItemsAction_Partial | StoreItemsAction_Whole,
+      action:
+        | StoreItemsAction_Partial
+        | StoreItemsAction_Whole
+        | StoreItemsAction_Error,
     ) => {
+      if (action.type === 'error') {
+        return action.error;
+      }
+
       const itemsWithoutFillers = action.items.filter(
         item => item.type !== 'legacy-sku',
       );
@@ -110,15 +125,19 @@ const useStore = storeName => {
 
           setHasPartialContent(true);
         },
-      }).then(({ data, included }) => {
-        setStoreMetaData({
-          id: data.id,
-          name: data.attributes.name,
-          totalResults: data.attributes['total-results'],
+      })
+        .then(({ data, included }) => {
+          setStoreMetaData({
+            id: data.id,
+            name: data.attributes.name,
+            totalResults: data.attributes['total-results'],
+          });
+          dispatchStoreItemsAction({ type: 'whole', items: included });
+          setIsLoading(false);
+        })
+        .catch(error => {
+          dispatchStoreItemsAction({ type: 'error', error });
         });
-        dispatchStoreItemsAction({ type: 'whole', items: included });
-        setIsLoading(false);
-      });
     },
     [
       country,
@@ -146,6 +165,10 @@ export const StoreContextProvider: React.FunctionComponent<{
   const { storeMetaData, storeItems, isLoading, hasPartialContent } = useStore(
     storeName,
   );
+
+  if (storeItems instanceof Error) {
+    return <Redirect to="/" noThrow />;
+  }
 
   const games = transformValkyrieItemToGameData(storeItems);
   window['games'] = games;

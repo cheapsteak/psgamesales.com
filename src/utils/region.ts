@@ -18,6 +18,7 @@ export const getRegionCodeByCountryCode = (
     case 'br':
     case 'ar':
     case 'ec':
+    case 'co':
       return 'americas';
     // asian?
     case 'hk':

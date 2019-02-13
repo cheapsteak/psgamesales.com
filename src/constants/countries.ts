@@ -52,7 +52,7 @@ const countriesWithoutKeys = [
   { name: 'Honduras', languageCode: 'es', code: 'hn' },
   { name: 'Hong Kong', languageCode: 'en', code: 'hk' },
   { name: 'Hungary', languageCode: 'hu', code: 'hu' },
-  { name: 'Iceland', languageCode: 'is', code: 'is' },
+  // { name: 'Iceland', languageCode: 'is', code: 'is' },
   { name: 'India', languageCode: 'en', code: 'in' },
   { name: 'Indonesia', languageCode: 'en', code: 'id' },
   { name: 'Ireland', languageCode: 'en', code: 'ie' },
