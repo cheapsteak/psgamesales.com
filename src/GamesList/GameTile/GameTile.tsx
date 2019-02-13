@@ -223,7 +223,6 @@ const GameTile: React.ForwardRefExoticComponent<{
           z-index: 20;
           & .MoreInfo {
             opacity: 1;
-            pointer-events: initial;
           }
         }
       `}
