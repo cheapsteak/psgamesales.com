@@ -1,9 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Redirect } from '@reach/router';
-import DEFAULT_STOREFRONTS from './constants/DEFAULT_STOREFRONTS';
+import { getRegionStorefrontsByCountryCode } from 'src/utils';
+import { UserOptionsContext } from 'src/UserOptionsContext';
 
-const RedirectToDefaultStore: React.FunctionComponent = () => (
-  <Redirect noThrow to={`stores/${DEFAULT_STOREFRONTS.ALL_DEALS.id}`} />
-);
+const RedirectToDefaultStore: React.FunctionComponent = () => {
+  const { country: countryFromUserOptions } = useContext(UserOptionsContext);
+
+  if (!countryFromUserOptions) {
+    // wait a bit for country to return;
+    return null;
+  }
+
+  const regionStorefronts = getRegionStorefrontsByCountryCode(
+    countryFromUserOptions.code,
+  );
+
+  return <Redirect noThrow to={`stores/${regionStorefronts.ALL_DEALS.id}`} />;
+};
 
 export default RedirectToDefaultStore;

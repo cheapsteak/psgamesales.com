@@ -2,14 +2,13 @@ import querystring from 'querystring';
 import axios, { AxiosResponse } from 'axios';
 import _ from 'lodash';
 import {
-  ValkyrieStoreIncludedItem,
   ValkyrieStoreResponse,
   Platform,
   GameType,
   ContentType,
 } from 'src/types';
 import { localforageInstance } from 'src/localforageInstance';
-import DEFAULT_STOREFRONTS from '../constants/DEFAULT_STOREFRONTS';
+import { getRegionStorefrontsByCountryCode } from 'src/utils';
 
 // const firstPageSize = 50;
 // const subsequentPageSize = 100;
@@ -129,12 +128,6 @@ const getAllItemsFromStore = async ({
   }
 };
 
-const storefrontsSupportingFilters = [
-  DEFAULT_STOREFRONTS.ALL_DEALS.id,
-  DEFAULT_STOREFRONTS.PSPLUS_DISCOUNTS.id,
-  DEFAULT_STOREFRONTS.PSPLUS_EXCLUSIVES.id,
-];
-
 const fetchItemsFromStore = async ({
   store,
   country,
@@ -153,6 +146,14 @@ const fetchItemsFromStore = async ({
       pageSize: number,
     ) => void;
   }): Promise<ValkyrieStoreResponse> => {
+  const regionStorefronts = getRegionStorefrontsByCountryCode(country);
+
+  const storefrontsSupportingFilters = [
+    regionStorefronts.ALL_DEALS.id,
+    regionStorefronts.PSPLUS_DISCOUNTS.id,
+    regionStorefronts.PSPLUS_EXCLUSIVES.id,
+  ];
+
   const storeParams = {
     store,
     country,
