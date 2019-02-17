@@ -2,7 +2,7 @@ import querystring from 'querystring';
 import _ from 'lodash';
 import { Rating, Icon } from 'semantic-ui-react';
 import React, { useContext, useState, useEffect, useReducer } from 'react';
-import { css, cx } from 'emotion';
+import { css, cx, keyframes } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameData } from 'src/types';
 import colors, { gradientColors } from 'src/constants/colors';
@@ -184,6 +184,21 @@ const MoreInfo: React.FunctionComponent<{
   );
 };
 
+const squish = keyframes`
+  from {
+    transform: scaleX(1) scaleY(1);
+  }
+  30% {
+    transform: scaleX(1.1) scaleY(0.9);
+  }
+  60% {
+    transform: scaleX(1.12) scaleY(1.2);
+  }
+  100%  {
+    transform: scaleX(1) scaleY(1);
+  }
+`;
+
 // @ts-ignore-line "Property 'game' does not exist on type '{ children?: ReactNode; }'.ts(2339)"
 const GameTile: React.ForwardRefExoticComponent<{
   game: GameData;
@@ -221,6 +236,16 @@ const GameTile: React.ForwardRefExoticComponent<{
           z-index: 20;
           & .MoreInfoIcon {
             opacity: 1;
+            &:before {
+              opacity: 1;
+              animation: ${squish} 0.4s cubic-bezier(0.41, 1.08, 0.9, 0.37)
+                forwards;
+            }
+            & .InfoIcon {
+              opacity: 1;
+              transform: translateY(0);
+              transition-delay: 0.2s;
+            }
           }
         }
       `}
@@ -234,6 +259,7 @@ const GameTile: React.ForwardRefExoticComponent<{
             top: 2px;
             right: 10px;
             color: #ffffff;
+            cursor: pointer;
 
             /* override button styling */
             padding: 10px;
@@ -241,10 +267,21 @@ const GameTile: React.ForwardRefExoticComponent<{
             margin: 0;
             border: 0;
 
-            background-color: #602dbc;
-            box-shadow: 0 2px 2px 0px rgb(54, 9, 124);
-
-            opacity: 0;
+            &:before {
+              content: '';
+              transform-origin: 50% 0;
+              display: block;
+              position: absolute;
+              z-index: -1;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: 100%;
+              background-color: #602dbc;
+              box-shadow: 0 2px 2px 0px rgb(54, 9, 124);
+              opacity: 0;
+              transition: 0.2s opacity;
+            }
           `,
         )}
         onMouseOver={() => !shouldShowMoreInfo && setShouldShowMoreInfo(true)}
@@ -254,9 +291,18 @@ const GameTile: React.ForwardRefExoticComponent<{
       >
         <Icon
           name="info"
-          className={css`
-            margin: 0 !important;
-          `}
+          className={cx(
+            'InfoIcon',
+            css`
+              && {
+                opacity: 0;
+                transform: translateY(-12px);
+                transition: 0.1s opacity,
+                  0.2s transform cubic-bezier(0.165, 0.84, 0.44, 1);
+                margin: 0;
+              }
+            `,
+          )}
         />
       </button>
       <a
