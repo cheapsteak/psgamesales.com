@@ -1,6 +1,6 @@
 import querystring from 'querystring';
 import _ from 'lodash';
-import { Rating } from 'semantic-ui-react';
+import { Rating, Icon } from 'semantic-ui-react';
 import React, { useContext, useState, useEffect, useReducer } from 'react';
 import { css, cx } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
@@ -102,8 +102,6 @@ const MoreInfo: React.FunctionComponent<{
           z-index: 1;
           padding: 1em;
           pointer-events: none;
-
-          opacity: 0;
           transition: 0.2s transform, 0.3s opacity;
 
           &:after {
@@ -221,15 +219,46 @@ const GameTile: React.ForwardRefExoticComponent<{
         z-index: 1;
         &:hover {
           z-index: 20;
-          & .MoreInfo {
+          & .MoreInfoIcon {
             opacity: 1;
           }
         }
       `}
-      onMouseOver={() => !shouldShowMoreInfo && setShouldShowMoreInfo(true)}
-      onMouseEnter={() => setShouldShowMoreInfo(true)}
-      onMouseLeave={() => setShouldShowMoreInfo(false)}
     >
+      <button
+        className={cx(
+          'MoreInfoIcon',
+          css`
+            position: absolute;
+            z-index: 1;
+            top: 2px;
+            right: 10px;
+            color: #ffffff;
+
+            /* override button styling */
+            padding: 10px;
+            background: none;
+            margin: 0;
+            border: 0;
+
+            background-color: #602dbc;
+            box-shadow: 0 2px 2px 0px rgb(54, 9, 124);
+
+            opacity: 0;
+          `,
+        )}
+        onMouseOver={() => !shouldShowMoreInfo && setShouldShowMoreInfo(true)}
+        onMouseEnter={() => setShouldShowMoreInfo(true)}
+        onMouseLeave={() => setShouldShowMoreInfo(false)}
+        onClick={() => setShouldShowMoreInfo(!shouldShowMoreInfo)}
+      >
+        <Icon
+          name="info"
+          className={css`
+            margin: 0 !important;
+          `}
+        />
+      </button>
       <a
         href={`https://store.playstation.com/${language}-${
           country.code
