@@ -3,9 +3,9 @@ import { Redirect } from '@reach/router';
 import StorefrontContainer from 'src/StorefrontContainer';
 
 const RedirectToDefaultStore: React.FunctionComponent = () => {
-  const storefronts = useContext(StorefrontContainer.Context);
+  const [storefronts, isLoading] = useContext(StorefrontContainer.Context);
 
-  if (storefronts.length === 0) {
+  if (storefronts.length === 0 || isLoading) {
     // wait a bit for storefronts to return
     return null;
   }

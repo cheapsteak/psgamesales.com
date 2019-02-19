@@ -6,7 +6,7 @@ import StorefrontContainer from 'src/StorefrontContainer';
 const Storefronts: React.FunctionComponent<
   React.HtmlHTMLAttributes<HTMLDivElement>
 > = ({ className, ...props }) => {
-  const storefronts = useContext(StorefrontContainer.Context);
+  const [storefronts] = useContext(StorefrontContainer.Context);
   return (
     <div className={cx('FacetWrapper', className)} {...props}>
       <h2>Stores</h2>

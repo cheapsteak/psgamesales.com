@@ -50,7 +50,7 @@ const Controls: React.FunctionComponent<
     queryParamDict.GAME_SEARCH
   ];
 
-  const storefronts = useContext(StorefrontContainer.Context);
+  const [storefronts] = useContext(StorefrontContainer.Context);
   const shouldShowFacets = !!countryFromUserOptions && storefronts.length > 0;
 
   return (

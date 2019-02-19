@@ -8,7 +8,6 @@ import { UserOptionsContext } from 'src/UserOptionsContext';
 import queryParamDict from 'src/queryParamDict';
 import { useLocation } from '@reach/router/unstable-hooks';
 import transformValkyrieItemToGameData from 'src/requests/transformValkyrieItemToGameData';
-import StorefrontContainer from 'src/StorefrontContainer';
 import { Redirect } from '@reach/router';
 
 export const StoreContext: React.Context<{
@@ -46,7 +45,6 @@ type StoreItemsAction_Error = {
 };
 
 const useStore = storeName => {
-  const storefronts = useContext(StorefrontContainer.Context);
   const { language, country, platforms, contentTypes } = useContext(
     UserOptionsContext,
   );
