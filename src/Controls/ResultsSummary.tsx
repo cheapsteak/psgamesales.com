@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { cx, css } from 'emotion/macro';
 import { StoreContext } from 'src/Store/StoreContext';
 
-const Results: React.FunctionComponent<
+const ResultsSummary: React.FunctionComponent<
   React.HTMLAttributes<HTMLDivElement>
 > = ({ className }) => {
   const { gamesToShow, isLoading } = useContext(StoreContext);
@@ -21,4 +21,4 @@ const Results: React.FunctionComponent<
   );
 };
 
-export default Results;
+export default ResultsSummary;

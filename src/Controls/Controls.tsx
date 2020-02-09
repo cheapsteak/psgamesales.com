@@ -13,7 +13,7 @@ import { ReactComponent as IconO } from 'src/assets/icon-o.svg';
 import { ReactComponent as IconFatSquare } from 'src/assets/icon-square-fat.svg';
 import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
 import { keyCountry } from 'src/constants/countries';
-import Results from './Results';
+import ResultsSummary from './ResultsSummary';
 import MobileCountrySelect from './MobileCountrySelect';
 import PricingToggle from './PricingToggle';
 import * as Facets from './Facets';
@@ -243,7 +243,7 @@ const Controls: React.FunctionComponent<
             })
           }
         />
-        <Results
+        <ResultsSummary
           className={css`
             align-self: flex-end;
             margin-left: auto;
