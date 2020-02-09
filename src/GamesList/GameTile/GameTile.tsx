@@ -186,16 +186,10 @@ const MoreInfo: React.FunctionComponent<{
 
 const squish = keyframes`
   from {
-    transform: scaleX(1) scaleY(1);
-  }
-  30% {
-    transform: scaleX(1.1) scaleY(0.9);
-  }
-  60% {
-    transform: scaleX(1.12) scaleY(1.2);
+    transform: scaleX(1.1) scaleY(0.95) translateY(-15%);
   }
   100%  {
-    transform: scaleX(1) scaleY(1);
+    transform: scaleX(1) scaleY(1) translateY(0);
   }
 `;
 
@@ -238,13 +232,13 @@ const GameTile: React.ForwardRefExoticComponent<{
             opacity: 1;
             &:before {
               opacity: 1;
-              animation: ${squish} 0.4s cubic-bezier(0.41, 1.08, 0.9, 0.37)
+              animation: ${squish} 0.2s cubic-bezier(0.41, 1.08, 0.9, 0.37)
                 forwards;
             }
             & .InfoIcon {
               opacity: 1;
               transform: translateY(0);
-              transition-delay: 0.2s;
+              transition-delay: 0.1s;
             }
           }
         }
