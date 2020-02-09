@@ -2,7 +2,7 @@ import { StorefrontItem } from '../types/StoreMetaData';
 
 export interface RegionStorefronts {
   GAMES_NAV: string;
-  DEALS_SUB_NAV?: string;
+  DEALS_SUB_NAV?: string | RegExp;
 
   ALL_DEALS: StorefrontItem;
   PSPLUS_FREE_GAMES: StorefrontItem;
@@ -12,7 +12,7 @@ export interface RegionStorefronts {
 
 export const AMERICAN_STOREFRONTS: RegionStorefronts = {
   GAMES_NAV: 'STORE-MSF77008-GAMESHOMEPAGE',
-  DEALS_SUB_NAV: 'STORE-MSF77008-SAVE',
+  DEALS_SUB_NAV: /STORE-MSF77008-(SAVE|WEEKLYDEALS)/,
 
   ALL_DEALS: {
     id: 'STORE-MSF77008-ALLDEALS',
@@ -50,7 +50,7 @@ export const EUROPEAN_STOREFRONTS: RegionStorefronts = {
   },
 
   PSPLUS_DISCOUNTS: {
-    id: 'STORE-MSF75508-MEMBERSV2',
+    id: 'STORE-MSF75508-PLUSSCENE',
     name: 'PS+ Discounts',
   },
 

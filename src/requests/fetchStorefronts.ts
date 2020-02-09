@@ -41,9 +41,13 @@ const fetchStorefronts = async (countryCode: string) => {
         `Unable to find homepage navigation item from list. Country: '${countryCode}'`,
       );
     }
-    const saleNavItems = navigationItem.submenu.find(
-      submenuItem =>
-        submenuItem['target-container-id'] === regionStorefronts.DEALS_SUB_NAV,
+    const saleNavItems = navigationItem.submenu.find(submenuItem =>
+      regionStorefronts.DEALS_SUB_NAV instanceof RegExp
+        ? regionStorefronts.DEALS_SUB_NAV.test(
+            submenuItem['target-container-id'],
+          )
+        : submenuItem['target-container-id'] ===
+          regionStorefronts.DEALS_SUB_NAV,
     );
 
     if (!saleNavItems) {
