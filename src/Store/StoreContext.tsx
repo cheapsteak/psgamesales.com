@@ -141,7 +141,6 @@ const useStore = storeName => {
       country,
       storeName,
       language,
-      country,
       platforms.join(','),
       contentTypes.join(','),
     ],

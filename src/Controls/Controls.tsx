@@ -17,12 +17,11 @@ import ResultsSummary from './ResultsSummary';
 import MobileCountrySelect from './MobileCountrySelect';
 import PricingToggle from './PricingToggle';
 import * as Facets from './Facets';
+import { MobileStoreFronts } from './Facets/Storefronts';
 
-const Controls: React.FunctionComponent<
-  {
-    isLoading: boolean;
-  } & React.HTMLAttributes<HTMLDivElement>
-> = ({ isLoading, className }) => {
+const Controls: React.FunctionComponent<{
+  isLoading: boolean;
+} & React.HTMLAttributes<HTMLDivElement>> = ({ isLoading, className }) => {
   const [location, navigate] = useLocation();
   const {
     country: countryFromUserOptions,
@@ -243,6 +242,8 @@ const Controls: React.FunctionComponent<
             })
           }
         />
+        <MobileStoreFronts />
+
         <ResultsSummary
           className={css`
             align-self: flex-end;
