@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import countries, { Country, UNITED_STATES } from 'src/constants/countries';
+import countries, { Country } from 'src/constants/countries';
 import { Platform, ContentType } from './types';
 
 let storedUserOptions;
