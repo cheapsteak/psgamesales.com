@@ -5,6 +5,7 @@ export enum Platform {
   PS4 = 'ps4',
   PS3 = 'ps3',
   Vita = 'vita',
+  PSP = 'psp',
 }
 
 // ?game_type=ps4_full_games

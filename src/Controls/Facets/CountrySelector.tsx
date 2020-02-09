@@ -41,11 +41,12 @@ const CountrySelector: React.FunctionComponent<
             }
           />
         );
-        const countriesAboveFold = _.uniq([
-          ...priorityContryCodes,
-          countryFromUserOptions && countryFromUserOptions.code,
-        ])
-          .filter(Boolean)
+        const countriesAboveFold = _.uniq(
+          countryFromUserOptions
+            ? [...priorityContryCodes, countryFromUserOptions.code]
+            : priorityContryCodes,
+        )
+          .filter(x => x !== null && x !== undefined)
           .map(countryCode =>
             countries.find(country => countryCode.includes(country.code)),
           );

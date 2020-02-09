@@ -30,7 +30,7 @@
     "semantic-ui-react": "0.84.0",
     "source-map-explorer": "1.6.0",
     "styled-components": "4.1.2",
-    "typescript": "3.2.1",
+    "typescript": "3.7.5",
     "typescript-eslint-parser": "21.0.2"
   },
   "scripts": {

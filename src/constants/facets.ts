@@ -1,26 +1,27 @@
+import { ContentType, Platform } from './../types/facets';
 const facets = {
   game_content_type: {
     name: 'Content Type',
     query_param_name: 'game_content_type',
     values: [
       {
-        key: 'games',
+        key: ContentType.Games,
         name: 'Games',
       },
       {
-        key: 'bundles',
+        key: ContentType.Bundles,
         name: 'Bundles',
       },
       {
-        key: 'addons',
+        key: ContentType.Addons,
         name: 'Add-Ons',
       },
       {
-        key: 'themes',
+        key: ContentType.Themes,
         name: 'Themes',
       },
       {
-        key: 'avatars',
+        key: ContentType.Avatars,
         name: 'Avatars',
       },
     ],
@@ -131,19 +132,19 @@ const facets = {
     query_param_name: 'platform',
     values: [
       {
-        key: 'ps4',
+        key: Platform.PS4,
         name: 'PS4™',
       },
       {
-        key: 'ps3',
+        key: Platform.PS3,
         name: 'PS3™',
       },
       {
-        key: 'psp',
+        key: Platform.PSP,
         name: 'PSP',
       },
       {
-        key: 'vita',
+        key: Platform.Vita,
         name: 'PS Vita',
       },
     ],

@@ -4,6 +4,7 @@ import { cx } from 'emotion';
 import { Checkbox } from 'semantic-ui-react';
 import { facets } from 'src/constants';
 import { UserOptionsContext } from 'src/UserOptionsContext';
+import { ContentType } from 'src/types';
 
 const ContentTypes: React.FunctionComponent<
   React.HtmlHTMLAttributes<HTMLDivElement>
@@ -23,9 +24,9 @@ const ContentTypes: React.FunctionComponent<
           onChange={(e, data) => {
             setUserOptions({
               contentTypes: _.uniq(
-                (data.checked ? _.concat : _.difference)(contentTypes, [
-                  data.value,
-                ]),
+                data.checked
+                  ? _.concat(contentTypes, [value.key])
+                  : _.difference(contentTypes, [value.key]),
               ),
             });
           }}

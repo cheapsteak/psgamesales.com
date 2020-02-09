@@ -22,8 +22,8 @@ export const StoreContext: React.Context<{
   storeItems: [] as (ValkyrieStoreIncludedItem | null)[],
   games: [] as (GameData | null)[],
   gamesToShow: [] as (GameData | null)[],
-  isLoading: false,
-  hasPartialContent: false,
+  isLoading: false as boolean,
+  hasPartialContent: false as boolean,
 });
 
 type StoreItemsAction_Partial = {

@@ -22,9 +22,9 @@ const Platforms: React.FunctionComponent<
           onChange={(e, data) => {
             setUserOptions({
               platforms: _.uniq(
-                (data.checked ? _.concat : _.difference)(platforms, [
-                  data.value,
-                ]),
+                data.checked
+                  ? _.concat(platforms, [value.key])
+                  : _.difference(platforms, [value.key]),
               ),
             });
           }}
