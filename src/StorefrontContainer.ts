@@ -4,7 +4,7 @@ import { UserOptionsContext } from 'src/UserOptionsContext';
 import { StorefrontItem } from 'src/types/StoreMetaData';
 import fetchStorefronts from 'src/requests/fetchStorefronts';
 
-const useStorefronts = (): [StorefrontItem[], boolean] => {
+const useStorefronts = () => {
   const { country } = useContext(UserOptionsContext);
   const [storefronts, setStorefronts] = useState([] as StorefrontItem[]);
   const [isLoading, setIsLoading] = useState(false);
@@ -23,10 +23,10 @@ const useStorefronts = (): [StorefrontItem[], boolean] => {
         setIsLoading(false);
       });
     },
-    [country && country.key],
+    [country, country && country.key],
   );
 
-  return [storefronts, isLoading];
+  return [storefronts, isLoading, country] as const;
 };
 
 const StorefrontContainer = createContainer(useStorefronts);

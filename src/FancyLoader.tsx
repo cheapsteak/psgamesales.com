@@ -16,7 +16,6 @@ const disappear = keyframes`
   }
 `;
 
-// eslint-disable-next-line prettier/prettier
 const animationDelayMap = [
   200, 300, 500,
   300, 500, 700,

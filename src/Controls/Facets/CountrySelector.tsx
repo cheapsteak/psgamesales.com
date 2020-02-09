@@ -11,12 +11,13 @@ const CountrySelector: React.FunctionComponent<
   const { country: countryFromUserOptions, setUserOptions } = useContext(
     UserOptionsContext,
   );
+  const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div className={cx('FacetWrapper', className)} {...props}>
       {(() => {
         const priorityContryCodes = ['us', 'ca'];
-        const [isExpanded, setIsExpanded] = useState(false);
+        
         const CountryCheckbox = country => (
           <Checkbox
             key={`${country.code}:${country.name}`}
