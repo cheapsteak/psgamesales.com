@@ -2,6 +2,7 @@ import React, { useContext, useState, useEffect } from 'react';
 import { Link } from '@reach/router';
 import { useLocation } from '@reach/router/unstable-hooks';
 import { css, cx } from 'emotion';
+import { mq } from 'src/constants';
 import StorefrontContainer from 'src/StorefrontContainer';
 import * as routes from 'src/routes';
 import { UserOptionsContext } from 'src/UserOptionsContext';
@@ -33,16 +34,15 @@ export const MobileStoreFronts: React.FC<React.HtmlHTMLAttributes<
     window.location.reload();
   }, [selectedStorefrontId]);
 
-  if (window.innerWidth > 600) {
-    return null;
-  }
-
   return (
     <div
       className={cx(
         css`
           position: relative;
           overflow: hidden;
+          ${mq.mediumUp} {
+            display: none;
+          }
         `,
         className,
       )}
