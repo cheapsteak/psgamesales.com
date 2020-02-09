@@ -280,8 +280,8 @@ const Controls: React.FunctionComponent<{
             <Facets.Storefronts />
             <Facets.Price />
             <Facets.CountrySelector />
-            {/* <Facets.Platforms />
-            <Facets.ContentTypes /> */}
+            {/* <Facets.Platforms /> */}
+            {/* <Facets.ContentTypes /> */}
           </React.Fragment>
         )}
       </div>
