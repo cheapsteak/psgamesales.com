@@ -2,14 +2,16 @@
   "eslint.validate":[
     "javascript",
     "javascriptreact",
-    {"language": "typescript", "autoFix": true },
-    {"language": "typescriptreact", "autoFix": true },
+    "typescript",
+    "typescriptreact"
   ],
   "eslint.alwaysShowStatus": true,
-  "eslint.autoFixOnSave": true,
   "workbench.colorCustomizations": {
     "activityBar.background": "#213220",
     "titleBar.activeBackground": "#2F462D",
     "titleBar.activeForeground": "#FAFCFA"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
   },
 }
