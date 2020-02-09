@@ -2,10 +2,10 @@ import React from 'react';
 import { Flag, FlagNameValues } from 'semantic-ui-react';
 import { css } from 'emotion';
 import { mq, countries } from 'src/constants';
-import { Country } from 'src/constants/countries';
+import { Country, keyCountry } from 'src/constants/countries';
 
 const MobileCountrySelect: React.FunctionComponent<{
-  selectedCountryKey?: Country['key'];
+  selectedCountryKey?: string;
   onChange: (selectedCountry: Country) => any;
 }> = ({ selectedCountryKey, onChange }) => {
   if (!selectedCountryKey) {
@@ -22,7 +22,7 @@ const MobileCountrySelect: React.FunctionComponent<{
     );
   }
   const selectedCountry = countries.find(
-    country => country.key === selectedCountryKey,
+    country => keyCountry(country) === selectedCountryKey,
   );
   if (!selectedCountry) {
     throw new Error(`Invalid country key: "${selectedCountryKey}"`);
@@ -47,7 +47,7 @@ const MobileCountrySelect: React.FunctionComponent<{
         defaultValue={selectedCountryKey}
         onChange={event => {
           const newlySelectedCountry = countries.find(
-            country => country.key === event.target.value,
+            country => keyCountry(country) === event.target.value,
           );
           if (!newlySelectedCountry) {
             throw new Error(
@@ -60,7 +60,7 @@ const MobileCountrySelect: React.FunctionComponent<{
         }}
       >
         {countries.map(country => (
-          <option key={country.key} value={country.key}>
+          <option key={keyCountry(country)} value={keyCountry(country)}>
             {country.name}
           </option>
         ))}

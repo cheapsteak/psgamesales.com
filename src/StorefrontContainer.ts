@@ -8,14 +8,15 @@ const useStorefronts = () => {
   const { country } = useContext(UserOptionsContext);
   const [storefronts, setStorefronts] = useState([] as StorefrontItem[]);
   const [isLoading, setIsLoading] = useState(false);
+  const countryCode = country?.code;
 
   useEffect(
     () => {
-      if (!country) {
+      if (!countryCode) {
         return;
       }
       setIsLoading(true);
-      fetchStorefronts(country.code).then(fetchedStorefronts => {
+      fetchStorefronts(countryCode).then(fetchedStorefronts => {
         if (!fetchedStorefronts || !fetchedStorefronts.length) {
           throw new Error('No storefronts could be found');
         }
@@ -23,7 +24,7 @@ const useStorefronts = () => {
         setIsLoading(false);
       });
     },
-    [country, country && country.key],
+    [countryCode],
   );
 
   return [storefronts, isLoading, country] as const;

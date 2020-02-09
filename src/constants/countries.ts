@@ -21,8 +21,12 @@ export interface Country {
   name: string;
   languageCode: string;
   code: string;
-  key: string;
 }
+
+export const keyCountry = (country: Country) => `${country.name}:${country.code}:${country.languageCode}`;
+
+export const UNITED_STATES = { name: 'United States', languageCode: 'en', code: 'us' };
+export const CANADA = { name: 'Canada', languageCode: 'en', code: 'ca' };
 
 const countriesWithoutKeys = [
   { name: 'Argentina', languageCode: 'es', code: 'ar' },
@@ -32,8 +36,8 @@ const countriesWithoutKeys = [
   { name: 'Belgium', languageCode: 'fr', code: 'be' },
   // { name: 'Belgium', languageCode: 'nl', code: 'be' },
   { name: 'Brasil', languageCode: 'pt', code: 'br' },
-  { name: 'Bulgaria', languageCode: 'bg', code: 'bg' },
-  { name: 'Canada', languageCode: 'en', code: 'ca' },
+  // { name: 'Bulgaria', languageCode: 'bg', code: 'bg' },
+  CANADA,
   // { name: 'Canada', languageCode: 'fr', code: 'ca' },
   { name: 'Chile', languageCode: 'es', code: 'cl' },
   { name: 'Colombia', languageCode: 'es', code: 'co' },
@@ -96,14 +100,14 @@ const countriesWithoutKeys = [
     languageCode: 'en',
     code: 'ae',
   },
-  { name: 'United States', languageCode: 'en', code: 'us' },
+  UNITED_STATES,
   { name: 'United Kingdom', languageCode: 'en', code: 'gb' },
   { name: 'Vietnam', languageCode: 'en', code: 'vn' },
-];
+] as const;
 
-const countries: Country[] = countriesWithoutKeys.map(country => ({
+const countries = countriesWithoutKeys.map(country => ({
   ...country,
-  key: `${country.name}:${country.code}`,
+  key: keyCountry(country),
 }));
 
 export default countries;

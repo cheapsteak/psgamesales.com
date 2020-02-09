@@ -34,7 +34,7 @@ function App() {
             `}
           >
             <Route
-              path="stores/:storeId"
+              path="/stores/:countryCode/:languageCode/:storeId"
               Component={(props: RouteComponentProps<{ storeId: string }>) => (
                 <StoreContextProvider
                   key={props.storeId}

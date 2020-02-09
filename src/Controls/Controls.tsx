@@ -12,6 +12,7 @@ import { ReactComponent as IconX } from 'src/assets/icon-x.svg';
 import { ReactComponent as IconO } from 'src/assets/icon-o.svg';
 import { ReactComponent as IconFatSquare } from 'src/assets/icon-square-fat.svg';
 import { ReactComponent as IconTriangle } from 'src/assets/icon-triangle.svg';
+import { keyCountry } from 'src/constants/countries';
 import Results from './Results';
 import MobileCountrySelect from './MobileCountrySelect';
 import PricingToggle from './PricingToggle';
@@ -250,7 +251,7 @@ const Controls: React.FunctionComponent<
         />
         <MobileCountrySelect
           selectedCountryKey={
-            countryFromUserOptions && countryFromUserOptions.key
+            countryFromUserOptions && keyCountry(countryFromUserOptions)
           }
           onChange={selectedCountry =>
             setUserOptions({

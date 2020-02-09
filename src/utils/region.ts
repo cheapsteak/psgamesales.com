@@ -32,6 +32,7 @@ export const getRegionCodeByCountryCode = (
     case 'au':
     case 'ae':
     case 'be':
+    case 'bg':
     case 'at':
     case 'cy':
     case 'dk':

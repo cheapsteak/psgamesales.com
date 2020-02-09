@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction, useState, useEffect } from 'react';
-import countries, { Country } from 'src/constants/countries';
+import countries, { Country, UNITED_STATES } from 'src/constants/countries';
 import { Platform, ContentType } from './types';
 
 let storedUserOptions;
@@ -27,6 +27,15 @@ type PricingDisplayModeOptions =
   | 'only_non_plus'
   | 'plus_and_non_plus';
 
+type UserOptions = {
+  language: string;
+  country: Country;
+  hasUserExplicitlySetCountryKey: boolean;
+  pricingDisplayMode: PricingDisplayModeOptions;
+  platforms: Platform[];
+  contentTypes: ContentType[];
+}
+
 export const UserOptionsContext: React.Context<{
   language: string;
   country?: Country;
@@ -35,14 +44,7 @@ export const UserOptionsContext: React.Context<{
   platforms: Platform[];
   contentTypes: ContentType[];
   setUserOptions: Dispatch<
-    SetStateAction<{
-      language?: string;
-      country?: Country;
-      hasUserExplicitlySetCountryKey?: boolean;
-      pricingDisplayMode?: PricingDisplayModeOptions;
-      platforms?: Platform[];
-      contentTypes?: ContentType[];
-    }>
+    SetStateAction<Partial<UserOptions>>
   >;
 }> = React.createContext({
   ...defaultUserOptions,
@@ -50,10 +52,11 @@ export const UserOptionsContext: React.Context<{
 });
 
 export const UserOptionsContextProvider: React.FunctionComponent = props => {
-  const [userOptions, setUserOptions] = useState(defaultUserOptions);
+  const [userOptions, setUserOptions] = useState<UserOptions>(defaultUserOptions);
+  const hasUserExplicitlySetCountryKey = userOptions.hasUserExplicitlySetCountryKey;
 
   useEffect(() => {
-    !userOptions.hasUserExplicitlySetCountryKey &&
+    !hasUserExplicitlySetCountryKey &&
       fetch('https://us-central1-psgamedeals.cloudfunctions.net/geolocation')
         .then(res => res.json())
         .then(geoInfo => {
@@ -77,7 +80,7 @@ export const UserOptionsContextProvider: React.FunctionComponent = props => {
           // todo: ask user to select their country?
           setUserOptions({
             ...userOptions,
-            country: countries.find(country => country.code === 'us'),
+            country: countries.find(country => country.code === 'us') as Country,
           });
         });
   }, []);
