@@ -1,5 +1,5 @@
 module.exports = {
-  "parser": "typescript-eslint-parser",
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
     "es6": true
@@ -29,10 +29,5 @@ module.exports = {
     "react": {
       "version": "detect"
     }
-  },
-  "overrides": {
-    "files": ["**/*.ts", "**/*.tsx"],
-    "parser": "typescript-eslint-parser",
-    "plugins": ["typescript"]
   }
 }
