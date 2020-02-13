@@ -1,12 +1,14 @@
 import _ from 'lodash';
 import React, { useMemo } from 'react';
-import { css, cx } from 'emotion';
+import { css, cx, keyframes } from 'emotion';
 import { gradientColors } from 'src/constants/colors';
 
 const LoadingTile: React.ForwardRefExoticComponent<{
   style: any;
+  columnIndex: number;
+  rowIndex: number;
   // eslint-disable-next-line react/display-name
-}> = React.forwardRef(({ style }, ref) => {
+}> = React.forwardRef(({ style, columnIndex, rowIndex }, ref) => {
   const backgroundImage = useMemo(() => {
     const bgBase = _.sample(gradientColors);
     const x = () => _.random(-50, 250);
@@ -38,6 +40,15 @@ const LoadingTile: React.ForwardRefExoticComponent<{
             position: relative;
             padding-top: 100%;
             background-image: ${backgroundImage};
+            animation: ${keyframes`
+              0% {
+                opacity: 1;
+              }
+              100% {
+                opacity: 0.6;
+              }
+            `} 1s linear infinite alternate;
+            animation-delay: ${(columnIndex + rowIndex) * 0.2}s;
           `,
         )}
       />

@@ -46,7 +46,13 @@ const GamesList: React.FunctionComponent = () => {
                       const game = games[columnCount * rowIndex + columnIndex];
 
                       if (!game && isLoading) {
-                        return <LoadingTile style={style} key={key} />;
+                        return (
+                          <LoadingTile
+                            style={style}
+                            columnIndex={columnIndex}
+                            rowIndex={rowIndex}
+                          />
+                        );
                       }
                       return (
                         // @ts-ignore "Type '{}' is missing the following properties from type 'HTMLDivElement': align, addEventListener, removeEventListener, accessKey, and 236 more.ts(2322)"
