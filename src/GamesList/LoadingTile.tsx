@@ -1,22 +1,25 @@
 import _ from 'lodash';
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import { css, cx } from 'emotion';
-import colors, { gradientColors } from 'src/constants/colors';
+import { gradientColors } from 'src/constants/colors';
 
 const LoadingTile: React.ForwardRefExoticComponent<{
   style: any;
+  // eslint-disable-next-line react/display-name
 }> = React.forwardRef(({ style }, ref) => {
-  const [backgroundImage] = useState(
-    _.sampleSize(gradientColors, 3)
+  const backgroundImage = useMemo(() => {
+    const bgBase = _.sample(gradientColors);
+    const x = () => _.random(-50, 250);
+    const y = () => _.random(-50, 250);
+    const radius = () => _.random(120, 220);
+    return _.sampleSize(gradientColors, 3)
       .map(
         color =>
-          `radial-gradient(circle at ${_.random(0, 200)}px ${_.random(
-            0,
-            200,
-          )}px, ${color}, ${colors.gradientFade})`,
+          `radial-gradient(circle ${radius()}px at ${x()}px ${y()}px, ${color}, transparent)`,
       )
-      .join(', '),
-  );
+      .concat(`linear-gradient(to right, ${bgBase}, ${bgBase})`)
+      .join(', ');
+  }, []);
 
   return (
     <div

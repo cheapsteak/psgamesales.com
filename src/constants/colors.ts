@@ -7,10 +7,10 @@ export default {
 };
 
 export const gradientColors = [
-  '#845EC2',
-  '#D65DB1',
-  '#FF6F91',
-  '#FF9671',
-  '#FFC75F',
-  '#F9F871',
+  '#845EC2d0',
+  '#D65DB1d0',
+  '#FF6F91d0',
+  '#FF9671d0',
+  '#FFC75Fd0',
+  // '#F9F871d0',
 ];
