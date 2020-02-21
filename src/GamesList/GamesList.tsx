@@ -5,7 +5,6 @@ import {
   AutoSizer,
   WindowScroller,
 } from 'react-virtualized';
-import { css } from 'emotion';
 import GameTile from './GameTile';
 import { StoreContext } from 'src/Store/StoreContext';
 import LoadingTile from './LoadingTile';
@@ -74,7 +73,7 @@ const GamesList: React.FunctionComponent = () => {
                     columnCount={columnCount}
                     height={height}
                     overscanColumnCount={0}
-                    overscanRowCount={3}
+                    overscanRowCount={10}
                     rowHeight={getColumnWidth}
                     rowCount={rowCount}
                     width={adjustedWidth}
