@@ -48,6 +48,7 @@ const GamesList: React.FunctionComponent = () => {
                       if (!game && isLoading) {
                         return (
                           <LoadingTile
+                            key={key}
                             style={style}
                             columnIndex={columnIndex}
                             rowIndex={rowIndex}
