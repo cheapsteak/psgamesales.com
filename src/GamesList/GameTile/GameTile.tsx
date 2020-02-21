@@ -209,19 +209,6 @@ const GameTile: React.ForwardRefExoticComponent<{
   const [shouldShowMoreInfo, setShouldShowMoreInfo] = useState(false);
   const { language, country } = useContext(UserOptionsContext);
   const [retryCount, setRetryCount] = useState(0);
-  const backgroundImage = useMemo(
-    () =>
-      _.sampleSize(gradientColors, 3)
-        .map(
-          color =>
-            `radial-gradient(circle at ${_.random(0, 200)}px ${_.random(
-              0,
-              200,
-            )}px, ${color}, ${colors.gradientFade})`,
-        )
-        .join(', '),
-    [],
-  );
 
   if (!country) {
     throw new Error(`No country found. Shouldn't be rendering GameTile yet.`);
@@ -314,9 +301,6 @@ const GameTile: React.ForwardRefExoticComponent<{
         rel="noopener noreferrer"
         className={cx(
           `GameInfoLink`,
-          css`
-            background-image: ${backgroundImage};
-          `,
           css`
             display: block;
             position: relative;
