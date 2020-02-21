@@ -1,7 +1,14 @@
+/* eslint-disable react/display-name */
 import querystring from 'querystring';
 import _ from 'lodash';
 import { Rating, Icon } from 'semantic-ui-react';
-import React, { useContext, useState, useEffect, useReducer } from 'react';
+import React, {
+  useContext,
+  useState,
+  useEffect,
+  useReducer,
+  useMemo,
+} from 'react';
 import { css, cx, keyframes } from 'emotion';
 import { UserOptionsContext } from 'src/UserOptionsContext';
 import { GameData } from 'src/types';
@@ -202,16 +209,18 @@ const GameTile: React.ForwardRefExoticComponent<{
   const [shouldShowMoreInfo, setShouldShowMoreInfo] = useState(false);
   const { language, country } = useContext(UserOptionsContext);
   const [retryCount, setRetryCount] = useState(0);
-  const [backgroundImage] = useState(
-    _.sampleSize(gradientColors, 3)
-      .map(
-        color =>
-          `radial-gradient(circle at ${_.random(0, 200)}px ${_.random(
-            0,
-            200,
-          )}px, ${color}, ${colors.gradientFade})`,
-      )
-      .join(', '),
+  const backgroundImage = useMemo(
+    () =>
+      _.sampleSize(gradientColors, 3)
+        .map(
+          color =>
+            `radial-gradient(circle at ${_.random(0, 200)}px ${_.random(
+              0,
+              200,
+            )}px, ${color}, ${colors.gradientFade})`,
+        )
+        .join(', '),
+    [],
   );
 
   if (!country) {
@@ -300,9 +309,7 @@ const GameTile: React.ForwardRefExoticComponent<{
         />
       </button>
       <a
-        href={`https://store.playstation.com/${language}-${
-          country.code
-        }/product/${game.id}`}
+        href={`https://store.playstation.com/${language}-${country.code}/product/${game.id}`}
         target="_blank"
         rel="noopener noreferrer"
         className={cx(
